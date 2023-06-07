@@ -220,6 +220,21 @@ public class ChamadosService {
             }
         }
 
+        if (permissoes.roleANALISTA()) {
+            if (Objects.equals(caspChamado.getIUsuarioAtendimento().getIUsuario(), usuarioLogado.getIUsuario())
+                    && caspChamado.getISituacao().getISituacao() == 3) {
+                return atualizaSituacaoDoChamado(caspChamado, 7);
+            } else {
+                throw new NegocioException("Sem permissão para cancelar o chamado com a situação atual!");
+            }
+        }
+
+        if (permissoes.roleADMIN()) {
+            return atualizaSituacaoDoChamado(caspChamado, 7);
+        } else {
+            throw new NegocioException("Sem permissão para cancelar o chamado com a situação atual!");
+        }
+
     }
 
     public List<CaspChamados> aguardando(CaspUsuarios usuarioLogado) {
