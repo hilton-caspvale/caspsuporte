@@ -1,0 +1,39 @@
+<div th:fragment="tabelaEntidades">
+    <div class="tab-content">
+        <div class="table-responsive">
+            <table id="table"
+                   data-toggle="table"
+                   data-search="true"     
+                   data-search-accent-neutralise="true"                           
+                   data-pagination="true"
+                   data-buttons-prefix="btn-md btn"
+                   data-buttons-class="success"
+                   data-buttons="botaoAddEntidades"
+                   data-show-button-text="false"
+                   data-show-pagination-switch="false" 
+                   data-show-refresh="true"
+                   data-show-toggle="false"
+                   data-show-fullscreen="true"
+                   data-show-columns="true"
+                   data-show-columns-toggle-all="true"
+                   data-show-export="true"
+                   data-page-list="[7, 30, 60, 120, All]"
+                   data-remember-order="true"
+                   class="table-striped table-sm"
+                   data-url="/atendimento/entidades">
+                <thead>
+                    <tr>
+                        <th data-field="nomeEntidade" data-sortable="true">Nome</th>
+                        <th data-field="itipoEntidade.tipoDescricao" data-sortable="true">Tipo</th>
+                        <th data-field="cnpjEntidade" data-sortable="true">CNPJ</th>
+                        <th data-field="emailEntidade" data-sortable="true">E-Mail</th>
+                        <th data-field="situacaoEntidade" data-sortable="true" data-width="10" data-halign="left" data-align="center" data-formatter="situacaoTabela">Situação</th>                        
+                        <th data-field="ientidade"  data-width="10" data-halign="left" data-align="center" data-formatter="acoesTabelaEntidades"></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>                
+    </div>
+    <script src="/public/js/bootstrap-table-pt-BR.min.js"></script>
+    <script>//modalXL();</script>
+</div>

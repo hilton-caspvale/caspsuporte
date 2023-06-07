@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org/">    
+    <div class="container-fluid" style="padding-top: 0.5rem"> 
+        <div class="row justify-content-md-center">
+            <div class="col col-md-8">
+                <div th:fragment="verChamadoModal">
+                    <!--<div th:replace="components/atendimento/atendimentoFragment :: acoesDoChamado"></div>-->
+                    <form id="formAnexos" class="form-floating" method="PATCH" action="/atendimentos/anexos"
+                          enctype='multipart/form-data' th:object="${caspChamados}">                                                                 
+                        <!--<div th:replace="components/atendimento/atendimentoFragment :: menssagemDaAcao"></div>
+                        <div class="alert alert-danger alert-dismissible fade show col-md" role="alert" th:each="m : ${msg}">
+                            <strong th:text="${m}"/>
+                            <button type="button" class="btn-sm btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>-->
+                        <div class="card shadow bg-body rounded">
+                            <div class="card-header rounded-1">
+                                <div class="casp-card-h">
+                                    <div class="row">
+                                        <div class="col-sm">
+                                            <div class="row justify-content-start">
+                                                <h5><span class="badge bg-transparent text-dark p-1">Atendimento:</span>
+                                                    <span class="badge bg-cinza text-dark p-1" th:text="*{iChamado}"></span>
+                                                </h5>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm text-end">
+                                            <span class="badge text-nowrap bg-transparent text-dark p-1">Aberto em:</span>
+                                            <span class="badge text-nowrap bg-transparent text-dark p-1" 
+                                                  th:text="*{{dataAbertura}}"/>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="container-fluid">          
+                                    <input id="iddd" type="hidden" form="formAnexos" th:field="*{iChamado}"/>
+                                    <div class="row justify-content-between mb-2 shadow p-2 bg-body rounded">
+                                        <div class="col-md">
+                                            <h6 class="mb-1" th:text="'Dados do usuário'"></h6>
+                                            <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary"
+                                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                                th:title="*{iUsuarioAbertura.nlogin}">
+                                                <li>
+                                                    <p class="mb-0"><small th:text="*{iUsuarioAbertura.nome}"/></p>
+                                                </li>                                                    
+                                                <li th:if="*{contatoSolicitante}!=''">
+                                                    <p class="mb-0"><small th:text="*{contatoSolicitante}"></small></p>                                                        
+                                                </li>
+                                                <li th:if="*{emailSolicitante}!=''">
+                                                    <p class="mb-0"><small th:text="*{emailSolicitante}"></small></p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h6 class="mb-1" th:text="*{iUsuarioEncaminhamento}!=null? 'Encaminhado para o analista' : 'Analista responsável'"></h6>
+                                            <ul class="list-unstyled text-center shadow p-1 cor-g rounded border-3 border-start border-secondary">
+                                                <li>
+                                                    <p class="mb-0">
+                                                        <small th:text="*{iUsuarioEncaminhamento}!=null? *{iUsuarioEncaminhamento.nome} : (*{iUsuarioAtendimento}==null? 'Nenhum' : *{iUsuarioAtendimento.nome})"></small>
+
+                                                    </p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h6 class="mb-1">Situação</h6>
+                                            <ul class="list-unstyled text-center shadow p-1 cor-g rounded border-3 border-start border-secondary">
+                                                <li>
+                                                    <!--<div th:replace="components/situacaoChamado :: situacaoChamado"></div>-->
+                                                </li>
+                                            </ul>
+                                        </div>                                            
+                                        <div class="row">
+                                            <div class="col-md-7">
+                                                <h6 class="mb-1">Entidade</h6>
+                                                <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
+                                                    <li 
+                                                        th:if="*{caspEntidadesList.size} > 0"
+                                                        th:each="enti : *{caspEntidadesList}">
+                                                        <span class="badge text-wrap text-dark bg-cinza" 
+                                                              th:text="${enti.nomeEntidade}"/>
+                                                    </li>
+                                                    <li 
+                                                        th:if="*{caspEntidadesList.size} == 0">
+                                                        <span class="badge text-wrap text-dark" 
+                                                              th:text="'Sem entidade informada'"/>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <h6 class="mb-1">Área</h6>                                                    
+                                                <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
+                                                    <li
+                                                        th:each="area : ${caspChamados.caspAreasList}">
+                                                        <!--<span th:replace="components/atendimento/atendimentoFragment :: caspChamadosAreas"
+                                                              th:if="*{caspAreasList.size} > 0"/>-->
+                                                        <span class="badge text-wrap text-dark" 
+                                                              th:if="*{caspAreasList.size} == 0"
+                                                              th:text="'Sem área informada'"/>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-7">
+                                                <h6 class="mb-1">Sistema</h6>
+                                                <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
+                                                    <li 
+                                                        th:if="*{caspSistemasList.size} > 0">
+                                                        <span class="badge text-wrap text-dark bg-cinza" 
+                                                              style="margin-right: 3px;margin-top: 3px"
+                                                              th:each="sistema : *{caspSistemasList}"
+                                                              th:text="${sistema.descricaoSistema}"/>
+                                                    </li>
+                                                    <li 
+                                                        th:if="*{caspSistemasList.size} == 0">
+                                                        <span class="badge text-wrap text-dark" 
+                                                              th:text="'Sem sistema informado'"/>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <h6 class="mb-1">Problema</h6>
+                                                <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
+                                                    <li 
+                                                        th:if="*{caspProblemasList.size} > 0">
+                                                        <span class="badge text-wrap text-dark bg-cinza" 
+                                                              style="margin-right: 3px;margin-top: 3px"
+                                                              th:each="problema : *{caspProblemasList}"
+                                                              th:text="${problema.descricaoProblema}"/>
+                                                    </li>
+                                                    <li 
+                                                        th:if="*{caspProblemasList.size} == 0">
+                                                        <span class="badge text-wrap text-dark" 
+                                                              th:text="'Sem problema informado'"/>
+                                                    </li>
+                                                </ul>
+                                            </div>                                                                                              
+                                        </div>
+                                    </div> 
+                                    <div class="row mb-2 shadow p-2 bg-body rounded">
+                                        <div class="col-md">
+                                            <h6 class="mb-1">Prioridade</h6>
+                                            <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
+                                                <li>
+                                                    <p class="mb-0"><small th:text="*{iPrioridade.descricaoPrioridade}"></small></p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md">
+                                            <h6 class="mb-1">Nível</h6>
+                                            <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
+                                                <li>
+                                                    <p class="mb-0"><small th:text="*{iNivel.descricaoNivel}"></small></p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md">
+                                            <h6 class="mb-1">Origem</h6>
+                                            <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
+                                                <li>
+                                                    <p class="mb-0"><small th:text="*{iOrigemChamado.descricaoOrigem}"></small></p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md" th:if="*{casoBetha}==''? false : (*{casoBetha}==null? false : true)">
+                                            <h6 class="mb-1">Chamado externo</h6>
+                                            <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
+                                                <li>
+                                                    <p class="mb-0"><small th:text="*{casoBetha}"></small></p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>                                    
+                                    <!--<div th:replace="components/atendimento/atendimentoAnexos :: atendimentoAnexos"></div>-->
+                                    <div class="row align-items-center mb-2 shadow p-2 bg-body rounded align-items-center"> 
+                                        <div class="col-md">
+                                            <h6 class="mb-1">Resumo</h6>
+                                            <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
+                                                <li>
+                                                    <p class="mb-0"><small th:text="*{resumoChamado}"></small></p>
+                                                </li>
+                                            </ul>
+                                        </div>                                    
+                                    </div>
+                                    <div class="row mb-2 shadow p-2 bg-body rounded">
+                                        <div class="col-md mb-3">                                        
+                                            <nav>
+                                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                                    <button class="nav-link active" id="nav-descricao-tab" data-bs-toggle="tab" data-bs-target="#nav-descricao" type="button" role="tab" aria-controls="nav-descricao" aria-selected="true">Descrição</button>
+                                                    <button class="nav-link" id="nav-problema-tab" data-bs-toggle="tab" data-bs-target="#nav-problema" type="button" role="tab" aria-controls="nav-problema" aria-selected="false">Problema</button>
+                                                    <button class="nav-link" id="nav-solucao-tab" data-bs-toggle="tab" data-bs-target="#nav-solucao" type="button" role="tab" aria-controls="nav-solucao" aria-selected="false">Solução</button>
+                                                    <!--<button class="nav-link" id="nav-comentarios-tab" data-bs-toggle="tab" data-bs-target="#nav-comentarios" type="button" role="tab" aria-controls="nav-comentarios" aria-selected="false"
+                                                            th:text="${quantidadeComentarios} > 0? 'Comentários ('+ ${quantidadeComentarios}+')' : 'Nenhum comentário'"></button>-->
+                                                </div>
+                                            </nav>
+                                            <div class="tab-content" id="nav-tabContent">
+                                                <div class="tab-pane fade show active" id="nav-descricao" role="tabpanel" aria-labelledby="nav-descricao-tab">
+                                                    <textarea id="idDescricaoChamado"
+                                                              class="form-control casp-textarea fs-6"                                                                          
+                                                              th:field="*{descricaoChamado}" 
+                                                              aria-label="Descrição" 
+                                                              readonly=""></textarea>                                                        
+                                                </div>
+                                                <div class="tab-pane fade" id="nav-problema" role="tabpanel" aria-labelledby="nav-problema-tab">
+                                                    <textarea class="form-control casp-textarea fs-6" th:field="*{descricaoProblema}"aria-label="Problema"
+                                                              readonly=""></textarea>
+                                                </div>
+                                                <div class="tab-pane fade" id="nav-solucao" role="tabpanel" aria-labelledby="nav-solucao-tab">                                                        
+                                                    <textarea class="form-control casp-textarea fs-6" th:field="*{descricaoSolucao}" aria-label="Solução"
+                                                              readonly=""></textarea>                                                         
+                                                </div>
+
+                                                <!--<div class="tab-pane fade" id="nav-comentarios" role="tabpanel" aria-labelledby="nav-comentarios-tab">
+                                                    <div class="list-group">
+                                                        <a class="list-group-item list-group-item-action"                                                                   
+                                                           th:each="anexo : *{caspAnexosList}"  
+                                                           th:if="${anexo.iArquivo}==null"
+                                                           th:value="${anexo}">                                                                    
+                                                            <div class="d-flex w-100 justify-content-end col-md">
+                                                                <small class="p-1" th:text="${anexo.iUsuario}==null? 'Interno em '+${{anexo.dataArquivo}} : ${anexo.iUsuario.nomeUsuario}+' em ' +${{anexo.dataArquivo}}"></small>
+                                                                <div class="btn-group mb-1" role="group">
+                                                                    <button th:if="${anexo.iUsuario} == ${usuarioLogado}"
+                                                                            class="btn btn-sm btn-outline-danger border-0 btEx" 
+                                                                            type="button"
+                                                                            data-bs-toggle="modal" 
+                                                                            data-bs-target="#confirmaExclusao"
+                                                                            th:attr="data-anexo=${anexo.iAnexo},data-id=${caspChamados.iChamado}"
+                                                                            onclick="setarIAnexo(event)">
+                                                                        <i class="fas fa-trash-alt"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <textarea 
+                                                                class="form-control fs-6" 
+                                                                th:text="${anexo.comentarioArquivo}" 
+                                                                aria-label="Solução" 
+                                                                readonly=""></textarea>                                                                                    
+                                                        </a>
+                                                    </div>
+                                                </div>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form id="formAnexo" class="form-floating" method="POST" action="/atendimentos/anexos" 
+                          enctype='multipart/form-data' th:object="${caspChamados}"> 
+                        <input type="hidden" form="formAnexo" th:field="*{iChamado}"/>
+                    </form>
+                    <div id="acoesDoChamadoB">
+                        <!--<div th:replace="components/atendimento/atendimentoFragment :: acoesDoChamado"></div>-->
+                    </div>
+                </div>
+                <div class="modal fade" 
+                     id="confirmaExclusao" 
+                     data-bs-backdrop="static" 
+                     data-bs-keyboard="false" 
+                     tabindex="-1" 
+                     aria-labelledby="confirmaExclusao">
+                    <div class="modal-dialog modal-dialog-centered modal-sm border-0">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                Deseja excluir o registro?
+                            </div>
+                            <div class="modal-body">
+                                <div class="row justify-content-md-center">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a class="btn btn-danger" type="button" 
+                                           th:id="btExcluir"
+                                           th:attr="data-id=*{iChamado}"
+                                           onclick="deletarAnexo(event);getModelAndView('/atendimentos/view', '#tabelapainel', event)"
+                                           data-bs-dismiss="modal">
+                                            Excluir
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>     
+                                        <a class="btn btn-secondary" type="button"
+                                           data-bs-dismiss="modal">
+                                            Voltar
+                                            <i class="fas fa-arrow-left"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</html>
+
+

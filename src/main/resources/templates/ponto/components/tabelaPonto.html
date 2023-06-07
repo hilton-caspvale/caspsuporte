@@ -1,0 +1,64 @@
+<div th:fragment="tabelaPonto">
+    <div class="tab-content">
+        <div class="table-responsive">
+            <table id="table"
+                   data-toggle="table"
+                   data-toolbar="#toolbar"
+                   data-search="true"     
+                   data-search-accent-neutralise="true"                           
+                   data-pagination="true"
+                   data-buttons-prefix="btn-md btn"
+                   data-buttons-class="success"
+                   data-buttons="buttons"
+                   data-show-button-text="false"
+                   data-show-pagination-switch="false" 
+                   data-show-refresh="true"
+                   data-show-toggle="false"
+                   data-show-fullscreen="true"
+                   data-show-columns="true"
+                   data-show-columns-toggle-all="true"
+                   data-show-export="true"
+                   data-detail-formatter="detailFormatter"  
+                   data-page-list="[7, 30, 60, 120, All]"
+                   data-remember-order="true"
+                   class="table-striped table-sm"
+                   data-url="/atendimento/lista">
+                <thead>
+                    <tr>
+                        <th data-field="ichamado" data-sortable="true">iChamado</th>
+                        <th data-field="entidadesDoChamado" data-sortable="true" data-formatter="entidades">entidadesDoChamado</th>
+                        <th data-field="abertura" data-sortable="true">Abertura</th>
+                        <th data-field="encerramento" data-sortable="true">Encerramento</th>
+                        <th data-field="nomeUsuarioAbertura" data-sortable="true" data-formatter="usuarioAbertura">Usuário</th>
+                        <th data-field="resumoChamado" data-sortable="true">Resumo</th>
+                        <th data-field="situacaoChamado" data-sortable="true"><span class="badge text-dark">Situacao</span></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>                
+    </div>
+    <script>
+        /*function entidades(value) {
+         var saida = [];
+         var classe_cor = "cor-g";
+         JSON.parse(JSON.stringify(value)).forEach(function (el) {
+         if (el === 'PREFEITURA DE AREIAS') {
+         classe_cor = "cor-g";
+         } else {
+         classe_cor = "cor-g";
+         }
+         saida.push('<span class="badge ' + classe_cor + ' text-dark" style="padding: 7px;margin-right: 3px;margin-top: 3px;">' + el + '</span>');
+         });
+         return saida;
+         }
+         function usuarioAbertura(value) {
+         return '<span class="badge bg-light text-dark cor-g" style="padding: 7px;margin-right: 3px;margin-top: 3px">' + value + '</span>';
+         }
+         
+         function queryParams(params) {
+         params.analista = document.querySelector('input').id;
+         return params;
+         }*/
+    </script>    
+    
+</div>

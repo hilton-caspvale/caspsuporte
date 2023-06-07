@@ -1,0 +1,364 @@
+<div th:fragment="cadastrarChamado">
+    <div class="row justify-content-md-center">
+        <div class="col col-md-8">
+            <div id="alertaChamado"></div>
+            <form id="formChamado" class="row g-3" 
+                  method="POST" 
+                  action="/atendimento/chamados" th:object="${chamado}">
+                <!--<div th:replace="fragments/layout :: msggeral"></div>
+                <div th:replace="fragments/layout :: msgcampos"></div>
+                <div class="alert alert-danger alert-dismissible fade show col-md" role="alert" th:each="m : ${msg}">
+                    <strong th:text="${m}"/>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>-->
+                <div class="card">                       
+                    <div class="card-header">
+                        <div class="casp-card-h">
+                            <div class="row">
+                                <div class="col-md"><h5 th:text="*{iChamado == null}? 'Novo Chamado' : 'Editar Chamado'"></h5></div>                                       
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body ">                                  
+                        <input type="hidden" form="formChamado" th:field="*{iChamado}" id="iChamado"/>
+                        <input type="hidden" form="formChamado" th:field="*{iSituacao}" id="iSituacao"/>
+                        <input type="hidden" form="formChamado" th:field="*{iusuarioAbertura}" id="iusuarioAbertura"/>
+
+                        <div class="row" th:if="*{iChamado == null}">
+                            <div class="col-md mb-3" th:if="${role}=='ANALISTA'? true : (${role}=='ADMINISTRADOR'? true : false)">
+                                <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                    <button type="button" class="btn btn-outline-secondary" onclick="modalSelecionarUsuario()">
+                                        Selecionar outro usuário <i class="bi bi-search"></i></button>
+                                    <button type="button" class="btn btn-outline-success"
+                                            onclick="modalEditarUsuario('iusuarioAbertura')">Editar <i class="bi bi-pencil-square"></i></button>
+                                    <button type="button" class="btn btn-outline-success"
+                                            onclick="modalCriarUsuarioAbertura()"><i class="bi bi-person-plus-fill"></i></button>                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-between">
+                            <div class="col-md-3 mb-3">
+                                <div class="form-floating">                                    
+                                    <input type="text"
+                                           class="form-control" placeholder="LOGIN"
+                                           th:field="*{nlogin}"   
+                                           id="nlogin"
+                                           form="formChamado"
+                                           readonly=""/>
+                                    <label for="nlogin" class="col-sm col-form-label">LOGIN</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">                                    
+                                    <input type="text"
+                                           class="form-control" placeholder="Nome"
+                                           th:field="*{nomeUsuario}"
+                                           id="nomeUsuario"
+                                           form="formChamado"
+                                           readonly=""/>
+                                    <label for="nomeUsuario" class="col-sm col-form-label">Nome</label>
+                                </div>
+                            </div>
+                            <div class="text-md-end col-md-3 mb-3">
+                                <div class="form-floating">
+                                    <input type="datetime" 
+                                           class="form-control" placeholder="Data"
+                                           th:field="*{dataAbertura}"
+                                           id="dataAbertura"
+                                           disabled=""
+                                           form="formChamado"/>
+                                    <label for="dataAbertura" class="col-sm col-form-label">Data</label>
+                                </div>                                     
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md mb-3">
+                                <div class="form-floating">                                       
+                                    <input type="text"
+                                           class="form-control" placeholder="Contato"
+                                           th:field="*{contatoSolicitante}"
+                                           form="formChamado"
+                                           id="contato"/>                                    
+                                    <label for="contato" class="col-sm col-form-label">Contato</label>
+                                </div>
+                            </div>
+                            <div class="col-md mb-3">
+                                <div class="form-floating">                                    
+                                    <input type="text"
+                                           class="form-control" placeholder="E-mail"
+                                           th:field="*{emailSolicitante}"
+                                           form="formChamado"
+                                           id="email"/>
+                                    <label for="email" class="col-sm col-form-label">E-mail</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div th:if="${entidadesDoUsuario.size} > 1">
+                                    <select class="form-control choicesmultiple"                                             
+                                            multiple=""     
+                                            placeholder="Entidade"
+                                            th:field="*{caspEntidadesList}"
+                                            id="entidades" required="true">
+                                        <option th:each="entidade : ${entidadesDoUsuario}"                                                         
+                                                th:value="${entidade}"                                                         
+                                                th:text="${entidade.nomeEntidade}"                                                        
+                                                contenteditable="false"/>
+                                    </select>
+                                </div>
+                                <div th:if="${entidadesDoUsuario.size} == 1"
+                                     class="form-floating">
+                                    <select class="form-control" 
+                                            aria-label="Entidade"
+                                            th:field="*{caspEntidadesList}"
+                                            id="entidades" required>
+                                        <option th:each="entidade : ${entidadesDoUsuario}" 
+                                                th:value="${entidade}" 
+                                                th:text="${entidade.nomeEntidade}"
+                                                contenteditable="false"/>
+                                    </select>                                    
+                                    <label for="entidades">Entidade</label>                                                
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-6 mb-3">
+                                <div th:if="${areasDoUsuario.size} == 1"
+                                     class="form-floating">
+                                    <select class="form-control"
+                                            aria-label="Área"
+                                            th:field="*{caspAreasList}"
+                                            id="areas">
+                                        <option th:each="areaUser : ${areasDoUsuario}" 
+                                                th:value="${areaUser}" 
+                                                th:text="${areaUser.descricaoArea}"
+                                                contenteditable="false"/>
+                                    </select>
+                                    <label for="areas">Área</label>                                                
+                                </div>
+                                <div th:if="${areasDoUsuario.size} > 1">
+                                    <select class="form-control choicesmultiple" 
+                                            multiple=""   
+                                            th:field="*{caspAreasList}"
+                                            id="areas"
+                                            placeholder="Área">
+                                        <option th:each="area : ${areasDoUsuario}"                                                         
+                                                th:value="${area}"                                                         
+                                                th:text="${area.descricaoArea}"                                                        
+                                                contenteditable="false"/>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md mb-3">
+                                <div th:if="${sistemasDoUsuario.size} > 1">
+                                    <select class="form-control choicesmultiple"                                             
+                                            placeholder="Sistemas"
+                                            multiple=""   
+                                            th:field="*{caspSistemasList}"
+                                            id="sistemas">
+                                        <option th:each="sistema : ${sistemasDoUsuario}"                                                         
+                                                th:value="${sistema}"                                                         
+                                                th:text="${sistema.descricaoSistema}"                                                        
+                                                contenteditable="false"/>
+                                    </select>                                                
+                                </div>
+                                <div th:if="${sistemasDoUsuario.size} == 1"
+                                     class="form-floating">     
+                                    <select class="form-control"
+                                            aria-label="Sistemas"
+                                            th:field="*{caspSistemasList}"
+                                            id="sistemas">
+                                        <option th:each="sistema : ${sistemasDoUsuario}" 
+                                                th:value="${sistema}" 
+                                                th:text="${sistema.descricaoSistema}"
+                                                contenteditable="false"/>
+                                    </select>
+                                    <label for="sistemas">Sistema</label>
+                                </div>
+                            </div>
+                            <div class="col-md mb-3">
+                                <div th:if="${problemas.size} == 1"
+                                     class="form-floating">     
+                                    <select class="form-control"
+                                            aria-label="Problema"
+                                            th:field="*{caspProblemasList}"
+                                            id="problemas">
+                                        <option th:each="problema : ${problemas}" 
+                                                th:value="${problema}" 
+                                                th:text="${problema.descricaoProblema}"
+                                                contenteditable="false"/>
+                                    </select>
+                                    <label for="problemas">Sistema</label>
+                                </div>
+                                <div th:if="${problemas.size} > 1">
+                                    <select class="form-control choicesmultiple"                                             
+                                            multiple=""   
+                                            th:field="*{caspProblemasList}"
+                                            id="problemas"
+                                            placeholder="Problemas">
+                                        <option th:each="problema : ${problemas}"                                                         
+                                                th:value="${problema}"                                                         
+                                                th:text="${problema.descricaoProblema}"                                                        
+                                                contenteditable="false"/>
+                                    </select>                                            
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">                            
+                            <div class="col-md-4 mb-3" th:if="${role}=='ANALISTA'? true : (${role}=='ADMINISTRADOR'? true : false)">
+                                <div class="form-floating">
+                                    <select class="form-control link-success"
+                                            aria-label="Origem"
+                                            th:field="*{iOrigemChamado}"
+                                            id="origem">
+                                        <option th:each="listaorigem : ${origens}" 
+                                                th:value="${listaorigem}" 
+                                                th:text="${listaorigem.descricaoOrigem}"
+                                                contenteditable="false"/>
+                                    </select>
+                                    <label for="origem">Origem</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3" th:if="${role}=='ANALISTA'? true : (${role}=='ADMINISTRADOR'? true : false)">
+                                <div class="form-floating">
+                                    <select class="form-control"
+                                            aria-label="Prioridade"
+                                            th:field="*{iPrioridade}"
+                                            id="prioridade">
+                                        <option th:each="listaprioridade : ${prioridades}" 
+                                                th:value="${listaprioridade}" 
+                                                th:text="${listaprioridade.descricaoPrioridade}"
+                                                contenteditable="false"/>
+                                    </select>
+                                    <label for="prioridade">Prioridade</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3" th:if="${role} == 'ANALISTA'? true : (${role}==ADMINISTRADOR? true : false)">
+                                <div class="form-floating">
+                                    <select class="form-control" 
+                                            aria-label="Nível"
+                                            th:field="*{iNivel}"
+                                            id="nivel">
+                                        <option th:each="listanivel : ${niveis}" 
+                                                th:value="${listanivel}" 
+                                                th:text="${listanivel.descricaoNivel}"
+                                                contenteditable="false"/>
+                                    </select>
+                                    <label for="nivel">Nível</label>
+                                </div>
+                            </div> 
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md">
+                                <div class="accordion" id="accordionExample">                                                
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="headingThree">
+                                            <button class="accordion-button collapsed link-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                Arquivos                                                            
+                                            </button>
+                                        </h2>
+                                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">
+                                                <div class="row">
+                                                    <div class="col-md mb-3">
+                                                        <ul class="list-group">                                                                        
+                                                            <li class="list-group-item">
+                                                                <input type="file"
+                                                                       id="file"
+                                                                       class="row col-md-6 form-control"                                                     
+                                                                       form="formChamado"
+                                                                       name="file"
+                                                                       multiple="multiple"/>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  
+                        <div class="row">
+                            <div class="col-md mb-3">
+                                <div class="form-floating">                                    
+                                    <input type="text"
+                                           class="form-control" placeholder="Resumo"
+                                           th:field="*{resumoChamado}"
+                                           form="formChamado"
+                                           id="resumoChamado"/>
+                                    <label for="resumoChamado" class="col-sm col-form-label">Resumo</label>
+                                </div>
+                            </div>
+                        </div> 
+
+
+                        <div class="row">
+                            <div class="col-md mb-3">                                        
+                                <nav>
+                                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                        <button class="nav-link active link-success" id="nav-descricao-tab" data-bs-toggle="tab" data-bs-target="#nav-descricao" type="button" role="tab" aria-controls="nav-descricao" aria-selected="true">Descrição</button>
+                                        <button class="nav-link link-success" id="nav-problema-tab" data-bs-toggle="tab" data-bs-target="#nav-problema" type="button" role="tab" aria-controls="nav-problema" aria-selected="false">Problema</button>
+                                        <button class="nav-link link-success" id="nav-solucao-tab" data-bs-toggle="tab" data-bs-target="#nav-solucao" type="button" role="tab" aria-controls="nav-solucao" aria-selected="false">Solução</button>
+                                    </div>
+                                </nav>
+                                <div class="tab-content" id="nav-tabContent">
+                                    <div class="tab-pane fade show active" id="nav-descricao" role="tabpanel" aria-labelledby="nav-descricao-tab">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <textarea class="form-control casp-textarea" th:field="*{descricaoChamado}" aria-label="Descrição"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="nav-problema" role="tabpanel" aria-labelledby="nav-problema-tab">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <textarea class="form-control casp-textarea" th:field="*{descricaoProblema}"aria-label="Problema"
+                                                          th:disabled="${role}=='ANALISTA'? false : (${role}=='ADMINISTRADOR'? 'false' : 'true')"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="nav-solucao" role="tabpanel" aria-labelledby="nav-solucao-tab">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <textarea class="form-control casp-textarea" th:field="*{descricaoSolucao}" aria-label="Solução"
+                                                          th:disabled="${role}=='ANALISTA'? false : (${role}=='ADMINISTRADOR'? 'false' : 'true')"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md mb-3">
+                                <div class="text-lg-center">
+                                    <button type="button" 
+                                            class="btn btn-success" 
+                                            id="liveToastBtn"
+                                            onclick="gravarChamado(event)">Gravar</button>                                        
+                                </div>
+                            </div>
+                            <div class="col-md mb-3">
+                                <div class="text-lg-center">
+                                    <button type="button" 
+                                            class="btn btn-danger" 
+                                            id="liveToastBtn"
+                                            onclick="getChamado()">TESTAR</button>                                        
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div th:if="${role}=='ANALISTA'? true : (${role}=='ADMINISTRADOR'? true : false)"></div>
+    </div>
+</div>

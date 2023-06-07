@@ -1,0 +1,35 @@
+<div th:fragment="tabelaOrigens">
+    <div class="tab-content">
+        <div class="table-responsive">
+            <table id="table"
+                   data-toggle="table"
+                   data-search="true"     
+                   data-search-accent-neutralise="true"                           
+                   data-pagination="true"
+                   data-buttons-prefix="btn-md btn"
+                   data-buttons-class="success"
+                   data-buttons="botaoAddTabelaOrigens"
+                   data-show-button-text="false"
+                   data-show-pagination-switch="false" 
+                   data-show-refresh="true"
+                   data-show-toggle="false"
+                   data-show-fullscreen="true"
+                   data-show-columns="true"
+                   data-show-columns-toggle-all="true"
+                   data-show-export="true"
+                   data-page-list="[7, 30, 60, 120, All]"
+                   data-remember-order="true"
+                   class="table-striped table-sm"
+                   data-url="/atendimento/origens">
+                <thead>
+                    <tr>
+                        <th data-field="descricaoOrigem" data-sortable="true">Descrição</th>
+                        <th data-field="situacaoOrigem" data-sortable="true" data-width="10" data-halign="left" data-align="center" data-formatter="situacaoTabela">Situação</th>                        
+                        <th data-field="iorigemChamado" data-width="10" data-halign="left" data-align="center" data-formatter="acoesTabelaOrigens"></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>                
+    </div>
+    <script src="/public/js/bootstrap-table-pt-BR.min.js"></script>
+</div>

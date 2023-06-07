@@ -1,0 +1,19 @@
+<div th:fragment="modal">
+    <div class="modal fade" role="dialog"
+         id="modal" 
+         data-bs-backdrop="static" 
+         data-bs-keyboard="false" 
+         tabindex="-1" 
+         aria-labelledby="staticBackdropLabel">
+        <div class="modal-dialog modal-lg" id="tamanhoModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="limparModal()"></button>
+                </div>                 
+                <div class="modal-body" id="modalBody">                                        
+                </div>                
+            </div>
+        </div>
+    </div>
+</div>

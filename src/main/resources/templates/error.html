@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org/"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head th:fragment="header">
+        <title>CASPVALE</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>        
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous"/>                                    
+        <link rel="stylesheet" type="text/css" href="/public/css/style.css"/>
+    </head> 
+    <body>
+        <div class="container-fluid casp-margens">
+            <div class="row justify-content-md-center">
+                <div class="col col-md-4">
+                    <div class="card text-center" style="margin-top: 7rem">
+                        <div class="card-header">
+                            <strong th:text="${statusMessage}"></strong>
+                        </div>
+                        <div class="card-body" th:text="${mensagem}">
+                            
+                        </div>
+                        <div class="card-footer">
+                            <div>
+                                <a class="btn btn-secondary" type="button" th:href="@{/}">
+                                    Voltar ao início
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <div class="d-flex flex-column flex-sm-row justify-content-end py-1 border-top fixed-bottom">
+                <p>&copy; 2022 CASPVALE, Todos os direitos reservados.</p>                
+            </div>
+        </footer>
+    </body>
+</html>

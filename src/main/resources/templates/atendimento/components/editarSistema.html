@@ -1,0 +1,78 @@
+<form class="form-floating" id="formSistema"
+      th:object="${sistemaModel}">
+    <input type="hidden" th:value="*{iSistema}" id="isistema"/>
+    <div class="mb-3 row">
+        <div class="col-md">
+            <div class="form-floating">                                    
+                <input type="text" required="true" class="form-control" placeholder="Descrição"
+                       th:field="*{descricaoSistema}"
+                       name="descricaoSistema"
+                       id="descricaoSistema"/>
+                <label for="descricaoSistema" class="col-sm col-form-label">Descrição</label>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-floating">
+                <select class="form-select"
+                        id="situacaoSistema" 
+                        aria-label="Situacao"
+                        th:field="*{situacaoSistema}">
+                    <option th:each="sit : ${situacoes}" 
+                            th:value="${sit}" 
+                            th:text="${sit}=='A'? 'Ativo' : 'Inativo'"
+                            contenteditable="false"/>
+                </select>
+                <label for="situacao">Situação</label>
+            </div>
+        </div>                                    
+    </div>
+    <div class="mb-3 row">
+        <div class="col-md">
+            <div class="form-text row d-flex justify-content-center mt-100">
+                <select class="form-control choicesmultiple"                                                             
+                        multiple="" 
+                        id="caspProblemasList"
+                        placeholder="Problemas"
+                        th:field="*{caspProblemasList}">
+                    <option th:each="problema : ${listaProblemas}"                                                         
+                            th:value="${problema}"
+                            th:text="${problema.descricaoProblema}"                                                        
+                            contenteditable="false"/>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <div class="col-md">
+            <div class="form-text row d-flex justify-content-center mt-100">
+                <select class="form-control choicesmultiple"                                                             
+                        multiple="" 
+                        id="caspAreasList"
+                        placeholder="Áreas"
+                        th:field="*{caspAreasList}">
+                    <option th:each="area : ${listaAreas}"                                                         
+                            th:value="${area}"
+                            th:text="${area.descricaoArea}"                                                        
+                            contenteditable="false"/>
+                </select>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md">
+        <div class="modal-footer"> 
+            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" th:value="*{iSistema}" onclick="deletarSistema(event)">
+                <i class="fas fa-times"></i>
+                Excluir</button>
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" onclick="limparModal()">
+                <i class="fas fa-times"></i>
+                Fechar</button>
+            <button type='button' class='btn btn-success bg-gradient' data-bs-dismiss="modal" th:value="*{iSistema}"
+                    onclick="editarSistema(event)">
+                <i class="fas fa-check"></i>
+                Editar</button>   
+        </div>
+    </div>
+</form>
+<script>carregarChoices()</script>

@@ -1,0 +1,141 @@
+<div th:fragment="tabelaChamados">   
+    <!--<div class="modal" tabindex="-1"  id="teste">
+        <div class="modal-dialog  modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="verAtendimento"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-sm btn-success">Abrir</button>
+                </div>
+            </div>
+        </div>
+    </div>-->
+
+    <div id="toolbar">
+        <div class="btn-group" role="group" aria-label="Painel Atendimento">
+            <input type="radio" class="btn-check" name="btnradio" id="button1" autocomplete="off" checked=""/>
+            <label class="btn btn-outline-success bg-gradient" for="button1">Pendentes
+                <span id="spanPendente" class="badge cor-g text-wrap text-dark">0</span>
+            </label>
+            <input type="radio" class="btn-check" name="btnradio" id="button2" autocomplete="off"/>
+            <label class="btn btn-outline-success bg-gradient" for="button2">Em Análise
+                <span id="spanEmAnalise"class="badge cor-g text-wrap text-dark">0</span> 
+            </label>
+            <input type="radio" class="btn-check" name="btnradio" id="button3" autocomplete="off"/>
+            <label class="btn btn-outline-success bg-gradient" for="button3">Finalizados
+                <span id="spanFinalizados"class="badge cor-g text-wrap text-dark">0</span> 
+            </label>
+        </div>
+        <div id="tabelaSelecionada" hidden="true" value="pendentes"></div>
+    </div>
+    <table
+        id="table"
+        data-toolbar="#toolbar"
+        data-toggle="table"
+        data-search="true"     
+        data-search-accent-neutralise="true"                           
+        data-pagination="true"
+        data-buttons-prefix="btn-md btn"
+        data-buttons-class="success"
+        data-buttons="novoChamadoTabela"
+        data-show-button-text="true"
+        data-show-pagination-switch="false" 
+        data-show-refresh="true"
+        data-show-toggle="false"
+        data-show-fullscreen="true"
+        data-show-columns="true"
+        data-show-columns-toggle-all="true"
+        data-show-export="true"
+        data-page-list="[7, 30, 60, 120, All]"
+        data-remember-order="true"
+        class="table-striped table-sm"
+        data-url="/atendimento/chamados/aguardando">
+        <thead>
+            <tr><!--class="badge bg-light text-dark" atendimentos/tipoTabela?tipo=aguardando-->
+                <th data-field="ichamado" data-sortable="true" data-formatter="acoesTabelaChamado">Nº</th>
+                <th data-field="caspEntidadesList" data-sortable="true" data-halign="left" data-align="left" data-formatter="entidades">Entidade</th>
+                <th data-field="caspAreasList" data-sortable="true" data-halign="left" data-align="center" data-formatter="areas">Área</th>
+                <th data-field="dataAbertura" data-sortable="true" data-formatter="spanTabela">Abertura</th>
+                <th data-field="iusuarioAbertura.nome" data-sortable="true" data-formatter="spanTabela">Usuário</th>
+                <th data-field="resumoChamado" data-sortable="true" data-formatter="spanTabela">Resumo</th>
+                <th data-field="isituacao" data-sortable="true" data-align="center" data-formatter="situacaoChamado">Situação</th>
+            </tr>
+        </thead>
+    </table> 
+    <script>
+
+        function novoChamadoTabela() {
+            return {
+                btnAdd: {
+                    text: 'Novo',
+                    icon: 'bi bi-plus-lg',
+                    event: function () {
+                        chamadoUsuarioLogado();
+                    }
+                }
+            };
+        }
+
+
+        $(function () {
+            $('#button1').click(function () {
+                atualizarTotais();
+                //document.getElementById("tabelaSelecionada").setAttribute('value', 'aguardando');
+                $('#table').bootstrapTable('refreshOptions', {
+                    showColumns: true,
+                    search: true,
+                    showRefresh: true,
+                    url: '/atendimento/chamados/aguardando'
+                });
+            });
+        });
+
+        $(function () {
+            $('#button2').click(function () {
+                atualizarTotais();
+                //document.getElementById("tabelaSelecionada").setAttribute('value', 'atendendo');
+                $('#table').bootstrapTable('refreshOptions', {
+                    showColumns: true,
+                    search: true,
+                    showRefresh: true,
+                    url: '/atendimento/chamados/em-analise'
+                });
+            });
+        });
+
+        $(function () {
+            $('#button3').click(function () {
+                atualizarTotais();
+                //document.getElementById("tabelaSelecionada").setAttribute('value', 'encerrados');
+                $('#table').bootstrapTable('refreshOptions', {
+                    showColumns: true,
+                    search: true,
+                    showRefresh: true,
+                    url: '/atendimento/chamados/finalizados'
+                });
+            });
+        });
+
+        $(function () {
+            let tabelaSelecionada = document.getElementById('tabelaSelecionada').value;
+            switch (tabelaSelecionada) {
+                case 'pendentes':
+                    document.getElementById('button1').click();
+                    break;
+                case 'emAtendimento':
+                    document.getElementById('button2').click();
+                    break;
+                case 'finalizados':
+                    document.getElementById('button3').click();
+                    break;
+                default:
+                    document.getElementById('button1').click();
+                    break;
+            }
+        });
+    </script>
+    <script src="/public/js/bootstrap-table-pt-BR.min.js"></script>
+</div>

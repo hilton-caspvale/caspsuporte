@@ -1,0 +1,115 @@
+<form class="form-floating" id="formEntidade"
+      th:object="${entidadeModel}">
+    <input type="hidden" th:field="*{iEntidade}" id="ientidade"/>
+    <div class="row">
+        <div class="col-md mb-3">
+            <div class="form-floating">                                    
+                <input type="text" required="true" class="form-control" placeholder="Nome"
+                       th:field="*{nomeEntidade}"
+                       name="nomeEntidade"
+                       id="nomeEntidade"/>
+                <label for="nomeEntidade" class="col-sm col-form-label">Nome</label>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="form-floating">
+                <select class="form-control" id="iTipoEntidade" aria-label="Tipo de entidade"
+                        th:field="*{iTipoEntidade}">
+                    <option th:each="tipos : ${listaTiposEntidades}" 
+                            th:value="${tipos}" 
+                            th:text="${tipos.tipoDescricao}"
+                            contenteditable="false"/>
+                </select>
+                <label for="iTiposEtnidade">Tipo de entidade</label>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-floating">
+                <select class="form-select"
+                        id="situacaoEntidade" 
+                        aria-label="Situacao"
+                        th:field="*{situacaoEntidade}">
+                    <option th:each="sit : ${situacoes}" 
+                            th:value="${sit}" 
+                            th:text="${sit}=='A'? 'Ativo' : 'Inativo'"
+                            contenteditable="false"/>
+                </select>
+                <label for="situacao">Situação</label>
+            </div>
+        </div>                                    
+    </div>
+    <div class="row"> 
+        <div class="col-md mb-3">
+            <div class="form-floating">                                    
+                <input type="email" required="true" class="form-control" placeholder="E-Mail"
+                       th:field="*{emailEntidade}"
+                       name="emailEntidade"
+                       id="emailEntidade"/>
+                <label for="emailEntidade" class="col-sm col-form-label">E-Mai</label>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="form-floating">                                    
+                <input type="text" required="true" class="form-control" placeholder="CNPJ"
+                       th:field="*{cnpjEntidade}"
+                       name="cnpjEntidade"
+                       id="cnpjEntidade"/>
+                <label for="cnpjEntidade" class="col-sm col-form-label">CNPJ</label>
+            </div>
+        </div>       
+        <div class="col-md-3 mb-3">
+            <div class="form-floating">                                    
+                <input type="tel" required="true" class="form-control" placeholder="Telefone"
+                       th:field="*{telefoneEntidade}"
+                       name="telefoneEntidade"
+                       id="telefoneEntidade"/>
+                <label for="telefoneEntidade" class="col-sm col-form-label">Telefone</label>
+            </div>
+        </div>                       
+    </div>
+    <div class="row">
+        <div class="col-md">
+            <div class="form-floating mb-3">                                    
+                <input type="text" required="true" class="form-control" placeholder="Endereço"
+                       th:field="*{enderecoEntidade}"
+                       name="enderecoEntidade"
+                       id="enderecoEntidade"/>
+                <label for="enderecoEntidade" class="col-sm col-form-label">Endereço</label>
+            </div>
+        </div> 
+    </div>
+    <div class="row">
+        <div class="col-md mb-3">
+            <textarea class="form-control"
+                      placeholder="Dados do servidor"
+                      title="Dados do servidor"
+                      th:field="*{dadosServidor}"
+                      id="dadosServidor" 
+                      name="dadosServidor">
+            </textarea>             
+        </div>
+        <div class="col-md b-3">
+                <textarea class="form-control"
+                          placeholder="Anotação"
+                          title="Anotação"
+                          th:field="*{comentarioEntidade}"
+                          id="comentarioEntidade" 
+                          name="comentarioEntidade">
+                </textarea>  
+        </div>
+    </div>
+    <div class="col-md">
+        <div class="modal-footer"> 
+            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" th:value="*{iEntidade}" onclick="deletarEntidade(event)">
+                <i class="fas fa-times"></i>
+                Excluir</button>
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" onclick="limparModal()">
+                <i class="fas fa-times"></i>
+                Fechar</button>
+            <button type='button' class='btn btn-success bg-gradient' data-bs-dismiss="modal" th:value="*{iEntidade}"
+                    onclick="editarEntidade(event)">
+                <i class="fas fa-check"></i>
+                Gravar</button>  
+        </div>
+    </div>
+</form>

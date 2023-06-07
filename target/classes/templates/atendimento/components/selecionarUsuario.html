@@ -1,0 +1,61 @@
+<div class="row mb-3">
+    <div class="row">            
+        <div class="col-sm">
+            <div class="form-floating">
+                <select class="form-select form-select-sm" id="ientidade" onchange="selectUsuarios()">
+                    <option th:each="entidade : ${listaEntidades}" 
+                            th:value="${entidade}" 
+                            th:text="${entidade.nomeEntidade}"
+                            contenteditable="false"/>
+                </select>
+                <label for="ientidade">Entidade</label>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-floating">
+                <select class="form-select form-select-sm" id="iarea" aria-label="Area" onchange="selectUsuarios()">
+                    <option th:each="area : ${listaAreas}" 
+                            th:value="${area}" 
+                            th:text="${area.descricaoArea}"
+                            contenteditable="false"/>
+                </select>
+                <label for="iarea">Área</label>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-floating">
+                <select class="form-select form-select-sm" id="isistema" aria-label="Sistema" onchange="selectUsuarios()">
+                    <option th:each="sistema : ${listaSistemas}" 
+                            th:value="${sistema}" 
+                            th:text="${sistema.descricaoSistema}"
+                            contenteditable="false"/>
+                </select>
+                <label for="isistema">Sistema</label>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-floating">
+                <select class="form-select form-select-sm" id="exibir" onchange="selectUsuarios()">
+                    <option th:each="opcao : ${exibir}" 
+                            th:value="${opcao}" 
+                            th:text="${opcao}"
+                            contenteditable="false"/>
+                </select>
+                <label for="exibir">Exibir</label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mb-3">
+    <div class="col-md" id="idSelectUsuarios"></div>
+</div>    
+<div class="row mb-3 justify-content-end"> 
+    <div class="col-md-2">
+        <button type="button" id="bt-selecionar" class="btn btn-secondary" onclick="chamadoUsuarioSelecionado()" disabled="" data-bs-dismiss="modal">Selecionar</button>
+    </div>
+    <div class="col-md form-check form-switch">
+        <input class="form-check-input text-end" type="checkbox" role="switch" id="somenteClientes" checked onclick="selectUsuarios()">
+        <label class="form-check-label text-end" for="somenteClientes">Somente clientes</label>
+    </div>
+</div>
+<script>selectUsuarios()</script>

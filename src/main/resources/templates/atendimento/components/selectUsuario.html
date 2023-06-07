@@ -1,0 +1,11 @@
+<select class="form-select choicesUsuarios" 
+        id="choices-usuarios"
+        multiple=""
+        onchange="validarSelectUsuario(document.getElementById('choices-usuarios'), document.getElementById('bt-selecionar'))">
+    <option th:each="usuario : ${usuariosAbertura}"
+            th:value="${usuario}"
+            th:id="${usuario.iUsuario}"
+            th:text="${usuario.nomeUsuario}+' ('+${usuario.nlogin}+') - '+  ${#strings.arrayJoin(usuario.caspEntidadesList,', ')}"  
+            contenteditable="false"/>
+</select>
+<script>choicesUsuarios()</script>

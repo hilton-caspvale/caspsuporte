@@ -1,0 +1,111 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 5 de jun de 2021, 13:30:28
+    Author     : Hilton
+*/
+
+/*.navbar-brand{
+    padding-bottom: 45px;
+}*/
+
+/*.text-ajust{
+    margin-top: 100px;
+}*/
+
+.page-link{
+    color: #0f5132 !important;
+    border-color: #aaa !important;
+}
+
+.casp-link-card{
+    float: right;
+    padding-top: 8px;
+}
+.casp-titulo-card{
+    float: left;
+    padding-top: 10px;
+}
+
+.casp-margens{
+/*    padding-top: 3rem;*/
+    margin-top: 4.2rem;
+}
+
+.casp-card-h{
+    padding-top: 7px;
+}
+
+.casp-fonte-tb{
+    font-size: 0.8rem;
+}
+
+.casp-fonte-tb-c{
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.cor-compras{
+    background-color: #cc0066;    
+}
+
+.cor-tributos{
+    background-color: #009966;    
+}
+
+.cor-rh{
+    background-color: #008fa1;    
+}
+
+.cor-contabil{
+    background-color: #9999ff;    
+}
+
+.cor-betha{
+    background-color: #084298;    
+}
+
+.cor-saude{
+    background-color: #008fa1;    
+}
+
+.cor-suporte{
+    background-color: darkgrey;    
+}
+
+.cor-verd{
+    background-color: #c3ffb8;    
+}
+
+.cor-logocasp{
+    background-color: #95bb32;
+}
+
+.cor-g{
+    background-color: #e9ecef;/*#ced4da;*/
+}
+
+.cor-g1{
+    background-color: #ced4da;
+}
+
+table {
+    word-wrap: break-word;
+}
+
+.casp-textarea{
+    height: 10rem;
+}
+
+.casp-alert{
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 3rem;
+}
+
+.casp-span{
+    padding: 7px;margin-right: 3px;margin-top: 3px;
+}
