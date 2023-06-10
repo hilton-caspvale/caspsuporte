@@ -30,9 +30,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @Configuration
 public class Permissoes {
 
-    public boolean SOMENTE_ENTIDADES_DO_USUARIO = true;
-    public boolean SOMENTE_AREAS_DO_USUARIO = true;
-    public boolean SOMENTE_SISTEMAS_DO_USUARIO = true;
+//    public boolean SOMENTE_ENTIDADES_DO_USUARIO = true;
+//    public boolean SOMENTE_AREAS_DO_USUARIO = true;
+//    public boolean SOMENTE_SISTEMAS_DO_USUARIO = true;
 
     @Autowired
     public UsuariosAssembler usuariosAssembler;

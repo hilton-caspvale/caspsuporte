@@ -72,12 +72,11 @@ public class ChamadosService {
         return gravar(popularNovoChamado(chamado));
     }
 
-    @Transactional
-    public CaspChamados editar(CaspChamados input) {
-        permissoes.exclusivoAdministrador();
-        return chamadosRepository.save(input);
-    }
-
+//    @Transactional
+//    public CaspChamados editar(CaspChamados input) {
+//        permissoes.exclusivoAdministrador();
+//        return chamadosRepository.save(input);
+//    }
     @Transactional
     private CaspChamados gravar(CaspChamados caspChamado) {
         caspChamado.setUsuarioAlteracao(permissoes.login());
@@ -104,7 +103,7 @@ public class ChamadosService {
 
     @Transactional
     public String movimentarChamado(CaspChamados caspChamado, String acao, String mensagem, CaspUsuarios usuarioLogado, String agenda, Integer usuarioEncaminhar) {
-        CaspSituacoes caspSituacoes = caspChamado.getISituacao();
+
         switch (acao) {
             case "atender":
                 caspChamado = atenderChamado(caspChamado, usuarioLogado);
@@ -116,36 +115,33 @@ public class ChamadosService {
                 caspChamado = encaminharChamado(caspChamado, usuarioEncaminhar);
                 break;
             case "cancelar":
-                caspSituacoes = situacao(7);
+                caspChamado = cancelarChamado(caspChamado, usuarioLogado);
                 break;
             case "encerrar":
-                permissoes.restritoAoCliente();
-                caspSituacoes = situacao(5);
-                caspChamado.setIUsuarioEncerramento(usuarioLogado);
+                caspChamado = encerrarChamado(caspChamado, usuarioLogado);
                 break;
             case "aguardarUsuario":
-                permissoes.restritoAoCliente();
-                caspSituacoes = situacao(8);
+                caspChamado = aguardarUsuario(caspChamado, usuarioLogado);
                 break;
             case "aguardarChamadoExterno":
                 permissoes.restritoAoCliente();
-                caspSituacoes = situacao(9);
+                //caspSituacoes = situacao(9);
                 break;
             case "enviarEstudo":
                 permissoes.restritoAoCliente();
-                caspSituacoes = situacao(6);
+                //caspSituacoes = situacao(6);
                 break;
             case "deixarAtendimento":
                 permissoes.restritoAoCliente();
-                caspSituacoes = situacao(1);
+                //caspSituacoes = situacao(1);
                 caspChamado.setIUsuarioAtendimento(null);
                 break;
             case "responder":
-                caspSituacoes = situacao(3);
+                //caspSituacoes = situacao(3);
                 break;
             case "reabrir":
                 permissoes.restritoAoCliente();
-                caspSituacoes = situacao(1);
+                //caspSituacoes = situacao(1);
                 break;
             case "comentario":
                 break;
@@ -157,13 +153,15 @@ public class ChamadosService {
             default:
                 throw new NegocioException("A ação informada [" + acao + "] não existe ou não é permitida.");
         }
+        
+        if(acaoPermitidaParaSituacaoDoChamado(caspChamado, acao)){
+            gravar(caspChamado);
+        }
 
         if (mensagem != null) {
             adicionarComentario(caspChamado, usuarioLogado, mensagem);
         }
-
-        caspChamado.setISituacao(caspSituacoes);
-        caspChamado.setSituacaoChamado(caspSituacoes.getDescricaoSituacao());
+        
         return mensagem;
     }
 
@@ -200,8 +198,7 @@ public class ChamadosService {
             throw new NegocioException("Usuário do encaminhamento não informado corretamente.");
         }
         CaspUsuarios usuarioEncaminhamento = usuariosService.buscarOuFalhar(iUsuarioEncaminhamento);
-        if (usuarioEncaminhamento.getITipoUsuario() == null
-                || usuarioEncaminhamento.getITipoUsuario().getDescricaoTipoUsuario().equals("CLIENTE")) {
+        if (usuarioEncaminhamento.getITipoUsuario().getDescricaoTipoUsuario().equals("CLIENTE")) {
             throw new NegocioException("O chamado só pode ser encaminhado para um analista ou para o administrador!");
         }
         caspChamado = atualizaSituacaoDoChamado(caspChamado, 4);
@@ -214,6 +211,9 @@ public class ChamadosService {
         if (permissoes.roleCLIENTE()) {
             if (Objects.equals(caspChamado.getIUsuarioAbertura().getIUsuario(), usuarioLogado.getIUsuario())
                     && caspChamado.getISituacao().getISituacao() == 1) {
+                caspChamado.setIUsuarioAtendimento(null);
+                caspChamado.setIUsuarioEncaminhamento(null);
+                caspChamado.setIUsuarioEncerramento(null);
                 return atualizaSituacaoDoChamado(caspChamado, 7);
             } else {
                 throw new NegocioException("Sem permissão para cancelar o chamado com a situação atual!");
@@ -221,8 +221,12 @@ public class ChamadosService {
         }
 
         if (permissoes.roleANALISTA()) {
+            permissoes.permissoesPorEntidadeAreaSistema(caspChamado, usuarioLogado);
             if (Objects.equals(caspChamado.getIUsuarioAtendimento().getIUsuario(), usuarioLogado.getIUsuario())
                     && caspChamado.getISituacao().getISituacao() == 3) {
+                caspChamado.setIUsuarioAtendimento(null);
+                caspChamado.setIUsuarioEncaminhamento(null);
+                caspChamado.setIUsuarioEncerramento(null);
                 return atualizaSituacaoDoChamado(caspChamado, 7);
             } else {
                 throw new NegocioException("Sem permissão para cancelar o chamado com a situação atual!");
@@ -230,11 +234,40 @@ public class ChamadosService {
         }
 
         if (permissoes.roleADMIN()) {
+            caspChamado.setIUsuarioAtendimento(null);
+            caspChamado.setIUsuarioEncaminhamento(null);
+            caspChamado.setIUsuarioEncerramento(null);
             return atualizaSituacaoDoChamado(caspChamado, 7);
         } else {
             throw new NegocioException("Sem permissão para cancelar o chamado com a situação atual!");
         }
+    }
 
+    private CaspChamados encerrarChamado(CaspChamados caspChamado, CaspUsuarios usuarioLogado) {
+        permissoes.restritoAoCliente();
+        if (caspChamado.getISituacao().getISituacao() != 3) {
+            throw new NegocioException("Somente chamado EM ATENDIMENTO pode ser encerrado!");
+        }
+        String role = usuarioLogado.getITipoUsuario().getDescricaoTipoUsuario();
+        if (role.equals("ANALISTA")) {
+            permissoes.permissoesPorEntidadeAreaSistema(caspChamado, usuarioLogado);
+            if (!Objects.equals(caspChamado.getIUsuarioAtendimento().getIUsuario(), usuarioLogado.getIUsuario())) {
+                throw new NegocioException("O chamado não pode ser encerrado, pois está em atendimento por outro analista!");
+            }
+        }
+        caspChamado.setIUsuarioAtendimento(null);
+        caspChamado.setIUsuarioEncaminhamento(null);
+        caspChamado.setIUsuarioEncerramento(usuarioLogado);
+        caspChamado.setDataEncerramento(LocalDateTime.now());
+        return atualizaSituacaoDoChamado(caspChamado, 5);
+    }
+
+    private CaspChamados aguardarUsuario(CaspChamados caspChamado, CaspUsuarios usuarioLogado) {
+        permissoes.restritoAoCliente();
+        if (!usuarioLogado.getITipoUsuario().getDescricaoTipoUsuario().equals("ADMINISTRADOR")) {
+            permissoes.permissoesPorEntidadeAreaSistema(caspChamado, usuarioLogado);
+        }
+        return atualizaSituacaoDoChamado(caspChamado, 8);
     }
 
     public List<CaspChamados> aguardando(CaspUsuarios usuarioLogado) {
@@ -359,6 +392,137 @@ public class ChamadosService {
         chamado.setISituacao(situacaoChamado);
         chamado.setSituacaoChamado(situacaoChamado.getDescricaoSituacao());
         return chamado;
+    }
+
+    private boolean acaoPermitidaParaSituacaoDoChamado(CaspChamados caspChamado, String acao) {
+        String descricaoSituacaoAtual = caspChamado.getISituacao().getDescricaoSituacao();
+        List<String> situacoesPermitidas = new ArrayList<>();
+        switch (acao) {
+            case "atender":
+                situacoesPermitidas.clear();
+                situacoesPermitidas.add("AGUARDANDO ATENDIMENTO");
+                situacoesPermitidas.add("EM ATENDIMENTO");
+                situacoesPermitidas.add("AGENDADO");
+                situacoesPermitidas.add("AGUARDANDO USUÁRIO");
+                situacoesPermitidas.add("AGUARDANDO CHAMADO EXTERNO");
+                situacoesPermitidas.add("ENCAMINHADO");
+                situacoesPermitidas.add("CANCELADO");
+                situacoesPermitidas.add("ENCERRADO");
+                situacoesPermitidas.add("EM ESTUDO");
+                return verificarSeContemSituacao(descricaoSituacaoAtual, situacoesPermitidas);
+            case "agendar":
+                situacoesPermitidas.clear();
+                situacoesPermitidas.add("AGUARDANDO ATENDIMENTO");
+                situacoesPermitidas.add("EM ATENDIMENTO");
+                situacoesPermitidas.add("AGENDADO");
+                situacoesPermitidas.add("AGUARDANDO CHAMADO EXTERNO");
+                situacoesPermitidas.add("ENCAMINHADO");
+                situacoesPermitidas.add("EM ESTUDO");
+                return verificarSeContemSituacao(descricaoSituacaoAtual, situacoesPermitidas);
+            case "encaminhar":
+                situacoesPermitidas.clear();
+                situacoesPermitidas.add("AGUARDANDO ATENDIMENTO");
+                situacoesPermitidas.add("EM ATENDIMENTO");
+                situacoesPermitidas.add("AGENDADO");
+                situacoesPermitidas.add("AGUARDANDO CHAMADO EXTERNO");
+                situacoesPermitidas.add("ENCAMINHADO");
+                situacoesPermitidas.add("EM ESTUDO");
+                return verificarSeContemSituacao(descricaoSituacaoAtual, situacoesPermitidas);
+            case "cancelar":
+                situacoesPermitidas.clear();
+                situacoesPermitidas.add("AGUARDANDO ATENDIMENTO");
+                situacoesPermitidas.add("EM ATENDIMENTO");
+                situacoesPermitidas.add("AGUARDANDO USUÁRIO");
+                return verificarSeContemSituacao(descricaoSituacaoAtual, situacoesPermitidas);
+            case "encerrar":
+                situacoesPermitidas.clear();
+                situacoesPermitidas.add("EM ATENDIMENTO");
+                return verificarSeContemSituacao(descricaoSituacaoAtual, situacoesPermitidas);
+            case "aguardarUsuario":
+                situacoesPermitidas.clear();
+                situacoesPermitidas.add("AGUARDANDO ATENDIMENTO");
+                situacoesPermitidas.add("EM ATENDIMENTO");
+                situacoesPermitidas.add("AGUARDANDO CHAMADO EXTERNO");
+                situacoesPermitidas.add("EM ESTUDO");
+                situacoesPermitidas.add("ENCAMINHADO");
+                return verificarSeContemSituacao(descricaoSituacaoAtual, situacoesPermitidas);
+            case "aguardarChamadoExterno":
+                situacoesPermitidas.clear();
+                situacoesPermitidas.add("EM ATENDIMENTO");
+                situacoesPermitidas.add("AGENDADO");
+                situacoesPermitidas.add("AGUARDANDO CHAMADO EXTERNO");
+                situacoesPermitidas.add("ENCAMINHADO");
+                situacoesPermitidas.add("EM ESTUDO");
+                return verificarSeContemSituacao(descricaoSituacaoAtual, situacoesPermitidas);
+            case "enviarEstudo":
+                situacoesPermitidas.clear();
+                situacoesPermitidas.add("EM ATENDIMENTO");
+                situacoesPermitidas.add("AGENDADO");
+                situacoesPermitidas.add("AGUARDANDO USUÁRIO");
+                situacoesPermitidas.add("AGUARDANDO CHAMADO EXTERNO");
+                situacoesPermitidas.add("ENCAMINHADO");
+                return verificarSeContemSituacao(descricaoSituacaoAtual, situacoesPermitidas);
+            case "deixarAtendimento":
+                situacoesPermitidas.clear();
+                situacoesPermitidas.add("EM ATENDIMENTO");
+                situacoesPermitidas.add("AGUARDANDO USUÁRIO");
+                situacoesPermitidas.add("AGUARDANDO CHAMADO EXTERNO");
+                situacoesPermitidas.add("ENCAMINHADO");
+                situacoesPermitidas.add("EM ESTUDO");
+                return verificarSeContemSituacao(descricaoSituacaoAtual, situacoesPermitidas);
+            case "responder":
+                situacoesPermitidas.clear();
+                situacoesPermitidas.add("AGUARDANDO USUÁRIO");
+                return verificarSeContemSituacao(descricaoSituacaoAtual, situacoesPermitidas);
+            case "reabrir":
+                situacoesPermitidas.clear();
+                situacoesPermitidas.add("ENCERRADO");
+                return verificarSeContemSituacao(descricaoSituacaoAtual, situacoesPermitidas);
+            case "comentario":
+                situacoesPermitidas.clear();
+                situacoesPermitidas.add("AGUARDANDO ATENDIMENTO");
+                situacoesPermitidas.add("EM ATENDIMENTO");
+                situacoesPermitidas.add("AGENDADO");
+                situacoesPermitidas.add("AGUARDANDO USUÁRIO");
+                situacoesPermitidas.add("AGUARDANDO CHAMADO EXTERNO");
+                situacoesPermitidas.add("ENCAMINHADO");
+                situacoesPermitidas.add("CANCELADO");
+                situacoesPermitidas.add("ENCERRADO");
+                situacoesPermitidas.add("EM ESTUDO");
+                return verificarSeContemSituacao(descricaoSituacaoAtual, situacoesPermitidas);
+            case "anexar":
+                situacoesPermitidas.clear();
+                situacoesPermitidas.add("AGUARDANDO ATENDIMENTO");
+                situacoesPermitidas.add("EM ATENDIMENTO");
+                situacoesPermitidas.add("AGENDADO");
+                situacoesPermitidas.add("AGUARDANDO USUÁRIO");
+                situacoesPermitidas.add("AGUARDANDO CHAMADO EXTERNO");
+                situacoesPermitidas.add("ENCAMINHADO");
+                situacoesPermitidas.add("ENCERRADO");
+                situacoesPermitidas.add("EM ESTUDO");
+                return verificarSeContemSituacao(descricaoSituacaoAtual, situacoesPermitidas);
+            case "editar":
+                situacoesPermitidas.clear();
+                situacoesPermitidas.add("AGUARDANDO ATENDIMENTO");
+                situacoesPermitidas.add("EM ATENDIMENTO");
+                situacoesPermitidas.add("AGENDADO");
+                situacoesPermitidas.add("AGUARDANDO USUÁRIO");
+                situacoesPermitidas.add("AGUARDANDO CHAMADO EXTERNO");
+                situacoesPermitidas.add("ENCAMINHADO");
+                situacoesPermitidas.add("EM ESTUDO");
+                return verificarSeContemSituacao(descricaoSituacaoAtual, situacoesPermitidas);
+            default:
+                throw new NegocioException("A ação informada [" + acao + "] não existe ou não é permitida.");
+        }
+    }
+
+    private boolean verificarSeContemSituacao(String descricaoSituacaoAtual, List<String> situacoes) {
+        for (String situacao : situacoes) {
+            if (descricaoSituacaoAtual.contains(situacao)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
