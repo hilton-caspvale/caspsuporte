@@ -124,26 +124,22 @@ public class ChamadosService {
                 caspChamado = aguardarUsuario(caspChamado, usuarioLogado);
                 break;
             case "aguardarChamadoExterno":
-                permissoes.restritoAoCliente();
-                //caspSituacoes = situacao(9);
+                caspChamado = aguardarChamadoExterno(caspChamado, usuarioLogado);
                 break;
             case "enviarEstudo":
-                permissoes.restritoAoCliente();
-                //caspSituacoes = situacao(6);
+                caspChamado = enviarEstudo(caspChamado, usuarioLogado);
                 break;
             case "deixarAtendimento":
-                permissoes.restritoAoCliente();
-                //caspSituacoes = situacao(1);
-                caspChamado.setIUsuarioAtendimento(null);
+                caspChamado = deixarAtendimento(caspChamado, usuarioLogado);
                 break;
             case "responder":
-                //caspSituacoes = situacao(3);
+                caspChamado = responder(caspChamado, usuarioLogado);
                 break;
             case "reabrir":
-                permissoes.restritoAoCliente();
-                //caspSituacoes = situacao(1);
+                caspChamado = reabrir(caspChamado, usuarioLogado);
                 break;
             case "comentario":
+                caspChamado = comentario(caspChamado, usuarioLogado, mensagem);
                 break;
             case "anexar":
                 break;
@@ -153,15 +149,15 @@ public class ChamadosService {
             default:
                 throw new NegocioException("A ação informada [" + acao + "] não existe ou não é permitida.");
         }
-        
-        if(acaoPermitidaParaSituacaoDoChamado(caspChamado, acao)){
+
+        if (acaoPermitidaParaSituacaoDoChamado(caspChamado, acao)) {
             gravar(caspChamado);
         }
 
         if (mensagem != null) {
             adicionarComentario(caspChamado, usuarioLogado, mensagem);
         }
-        
+
         return mensagem;
     }
 
@@ -268,6 +264,53 @@ public class ChamadosService {
             permissoes.permissoesPorEntidadeAreaSistema(caspChamado, usuarioLogado);
         }
         return atualizaSituacaoDoChamado(caspChamado, 8);
+    }
+
+    private CaspChamados aguardarChamadoExterno(CaspChamados caspChamado, CaspUsuarios usuarioLogado) {
+        permissoes.restritoAoCliente();
+        if (!usuarioLogado.getITipoUsuario().getDescricaoTipoUsuario().equals("ADMINISTRADOR")) {
+            permissoes.permissoesPorEntidadeAreaSistema(caspChamado, usuarioLogado);
+        }
+        return atualizaSituacaoDoChamado(caspChamado, 9);
+    }
+
+    private CaspChamados enviarEstudo(CaspChamados caspChamado, CaspUsuarios usuarioLogado) {
+        permissoes.restritoAoCliente();
+        if (!usuarioLogado.getITipoUsuario().getDescricaoTipoUsuario().equals("ADMINISTRADOR")) {
+            permissoes.permissoesPorEntidadeAreaSistema(caspChamado, usuarioLogado);
+        }
+        return atualizaSituacaoDoChamado(caspChamado, 6);
+    }
+
+    private CaspChamados deixarAtendimento(CaspChamados caspChamado, CaspUsuarios usuarioLogado) {
+        permissoes.restritoAoCliente();
+        if (!usuarioLogado.getITipoUsuario().getDescricaoTipoUsuario().equals("ADMINISTRADOR")) {
+            permissoes.permissoesPorEntidadeAreaSistema(caspChamado, usuarioLogado);
+        }
+        caspChamado.setIUsuarioAtendimento(null);
+        return atualizaSituacaoDoChamado(caspChamado, 1);
+    }
+
+    private CaspChamados responder(CaspChamados caspChamado, CaspUsuarios usuarioLogado) {
+        permissoes.permissoesPorEntidadeAreaSistema(caspChamado, caspChamado.getIUsuarioAbertura());
+        return atualizaSituacaoDoChamado(caspChamado, 3);
+    }
+
+    private CaspChamados reabrir(CaspChamados caspChamado, CaspUsuarios usuarioLogado) {
+        permissoes.restritoAoCliente();
+        if (!usuarioLogado.getITipoUsuario().getDescricaoTipoUsuario().equals("ADMINISTRADOR")) {
+            permissoes.permissoesPorEntidadeAreaSistema(caspChamado, usuarioLogado);
+        }
+        caspChamado.setIUsuarioEncerramento(null);
+        caspChamado.setIUsuarioAtendimento(null);
+        return atualizaSituacaoDoChamado(caspChamado, 1);
+    }
+
+    private CaspChamados comentario(CaspChamados caspChamado, CaspUsuarios usuarioLogado, String mensagem) {
+        if (!usuarioLogado.getITipoUsuario().getDescricaoTipoUsuario().equals("ADMINISTRADOR")) {
+            permissoes.permissoesPorEntidadeAreaSistema(caspChamado, usuarioLogado);
+        }
+        return caspChamado;
     }
 
     public List<CaspChamados> aguardando(CaspUsuarios usuarioLogado) {

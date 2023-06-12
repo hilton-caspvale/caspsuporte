@@ -73,18 +73,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             HttpHeaders headers, HttpStatus status, WebRequest request) {
         return handleValidationInternal(ex, headers, status, request, ex.getBindingResult());
     }
-    
+
     @Override
     protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex,
             HttpHeaders headers, HttpStatus status, WebRequest request) {
         ProblemType problemType = ProblemType.PARAMETRO_INVALIDO;
-        String detail = "Parametro obrigatório ["+ex.getParameterName()+"] do tipo ["+ex.getParameterType()+"] nao foi informado";
+        String detail = "Parametro obrigatório [" + ex.getParameterName() + "] do tipo [" + ex.getParameterType() + "] nao foi informado";
         Object body = Problem.builder()
-                    .timestamp(LocalDateTime.now())
-                    .title(problemType.getTitle())
-                    .status(status.value())
-                    .userMessage(detail)
-                    .build();        
+                .timestamp(LocalDateTime.now())
+                .title(problemType.getTitle())
+                .status(status.value())
+                .userMessage(detail)
+                .build();
         return handleExceptionInternal(ex, body, headers, status, request);
     }
 
@@ -117,9 +117,22 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         return handleExceptionInternal(ex, problem, headers, status, request);
     }
-    
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<Object> nullPointerException(Exception ex, WebRequest request) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        ProblemType problemType = ProblemType.DADOS_INVALIDOS;
+        String detail = "O recurso acessado possui um ou mais campos que estão indevidamente nulos";
+        Problem problem = createProblemBuilder(status, problemType, detail)
+                .userMessage(detail)
+                .build();
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleUncaught(Exception ex, WebRequest request) {
+        System.out.println("Exception.class");
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         ProblemType problemType = ProblemType.ERRO_DE_SISTEMA;
         String detail = MSG_ERRO_GENERICA_USUARIO_FINAL;
@@ -132,12 +145,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
-    
+
     public ResponseEntity<Object> rwaw(Exception ex, WebRequest request) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         ProblemType problemType = ProblemType.ERRO_DE_SISTEMA;
         String detail = MSG_ERRO_GENERICA_USUARIO_FINAL;
-        
+
         ex.printStackTrace();
 
         Problem problem = createProblemBuilder(status, problemType, detail)
@@ -146,14 +159,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
-    
 
     @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
     public ResponseEntity<Object> handleObjectOptimisticLockingFailureException(Exception ex, WebRequest request) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         ProblemType problemType = ProblemType.ERRO_DE_SISTEMA;
         String detail = "A atualização já foi realizada na requisição anterior!";
-        
+
         Problem problem = createProblemBuilder(status, problemType, detail)
                 .userMessage(detail)
                 .build();
@@ -273,7 +285,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
-    
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<?> handleRegistroEmUso(DataIntegrityViolationException ex, WebRequest request) {
 
@@ -286,7 +298,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
-    
 
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
     public ResponseEntity<?> handleEntidadeNaoEncontrada(EntidadeNaoEncontradaException ex,
@@ -370,7 +381,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .map(ref -> ref.getFieldName())
                 .collect(Collectors.joining("."));
     }
-    
+
     /*
     public static final String MSG_ERRO_GENERICA_USUARIO_FINAL
             = "Ocorreu um erro interno inesperado no sistema. Tente novamente e se "

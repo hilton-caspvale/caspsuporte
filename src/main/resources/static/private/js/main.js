@@ -31,7 +31,7 @@ function limparModal() {
     document.getElementById('modalBody').innerHTML = '';
 }
 
-function login(){
+function login() {
     return document.querySelector('.loginlog').id;
 }
 
@@ -98,7 +98,7 @@ function carregarChoices() {
     });
 }
 
-function choicesUsuarios() {    
+function choicesUsuarios() {
     document.querySelectorAll('.choicesUsuarios').forEach(function (element) {
         new Choices(element, {
             placeholder: true,
@@ -113,7 +113,7 @@ function choicesUsuarios() {
 }
 
 
-function carregaHtml(uri, elemento) {
+function carregaHtml2(uri, elemento) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', getUrl() + uri);
     xhr.setRequestHeader('Content-Type', 'text/html');
@@ -131,6 +131,35 @@ function carregaHtml(uri, elemento) {
     xhr.onload = function () {
         $("#" + elemento).html(xhr.responseText);
     };
+}
+
+function carregaHtml(uri, elemento) {
+    fetch(getUrl() + uri, {
+        method: 'GET',
+        headers: new Headers({
+            'Content-Type': 'text/html'
+        })
+    })
+            .then(response => {
+                if (!response.ok) {
+                    //throw new Error('Erro na solicitação. Código do status HTTP: ' + response.status);
+                    response.json().then(function (json) {
+                        if (json.detail === undefined) {
+                            carregarToast(response.status + ' - Recurso não encontrado! ' + json.path);
+                        } else {
+                            carregarToast(json.userMessage);
+                        }
+                    });
+                } else {
+                    return response.text();
+                }
+            })
+            .then(html => {
+                $("#" + elemento).html(html);
+            })
+            .catch(function (error) {
+                carregarToast('Erro ao processar requisição!' + error);
+            });
 }
 
 function carregarToast(mensagem) {
@@ -171,13 +200,13 @@ function requestAtendimento(uri, metodo, object, tabela) {
             })
             .catch(function (error) {
                 carregarToast('Erro ao processar requisição!');
-            });    
+            });
 }
 
 function validarUsuario(formulario) {
     //let login = document.querySelector('#cadastroUsuarioModal input[id="nlogin"]');
     let form = document.querySelector(formulario);
-    let login = form.querySelector('#nlogin');    
+    let login = form.querySelector('#nlogin');
     let usuarioInvalido = form.querySelector('#usuarioInvalido');
     let botaoGravar = form.querySelector('#gravarCliente');
     let texto = 'Informe um login';
@@ -252,10 +281,10 @@ function trocarSenha() {
     }
 }
 
-function validarSelectUsuario(select, bt){
-    if(select.length===1){
+function validarSelectUsuario(select, bt) {
+    if (select.length === 1) {
         bt.removeAttribute('disabled');
-    }else{
+    } else {
         bt.setAttribute('disabled', '');
     }
 }
