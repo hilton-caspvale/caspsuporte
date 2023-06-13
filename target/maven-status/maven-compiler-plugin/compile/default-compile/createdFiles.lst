@@ -73,6 +73,7 @@ caspvale\caspsuporte\atendimento\view\EntidadesView.class
 caspvale\caspsuporte\atendimento\view\SistemasView.class
 caspvale\caspsuporte\domain\security\DetalheUser.class
 caspvale\caspsuporte\atendimento\api\model\AreasInputModel.class
+caspvale\caspsuporte\atendimento\api\model\ArquivosModel.class
 caspvale\caspsuporte\atendimento\domain\repository\EntidadesRepository.class
 caspvale\caspsuporte\atendimento\domain\service\EntidadesService.class
 caspvale\caspsuporte\view\MyErrorController.class

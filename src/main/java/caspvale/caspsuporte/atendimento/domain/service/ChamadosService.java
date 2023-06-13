@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -92,6 +93,11 @@ public class ChamadosService {
         caspAnexos.setComentarioArquivo(comentario);
         caspAnexos.setDataArquivo(LocalDateTime.now());
         anexosService.gravar(caspAnexos);
+    }
+
+    @Transactional
+    public void adicionarArquivo() {
+
     }
 
     @Transactional
@@ -566,6 +572,38 @@ public class ChamadosService {
             }
         }
         return false;
+    }
+
+    private boolean existeFile(List<MultipartFile> file) {
+        if (file == null) {
+            return false;
+        }
+        if (file.isEmpty()) {
+            return false;
+        }
+        return !file.get(0).isEmpty();
+    }
+
+    private boolean tamanhoPermitido(List<MultipartFile> file) {
+        long total = 0;
+        long mb = 1024L * 1024L;
+        for (MultipartFile arquivo : file) {
+            total += arquivo.getSize();
+        }
+        total = total / mb;
+        return total <= 20;
+    }
+
+    private double tamanhoDoArquivoEmKB(MultipartFile file) {
+        double total = 0;
+        long mb = 1024L;
+        total = file.getSize();
+        total = total / mb;
+        return Math.round(total * 100.0) / 100.0;
+    }
+
+    private String formataTamanhoArquivoEmMB(double tamanho) {
+        return String.valueOf(tamanho).replace(".", ",") + " KB";
     }
 
 }

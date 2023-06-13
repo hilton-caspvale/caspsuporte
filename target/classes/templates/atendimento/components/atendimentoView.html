@@ -24,7 +24,7 @@ and open the template in the editor.
                                     <div class="row">
                                         <div class="col-sm">
                                             <div class="row justify-content-start">
-                                                <h5><span class="badge bg-transparent text-dark p-1">Atendimento:</span>
+                                                <h5><span class="badge bg-transparent text-dark p-1">Atendimentok:</span>
                                                     <span class="badge bg-cinza text-dark p-1" th:text="*{iChamado}"></span>
                                                 </h5>
                                             </div>
@@ -252,10 +252,10 @@ and open the template in the editor.
                             </div>
                         </div>
                     </form>
-                    <form id="formAnexo" class="form-floating" method="POST" action="/atendimentos/anexos" 
+                   <!-- <form id="formAnexo" class="form-floating" method="POST" action="/atendimentos/anexos" 
                           enctype='multipart/form-data' th:object="${caspChamados}"> 
                         <input type="hidden" form="formAnexo" th:field="*{iChamado}"/>
-                    </form>
+                    </form>-->
                     <div id="acoesDoChamadoB">
                         <!--<div th:replace="components/atendimento/atendimentoFragment :: acoesDoChamado"></div>-->
                     </div>

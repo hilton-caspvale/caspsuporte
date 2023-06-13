@@ -174,7 +174,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                             >Voltar</button>
                     <button type="button" class="btn btn-success" data-bs-dismiss="modal"
-                            th:value="${atender}" onclick="movimentarChamado(event,'atender',null)">
+                            th:value="${atender}" onclick="movimentarChamado(event, 'atender', null)">
                         Atender
                     </button>
                 </div>
@@ -200,7 +200,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                             >Voltar</button>
                     <button type="submit" class="btn btn-success" data-bs-dismiss="modal"
-                            th:value="${enviarEstudo}" onclick="movimentarChamado(event,'enviarEstudo','comentarioEstudar')">
+                            th:value="${enviarEstudo}" onclick="movimentarChamado(event, 'enviarEstudo', 'comentarioEstudar')">
                         Confirmar
                     </button>
                 </div>
@@ -226,7 +226,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                             >Voltar</button>
                     <button type="submit" class="btn btn-success" data-bs-dismiss="modal"
-                            th:value="${responder}" onclick="movimentarChamado(event,'responder','comentarioResponder')">
+                            th:value="${responder}" onclick="movimentarChamado(event, 'responder', 'comentarioResponder')">
                         Confirmar
                     </button>
                 </div>
@@ -251,7 +251,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                             >Voltar</button>
                     <button type="submit" class="btn btn-success" data-bs-dismiss="modal"
-                            th:value="${comentario}" onclick="movimentarChamado(event,'comentario','comentarioComentario')">
+                            th:value="${comentario}" onclick="movimentarChamado(event, 'comentario', 'comentarioComentario')">
                         Adicionar
                     </button>
                 </div>
@@ -283,7 +283,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                             >Voltar</button>
                     <button type="submit" class="btn btn-success" data-bs-dismiss="modal"
-                            th:value="${agendar}" onclick="movimentarChamado(event,'agendar','comentarioAgendamento','dataagendamentoinput')">
+                            th:value="${agendar}" onclick="movimentarChamado(event, 'agendar', 'comentarioAgendamento', 'dataagendamentoinput')">
                         Agendar
                     </button>
                 </div>
@@ -309,7 +309,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                             >Voltar</button>
                     <button type="submit" class="btn btn-success" data-bs-dismiss="modal"
-                            th:value="${aguardarUsuario}" onclick="movimentarChamado(event,'aguardarUsuario','comentarioAguardar')">
+                            th:value="${aguardarUsuario}" onclick="movimentarChamado(event, 'aguardarUsuario', 'comentarioAguardar')">
                         Confirmar
                     </button>
                 </div>
@@ -336,7 +336,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                             >Voltar</button>
                     <button type="submit" class="btn btn-danger" data-bs-dismiss="modal"
-                            th:value="${cancelar}" onclick="movimentarChamado(event,'cancelar','comentarioCancelamento')">
+                            th:value="${cancelar}" onclick="movimentarChamado(event, 'cancelar', 'comentarioCancelamento')">
                         Cancelar
                     </button>
                 </div>
@@ -361,13 +361,13 @@
                             <optgroup th:each="area : ${caspChamados.caspAreasList}"
                                       th:value="${area}"
                                       th:label="${area.descricaoArea}"><!-- '['+${ent.iTipoEntidade.tipoDescricao}+'] '+-->
-                                <!--<option th:each="usu : ${area.caspUsuariosList}"
-                                        th:value="${usu}"                                            
-                                        th:text="${usu.nomeUsuario}"  
-                                        th:if="${usu.iTipoUsuario.iTipoUsuario}==2? (${usu.situacaoUsuario}=='A'? true : false) : false"
-                                        contenteditable="false"/>
-                            </optgroup>
-                        </select>-->
+                        <!--<option th:each="usu : ${area.caspUsuariosList}"
+                                th:value="${usu}"                                            
+                                th:text="${usu.nomeUsuario}"  
+                                th:if="${usu.iTipoUsuario.iTipoUsuario}==2? (${usu.situacaoUsuario}=='A'? true : false) : false"
+                                contenteditable="false"/>
+                    </optgroup>
+                </select>-->
                     </div>
                     <div class="row mb-3">
                         <textarea class="form-control text-wrap" 
@@ -385,7 +385,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                             >Close</button>
                     <button type="submit" class="btn btn-success" data-bs-dismiss="modal"
-                            th:value="${encaminhar}" onclick="movimentarChamado(event,'encaminhar','comentarioEncaminhar')">
+                            th:value="${encaminhar}" onclick="movimentarChamado(event, 'encaminhar', 'comentarioEncaminhar')">
                         Confirma
                     </button>
                 </div>
@@ -423,7 +423,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                             >Fechar</button>
                     <button type="submit" class="btn btn-success" data-bs-dismiss="modal"
-                            th:value="${encerrar}" onclick="movimentarChamado(event,'encerrar','comentarioCancelamento')">
+                            th:value="${encerrar}" onclick="movimentarChamado(event, 'encerrar', 'comentarioCancelamento')">
                         Encerrar
                     </button>
                 </div>
@@ -446,7 +446,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                             >Fechar</button>
                     <button type="submit" class="btn btn-success" data-bs-dismiss="modal"
-                            th:value="${reabrir}" onclick="movimentarChamado(event,'reabrir',null)">
+                            th:value="${reabrir}" onclick="movimentarChamado(event, 'reabrir', null)">
                         Reabrir
                     </button>
                 </div>
@@ -469,7 +469,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                             >Fechar</button>
                     <button type="submit" class="btn btn-success" data-bs-dismiss="modal"
-                            th:value="${deixarAtendimento}" onclick="movimentarChamado(event,'deixarAtendimento',null)">
+                            th:value="${deixarAtendimento}" onclick="movimentarChamado(event, 'deixarAtendimento', null)">
                         Confirmar
                     </button>
                 </div>
@@ -477,6 +477,10 @@
         </div>
     </div>
 
+    <form id="formAnexo" class="form-floating" method="POST" action="/atendimentos/anexos" 
+          enctype='multipart/form-data' th:object="${caspChamados}"> 
+        <!--<input type="hidden" form="formAnexo" th:field="*{iChamado}"/>-->
+    </form>
     <div
         class="modal fade" id="enviarAnexoModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-dialog-scrollable">
@@ -490,13 +494,13 @@
                     <div class="input-group input-group-sm mb-3">
                         <input type="file"
                                class="form-control"                                                     
-                               form="formAnexos"
+                               form="formAnexo"
                                name="file"
                                multiple=""
-                               id="idAnexos"/>  
+                               id="file"/>  
                     </div>
                     <textarea class="form-control text-wrap" 
-                              placeholder="Comentário (opcional)" form="formAnexos"
+                              placeholder="Comentário (opcional)" form="formAnexo"
                               id="comentarioAnexo"></textarea>
                 </div>
                 <div class="modal-footer">                        

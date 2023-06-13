@@ -13,7 +13,10 @@ import caspvale.caspsuporte.atendimento.domain.service.UsuariosService;
 import caspvale.caspsuporte.atendimento.common.Permissoes;
 import caspvale.caspsuporte.atendimento.domain.model.CaspAnexos;
 import caspvale.caspsuporte.atendimento.domain.service.AnexosService;
+import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.validation.Valid;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -106,9 +109,21 @@ public class ChamadosController {
         return ResponseEntity.ok(chamadosService.movimentarChamado(caspChamado, acao, comentario, caspUsuarioLogado, agenda, usuarioEncaminhar));
     }
 
-    @PatchMapping(path = "/anexos", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> pathAnexos(@RequestParam("file") List<MultipartFile> file) {
-        System.out.println("file: " + file);
+    @PatchMapping(path = "/{id}/anexar"/*, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}*/)
+    public ResponseEntity<?> pathAnexos(@PathVariable Integer id,
+            @RequestParam("file") List<MultipartFile> file,
+            @RequestParam String comentarioAnexo) {
+
+        CaspUsuarios caspUsuarioLogado = permissoes.caspUsuarioLogado();
+        CaspChamados caspChamado = chamadosService.chamadoLocalizadoPermitidoParaUsuario(id, caspUsuarioLogado);
+
+        file.forEach(f -> {
+            System.out.println("INI: " + f.getContentType());
+            System.out.println("getName: " + f.getName());
+            System.out.println("getOriginalFilename: " + f.getOriginalFilename());
+            System.out.println("getSize: " + f.getSize());
+            System.out.println("isEmpty: " + f.isEmpty());
+        });
         return ResponseEntity.ok("OKOK");
     }
 

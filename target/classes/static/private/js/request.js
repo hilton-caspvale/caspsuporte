@@ -184,6 +184,63 @@ function deletarComentario(event, comentarioId) {
             });
 }
 
+function patchEnviarAnexo(method, event) {
+    event.preventDefault();
+    //let form = document.getElementById('formAnexo');//$('#formAnexos')[0];
+    let form = $('#formAnexo')[0];
+    console.log('form: ' + form);
+    const idChamado = document.getElementById('ichamado').value;
+    const comentarioAnexo = document.getElementById('comentarioAnexo').value;
+    var data = new FormData(form);
+    data.append("iChamado", idChamado);
+    data.append("comentarioAnexo", comentarioAnexo);
+    $.ajax({
+        url: "/atendimento/chamados/" + idChamado + "/anexar",
+        enctype: 'multipart/form-data',
+        type: method,
+        data: data,
+        processData: false,
+        contentType: false,
+        cache: false,
+        timeout: 600000,
+        error: function (msg) {
+            carregarToast(msg.statusText);
+            return msg;
+        },
+        success: function (html) {
+            //$("#tabelapainel").html(html);
+        }
+    });
+}
+
+
+function patchEnviarAnexo2(method, event) {
+    event.preventDefault();
+    const form = $('#formAnexos')[0];
+    const idChamado = document.getElementById('ichamado').value;
+    const comentarioAnexo = document.getElementById('comentarioAnexo').value;
+    var data = new FormData(form);
+    data.append("iChamado", idChamado);
+    data.append("comentarioAnexo", comentarioAnexo);
+    $.ajax({
+        url: "/atendimento/chamados/" + idChamado + "/anexar",
+        enctype: 'multipart/form-data',
+        type: method,
+        data: data,
+        processData: false,
+        contentType: false,
+        cache: false,
+        timeout: 600000,
+        error: function (msg) {
+            alert(msg.statusText);
+            return msg;
+        },
+        success: function (html) {
+            alert('ussss');//$("#tabelapainel").html(html);
+        }
+    });
+}
+
 function alertaCampos(mensagem, detalhe) {
     let wrapper = document.createElement('div');
     wrapper.innerHTML = [
