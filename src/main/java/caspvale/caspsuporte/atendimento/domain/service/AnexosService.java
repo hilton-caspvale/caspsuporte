@@ -4,13 +4,29 @@
  */
 package caspvale.caspsuporte.atendimento.domain.service;
 
+import caspvale.caspsuporte.atendimento.common.ManipulaArquivos;
 import caspvale.caspsuporte.atendimento.common.Permissoes;
 import caspvale.caspsuporte.atendimento.domain.model.CaspAnexos;
+import caspvale.caspsuporte.atendimento.domain.model.CaspArquivos;
+import caspvale.caspsuporte.atendimento.domain.model.CaspChamados;
+import caspvale.caspsuporte.atendimento.domain.model.CaspTiposArquivos;
+import caspvale.caspsuporte.atendimento.domain.model.CaspUsuarios;
 import caspvale.caspsuporte.atendimento.domain.repository.AnexosRepository;
+import caspvale.caspsuporte.atendimento.domain.repository.ArquivosRepository;
+import caspvale.caspsuporte.atendimento.domain.repository.TiposArquivosRepository;
 import caspvale.caspsuporte.domain.exception.AnexoNaoEncontradoException;
+import caspvale.caspsuporte.domain.exception.NegocioException;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -20,11 +36,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class AnexosService {
 
     private final AnexosRepository anexosRepository;
-    private final Permissoes permissoes;
+    private final ArquivosRepository arquivosRepository;
+    private final TiposArquivosRepository tiposArquivosRepository;
+    private final ManipulaArquivos manipulaArquivos;
 
-    public AnexosService(AnexosRepository anexosRepository, Permissoes permissoes) {
+    public AnexosService(AnexosRepository anexosRepository,
+            ArquivosRepository arquivosRepository,
+            TiposArquivosRepository tiposArquivosRepository,
+            ManipulaArquivos manipulaArquivos) {
         this.anexosRepository = anexosRepository;
-        this.permissoes = permissoes;
+        this.arquivosRepository = arquivosRepository;
+        this.tiposArquivosRepository = tiposArquivosRepository;
+        this.manipulaArquivos = manipulaArquivos;
     }
 
     public CaspAnexos buscarOuFalhar(Integer id) {
@@ -39,9 +62,12 @@ public class AnexosService {
     }
 
     @Transactional
-    public boolean deletarAnexo(Integer iAnexo) {
+    public boolean deletarAnexo(CaspAnexos caspAnexo) {
         try {
-            anexosRepository.deleteById(iAnexo);
+            if (caspAnexo.getIArquivo() != null) {
+                arquivosRepository.deleteById(caspAnexo.getIArquivo());
+            }
+            anexosRepository.deleteById(caspAnexo.getIAnexo());
             return true;
         } catch (Exception e) {
             return false;
@@ -49,8 +75,80 @@ public class AnexosService {
     }
 
     @Transactional
-    public CaspAnexos gravar(CaspAnexos caspAnexo) {
+    private CaspAnexos gravar(CaspAnexos caspAnexo) {
         return anexosRepository.saveAndFlush(caspAnexo);
+    }
+
+    @Transactional
+    public void adicionarArquivo(CaspChamados caspChamado, CaspUsuarios caspUsuariologado, List<MultipartFile> file, String comentarioAnexo) {
+        manipulaArquivos.tamanhoPermitido(file);
+        gravarArquivosAnexados(caspChamado, file, caspUsuariologado);
+        if (!comentarioAnexo.equals("")) {
+            adicionarComentario(caspChamado, caspUsuariologado, comentarioAnexo);
+        }
+    }
+
+    @Transactional
+    public CaspAnexos adicionarComentario(CaspChamados caspchamado, CaspUsuarios caspUsuariologado, String comentario) {
+        CaspAnexos caspAnexos = new CaspAnexos();
+        caspAnexos.setIChamado(caspchamado);
+        caspAnexos.setIUsuario(caspUsuariologado);
+        caspAnexos.setComentarioArquivo(comentario);
+        caspAnexos.setDataArquivo(LocalDateTime.now());
+        return gravar(caspAnexos);
+    }
+
+    @Transactional
+    private void gravarArquivosAnexados(CaspChamados caspChamados, List<MultipartFile> file, CaspUsuarios usuarioLogado) {
+        List<CaspAnexos> listaAnexos = new ArrayList<>();
+        file.forEach(arqui -> {
+            if (!arqui.getOriginalFilename().equals("")) {
+                try {
+                    CaspArquivos novoArquivo = new CaspArquivos();
+                    CaspAnexos novoAnexo = new CaspAnexos();
+                    novoArquivo.setArquivo(arqui.getBytes());
+                    arquivosRepository.save(novoArquivo);
+                    novoAnexo.setIArquivo(novoArquivo.getIArquivo());
+                    novoAnexo.setArquivo(null);
+                    novoAnexo.setDataArquivo(LocalDateTime.now());
+                    novoAnexo.setDescricaoArquivo(arqui.getOriginalFilename());
+                    novoAnexo.setITipoArquivo(tiposArquivos(arqui.getContentType()));
+                    novoAnexo.setIUsuario(usuarioLogado);
+                    novoAnexo.setSituacaoArquivo("A");
+                    novoAnexo.setComentarioArquivo(formataTamanhoArquivoEmMB(tamanhoDoArquivoEmKB(arqui)));
+                    novoAnexo.setDiretorioArquivo(arqui.getContentType());
+                    anexosRepository.save(novoAnexo);
+                    listaAnexos.add(novoAnexo);
+                    caspChamados.getCaspAnexosList().add(novoAnexo);
+                } catch (IOException ex) {
+                    throw new NegocioException("Erro ao gravar anexo", ex);
+                }
+            }
+        });
+        listaAnexos.forEach(anexo -> {
+            anexo.setIChamado(caspChamados);
+        });
+        anexosRepository.saveAll(listaAnexos);
+    }
+
+    public CaspTiposArquivos tiposArquivos(String contentType) {
+        if (contentType.contains("image")) {
+            return tiposArquivosRepository.findById(3).get();
+        } else {
+            return tiposArquivosRepository.findById(1).get();
+        }
+    }
+
+    public double tamanhoDoArquivoEmKB(MultipartFile file) {
+        double total = 0;
+        long mb = 1024L;
+        total = file.getSize();
+        total = total / mb;
+        return Math.round(total * 100.0) / 100.0;
+    }
+
+    public String formataTamanhoArquivoEmMB(double tamanho) {
+        return String.valueOf(tamanho).replace(".", ",") + " KB";
     }
 
 }

@@ -16,6 +16,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -37,6 +38,7 @@ public class CaspArquivos implements Serializable {
     private Integer iArquivo;
     @Lob
     @Column(name = "arquivo")
+    @Type(type="org.hibernate.type.BinaryType")
     private byte[] arquivo;
 
     public CaspArquivos() {

@@ -7,32 +7,32 @@ function trocarsenha(event) {
     limparModal();
 }
 
-function gravarAnexo(event) {
-    let method = 'POST';
-    event.preventDefault();
-    let form = $('#formAnexo')[0];
-    let idChamado = document.getElementById('iChamado').value;
-    let data = new FormData(form);
-    data.append("iChamado", idChamado);
-    console.log('data: ' + data);
-    $.ajax({
-        url: "/atendimento/chamados/anexo",
-        enctype: 'multipart/form-data',
-        type: method,
-        data: data,
-        processData: false,
-        contentType: false,
-        cache: false,
-        timeout: 600000,
-        error: function (msg) {
-            carregarToast("[" + msg.statusText) + "] - Não foi possível gravar o anexo!";
-            return msg;
-        },
-        success: function (html) {
-            carregarToast("Os anexos do chamado " + idChamado + " gravados com sucesso!");
-        }
-    });
-}
+/*function gravarAnexo(event) {
+ let method = 'POST';
+ event.preventDefault();
+ let form = $('#formAnexo')[0];
+ let idChamado = document.getElementById('iChamado').value;
+ let data = new FormData(form);
+ data.append("iChamado", idChamado);
+ console.log('data: ' + data);
+ $.ajax({
+ url: "/atendimento/chamados/anexo",
+ enctype: 'multipart/form-data',
+ type: method,
+ data: data,
+ processData: false,
+ contentType: false,
+ cache: false,
+ timeout: 600000,
+ error: function (msg) {
+ carregarToast("[" + msg.statusText) + "] - Não foi possível gravar o anexo!";
+ return msg;
+ },
+ success: function (html) {
+ carregarToast("Os anexos do chamado " + idChamado + " gravados com sucesso!");
+ }
+ });
+ }*/
 
 function gravarChamado(event) {
     event.preventDefault();
@@ -77,7 +77,7 @@ function gravarChamado(event) {
 function movimentarChamado(event, acao, comentarioId, dataagendamentoinput) {
     event.preventDefault();
     let iChamado = document.querySelector('#iChamado').value;
-    let patchUrl = getUrl() + "/atendimento/chamados/" + iChamado + "?acao=" + acao;
+    let patchUrl = getUrl() + "/atendimento/chamados/" + iChamado + "/movimentar?acao=" + acao;
     let comentario = '';
 
     if (comentarioId !== null) {
@@ -146,12 +146,12 @@ function setarIAnexo(event) {
     document.getElementById("btExcluir").setAttribute("data-id", iChamado);
 }
 
-function deletarComentario(event, comentarioId) {
+function deletarComentario(event) {
     event.preventDefault();
     var currentTarget = $(event.currentTarget);
     var idAnexo = currentTarget.attr('data-anexo');
     var iChamado = currentTarget.attr('data-id');
-    fetch(getUrl() + "/atendimento/chamados/" + iChamado + "/comentario/" + idAnexo, {
+    fetch(getUrl() + "/atendimento/chamados/" + iChamado + "/anexos/" + idAnexo, {
         method: "DELETE"
     })
             .then(function (response) {
@@ -186,7 +186,6 @@ function deletarComentario(event, comentarioId) {
 
 function patchEnviarAnexo(method, event) {
     event.preventDefault();
-    //let form = document.getElementById('formAnexo');//$('#formAnexos')[0];
     let form = $('#formAnexo')[0];
     console.log('form: ' + form);
     const idChamado = document.getElementById('ichamado').value;
@@ -204,39 +203,12 @@ function patchEnviarAnexo(method, event) {
         cache: false,
         timeout: 600000,
         error: function (msg) {
-            carregarToast(msg.statusText);
+            carregarToast(msg.responseJSON.detail);
             return msg;
         },
         success: function (html) {
-            //$("#tabelapainel").html(html);
-        }
-    });
-}
-
-
-function patchEnviarAnexo2(method, event) {
-    event.preventDefault();
-    const form = $('#formAnexos')[0];
-    const idChamado = document.getElementById('ichamado').value;
-    const comentarioAnexo = document.getElementById('comentarioAnexo').value;
-    var data = new FormData(form);
-    data.append("iChamado", idChamado);
-    data.append("comentarioAnexo", comentarioAnexo);
-    $.ajax({
-        url: "/atendimento/chamados/" + idChamado + "/anexar",
-        enctype: 'multipart/form-data',
-        type: method,
-        data: data,
-        processData: false,
-        contentType: false,
-        cache: false,
-        timeout: 600000,
-        error: function (msg) {
-            alert(msg.statusText);
-            return msg;
-        },
-        success: function (html) {
-            alert('ussss');//$("#tabelapainel").html(html);
+            visualizarChamado(idChamado);
+            carregarToast(html);
         }
     });
 }

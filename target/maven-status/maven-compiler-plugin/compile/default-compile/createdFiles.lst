@@ -63,17 +63,18 @@ caspvale\caspsuporte\atendimento\domain\repository\UsuariosConfigRepository.clas
 caspvale\caspsuporte\atendimento\api\model\AnexosInputModel.class
 caspvale\caspsuporte\atendimento\common\Rotas.class
 caspvale\caspsuporte\atendimento\api\controller\PrioridadesController.class
+caspvale\caspsuporte\atendimento\domain\service\ArquivosService.class
 caspvale\caspsuporte\domain\model\RemotoTiposAcessos.class
 caspvale\caspsuporte\atendimento\api\model\UsuariosAberturaModel.class
 caspvale\caspsuporte\atendimento\api\model\UsuariosResumoModel.class
 caspvale\caspsuporte\atendimento\api\assembler\TiposUsuariosAssembler.class
 caspvale\caspsuporte\domain\security\SecurityConfiguration.class
 caspvale\caspsuporte\atendimento\domain\model\CaspTiposEntidades.class
+caspvale\caspsuporte\atendimento\domain\repository\ArquivosRepository.class
 caspvale\caspsuporte\atendimento\view\EntidadesView.class
 caspvale\caspsuporte\atendimento\view\SistemasView.class
 caspvale\caspsuporte\domain\security\DetalheUser.class
 caspvale\caspsuporte\atendimento\api\model\AreasInputModel.class
-caspvale\caspsuporte\atendimento\api\model\ArquivosModel.class
 caspvale\caspsuporte\atendimento\domain\repository\EntidadesRepository.class
 caspvale\caspsuporte\atendimento\domain\service\EntidadesService.class
 caspvale\caspsuporte\view\MyErrorController.class
@@ -137,6 +138,7 @@ caspvale\caspsuporte\atendimento\api\assembler\UsuariosAssembler.class
 caspvale\caspsuporte\atendimento\api\model\EntidadesInputModel.class
 caspvale\caspsuporte\atendimento\api\controller\NiveisController.class
 caspvale\caspsuporte\atendimento\domain\repository\PrioridadesRepository.class
+caspvale\caspsuporte\atendimento\common\ManipulaArquivos.class
 caspvale\caspsuporte\atendimento\api\model\TiposArquivosModel.class
 caspvale\caspsuporte\atendimento\api\model\OrigensInputModel.class
 caspvale\caspsuporte\atendimento\domain\repository\ChamadosRepository.class

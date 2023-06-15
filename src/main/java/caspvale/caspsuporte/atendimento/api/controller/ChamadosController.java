@@ -6,6 +6,7 @@ import caspvale.caspsuporte.atendimento.api.assembler.UsuariosAssembler;
 import caspvale.caspsuporte.atendimento.api.model.ChamadosInputModel;
 import caspvale.caspsuporte.atendimento.api.model.ChamadosModel;
 import caspvale.caspsuporte.atendimento.api.model.QuantidadeChamados;
+import caspvale.caspsuporte.atendimento.common.ManipulaArquivos;
 import caspvale.caspsuporte.atendimento.domain.model.CaspChamados;
 import caspvale.caspsuporte.atendimento.domain.model.CaspUsuarios;
 import caspvale.caspsuporte.atendimento.domain.service.ChamadosService;
@@ -98,7 +99,17 @@ public class ChamadosController {
         return ResponseEntity.ok(chamadoLocalizado);
     }
 
-    @PatchMapping("/{id}")
+    @PostMapping
+    public ResponseEntity<?> cadastrarNovoChamado(@Valid @RequestBody ChamadosInputModel chamadosInputModel) {
+        ChamadosModel chamadoModel = chamadosInputAssembler.toEntity(chamadosInputModel);
+        permissoes.permissoesAberturaUsuarioLogado(chamadoModel);
+        CaspChamados chamado = chamadosAssembler.toEntity(chamadoModel);
+        CaspChamados novoChamado = chamadosService.novoChamado(chamado);
+        ChamadosModel novoChamadoModel = chamadosAssembler.toModel(novoChamado);
+        return ResponseEntity.ok(novoChamadoModel);
+    }
+
+    @PatchMapping("/{id}/movimentar")
     public ResponseEntity<?> movimentarChamado(@PathVariable Integer id,
             @RequestBody(required = false) String comentario,
             @RequestParam(value = "acao", required = true) String acao,
@@ -112,38 +123,20 @@ public class ChamadosController {
     @PatchMapping(path = "/{id}/anexar"/*, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}*/)
     public ResponseEntity<?> pathAnexos(@PathVariable Integer id,
             @RequestParam("file") List<MultipartFile> file,
-            @RequestParam String comentarioAnexo) {
-
+            @RequestParam(value = "comentarioAnexo", required = false) String comentarioAnexo) {
         CaspUsuarios caspUsuarioLogado = permissoes.caspUsuarioLogado();
         CaspChamados caspChamado = chamadosService.chamadoLocalizadoPermitidoParaUsuario(id, caspUsuarioLogado);
-
-        file.forEach(f -> {
-            System.out.println("INI: " + f.getContentType());
-            System.out.println("getName: " + f.getName());
-            System.out.println("getOriginalFilename: " + f.getOriginalFilename());
-            System.out.println("getSize: " + f.getSize());
-            System.out.println("isEmpty: " + f.isEmpty());
-        });
-        return ResponseEntity.ok("OKOK");
+        anexosService.adicionarArquivo(caspChamado, caspUsuarioLogado, file, comentarioAnexo);
+        return ResponseEntity.ok("Anexo gravado com sucesso!");
     }
 
-    @PostMapping
-    public ResponseEntity<?> cadastrarNovoChamado(@Valid @RequestBody ChamadosInputModel chamadosInputModel) {
-        ChamadosModel chamadoModel = chamadosInputAssembler.toEntity(chamadosInputModel);
-        permissoes.permissoesAberturaUsuarioLogado(chamadoModel);
-        CaspChamados chamado = chamadosAssembler.toEntity(chamadoModel);
-        CaspChamados novoChamado = chamadosService.novoChamado(chamado);
-        ChamadosModel novoChamadoModel = chamadosAssembler.toModel(novoChamado);
-        return ResponseEntity.ok(novoChamadoModel);
-    }
-
-    @DeleteMapping("/{id}/comentario/{comentario}")
+    @DeleteMapping("/{id}/anexos/{comentario}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<?> deletarComentario(@PathVariable Integer id, @PathVariable Integer comentario) {
         chamadosService.chamadoLocalizadoPermitidoParaUsuario(id, permissoes.caspUsuarioLogado());
         CaspAnexos caspAnexo = anexosService.buscarOuFalhar(comentario);
         anexosService.permiteExcluirAnexo(caspAnexo, permissoes.caspUsuarioLogado().getIUsuario());
-        if (anexosService.deletarAnexo(comentario)) {
+        if (anexosService.deletarAnexo(caspAnexo)) {
             return ResponseEntity.ok("Registro excluído com sucesso!");
         } else {
             return ResponseEntity.ok("Não foi possível excluir o registro!");

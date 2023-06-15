@@ -2,6 +2,7 @@ package caspvale.caspsuporte.atendimento.domain.service;
 
 import caspvale.caspsuporte.atendimento.api.model.ChamadosModel;
 import caspvale.caspsuporte.atendimento.api.model.UsuariosModel;
+import caspvale.caspsuporte.atendimento.common.ManipulaArquivos;
 import caspvale.caspsuporte.atendimento.domain.model.CaspChamados;
 import caspvale.caspsuporte.atendimento.domain.model.CaspSituacoes;
 import caspvale.caspsuporte.atendimento.domain.model.CaspUsuarios;
@@ -17,6 +18,7 @@ import caspvale.caspsuporte.domain.exception.NegocioException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.stereotype.Service;
@@ -79,25 +81,10 @@ public class ChamadosService {
 //        return chamadosRepository.save(input);
 //    }
     @Transactional
-    private CaspChamados gravar(CaspChamados caspChamado) {
+    public CaspChamados gravar(CaspChamados caspChamado) {
         caspChamado.setUsuarioAlteracao(permissoes.login());
         caspChamado.setDtAlteracao(LocalDateTime.now());
         return chamadosRepository.saveAndFlush(caspChamado);
-    }
-
-    @Transactional
-    public void adicionarComentario(CaspChamados caspchamado, CaspUsuarios iUsuarioLogado, String comentario) {
-        CaspAnexos caspAnexos = new CaspAnexos();
-        caspAnexos.setIChamado(caspchamado);
-        caspAnexos.setIUsuario(iUsuarioLogado);
-        caspAnexos.setComentarioArquivo(comentario);
-        caspAnexos.setDataArquivo(LocalDateTime.now());
-        anexosService.gravar(caspAnexos);
-    }
-
-    @Transactional
-    public void adicionarArquivo() {
-
     }
 
     @Transactional
@@ -145,12 +132,13 @@ public class ChamadosService {
                 caspChamado = reabrir(caspChamado, usuarioLogado);
                 break;
             case "comentario":
-                caspChamado = comentario(caspChamado, usuarioLogado, mensagem);
+                caspChamado = comentario(caspChamado, usuarioLogado);
                 break;
             case "anexar":
                 break;
             case "editar":
                 permissoes.restritoAoCliente();
+                permissoes.permissoesPorEntidadeAreaSistema(caspChamado, usuarioLogado);
                 break;
             default:
                 throw new NegocioException("A ação informada [" + acao + "] não existe ou não é permitida.");
@@ -161,10 +149,10 @@ public class ChamadosService {
         }
 
         if (mensagem != null) {
-            adicionarComentario(caspChamado, usuarioLogado, mensagem);
+            anexosService.adicionarComentario(caspChamado, usuarioLogado, mensagem);
         }
 
-        return mensagem;
+        return "Registro atualizado!";
     }
 
     private CaspChamados atenderChamado(CaspChamados caspChamado, CaspUsuarios usuarioLogado) {
@@ -312,7 +300,7 @@ public class ChamadosService {
         return atualizaSituacaoDoChamado(caspChamado, 1);
     }
 
-    private CaspChamados comentario(CaspChamados caspChamado, CaspUsuarios usuarioLogado, String mensagem) {
+    private CaspChamados comentario(CaspChamados caspChamado, CaspUsuarios usuarioLogado) {
         if (!usuarioLogado.getITipoUsuario().getDescricaoTipoUsuario().equals("ADMINISTRADOR")) {
             permissoes.permissoesPorEntidadeAreaSistema(caspChamado, usuarioLogado);
         }
@@ -573,37 +561,4 @@ public class ChamadosService {
         }
         return false;
     }
-
-    private boolean existeFile(List<MultipartFile> file) {
-        if (file == null) {
-            return false;
-        }
-        if (file.isEmpty()) {
-            return false;
-        }
-        return !file.get(0).isEmpty();
-    }
-
-    private boolean tamanhoPermitido(List<MultipartFile> file) {
-        long total = 0;
-        long mb = 1024L * 1024L;
-        for (MultipartFile arquivo : file) {
-            total += arquivo.getSize();
-        }
-        total = total / mb;
-        return total <= 20;
-    }
-
-    private double tamanhoDoArquivoEmKB(MultipartFile file) {
-        double total = 0;
-        long mb = 1024L;
-        total = file.getSize();
-        total = total / mb;
-        return Math.round(total * 100.0) / 100.0;
-    }
-
-    private String formataTamanhoArquivoEmMB(double tamanho) {
-        return String.valueOf(tamanho).replace(".", ",") + " KB";
-    }
-
 }

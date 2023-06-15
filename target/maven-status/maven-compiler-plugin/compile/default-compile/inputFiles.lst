@@ -1,4 +1,5 @@
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\domain\model\CaspUsuariosPermissoes.java
+C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\domain\repository\ArquivosRepository.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\domain\service\TiposArquivosService.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\domain\service\UsuariosService.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\domain\model\CaspSistemas.java
@@ -91,6 +92,7 @@ C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\ja
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\api\model\AreasModel.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\api\assembler\UsuariosAberturaAssembler.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\domain\service\ProblemasService.java
+C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\common\ManipulaArquivos.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\domain\model\CaspTiposEntidades.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\view\NiveisView.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\api\controller\SistemasController.java
@@ -157,9 +159,9 @@ C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\ja
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\view\ClientesView.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\api\assembler\TiposUsuariosAssembler.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\domain\model\HoraServidor.java
+C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\domain\service\ArquivosService.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\api\assembler\EntidadesAssembler.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\api\model\EntidadesModel.java
-C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\api\model\ArquivosModel.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\api\controller\TiposEntidadesController.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\api\model\ChamadosExibicaoModel.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\domain\service\TiposEntidadesService.java
