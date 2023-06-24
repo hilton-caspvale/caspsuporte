@@ -71,6 +71,8 @@ C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\ja
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\view\SistemasView.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\api\model\EntidadesDescricaoModel.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\api\model\NiveisModel.java
+C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\api\assembler\AnexosAssembler.java
+C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\api\model\AreasUsuariosModel.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\domain\service\NiveisService.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\domain\service\OrigensService.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\domain\service\SistemasService.java
@@ -122,6 +124,7 @@ C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\ja
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\view\TiposEntidadesView.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\domain\repository\TiposArquivosRepository.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\domain\exception\EntidadeNaoEncontradaException.java
+C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\api\assembler\AreasUsuariosAssembler.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\api\model\PrioridadesModel.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\api\model\QuantidadeChamados.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\domain\repository\TiposEntidadesRepository.java

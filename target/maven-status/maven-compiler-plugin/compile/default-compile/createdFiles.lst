@@ -46,6 +46,7 @@ caspvale\caspsuporte\atendimento\api\model\NiveisModel.class
 caspvale\caspsuporte\domain\model\PontoConfig.class
 caspvale\caspsuporte\api\exceptionHandler\Problem$Object$ObjectBuilder.class
 caspvale\caspsuporte\domain\exception\NegocioException.class
+caspvale\caspsuporte\atendimento\api\assembler\AnexosAssembler.class
 caspvale\caspsuporte\atendimento\domain\model\CaspUsuariosPermissoes.class
 caspvale\caspsuporte\domain\model\RemotoConexoes.class
 caspvale\caspsuporte\atendimento\api\model\PrioridadesModel.class
@@ -60,6 +61,7 @@ caspvale\caspsuporte\atendimento\domain\service\TiposEntidadesService.class
 caspvale\caspsuporte\atendimento\api\controller\AreasController.class
 caspvale\caspsuporte\atendimento\api\controller\TiposUsuariosController.class
 caspvale\caspsuporte\atendimento\domain\repository\UsuariosConfigRepository.class
+caspvale\caspsuporte\atendimento\api\assembler\AnexosAssembler$1.class
 caspvale\caspsuporte\atendimento\api\model\AnexosInputModel.class
 caspvale\caspsuporte\atendimento\common\Rotas.class
 caspvale\caspsuporte\atendimento\api\controller\PrioridadesController.class
@@ -117,9 +119,11 @@ caspvale\caspsuporte\atendimento\api\controller\SituacoesController.class
 caspvale\caspsuporte\domain\model\PontoIntercorrencias.class
 caspvale\caspsuporte\atendimento\view\ProblemasView.class
 caspvale\caspsuporte\atendimento\api\model\UsuariosModel.class
+caspvale\caspsuporte\atendimento\api\assembler\AreasUsuariosAssembler.class
 caspvale\caspsuporte\atendimento\domain\service\AnexosService.class
 caspvale\caspsuporte\domain\model\PontoPeriodos.class
 caspvale\caspsuporte\atendimento\api\model\OrigensModel.class
+caspvale\caspsuporte\atendimento\api\model\AreasUsuariosModel.class
 caspvale\caspsuporte\common\ModelMapperConfig.class
 caspvale\caspsuporte\domain\model\PontoPercentuais.class
 caspvale\caspsuporte\domain\exception\AnexoNaoEncontradoException.class

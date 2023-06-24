@@ -9,6 +9,7 @@ import caspvale.caspsuporte.atendimento.api.controller.PrioridadesController;
 import caspvale.caspsuporte.atendimento.api.controller.SistemasController;
 import caspvale.caspsuporte.atendimento.api.controller.UsuariosController;
 import caspvale.caspsuporte.atendimento.api.model.AnexosInputModel;
+import caspvale.caspsuporte.atendimento.api.model.AreasInputModel;
 import caspvale.caspsuporte.atendimento.api.model.AreasModel;
 import caspvale.caspsuporte.atendimento.api.model.ChamadosInputModel;
 import caspvale.caspsuporte.atendimento.api.model.ChamadosModel;
@@ -89,6 +90,13 @@ public class ChamadosView {
         mv.addObject("login", login);
         mv.addObject("quantidadeComentarios", quantidadeComentarios);
         mv.addObject("quantidadeArquivos", quantidadeArquivos);
+        mv.addObject("areasEncaminhar", areasController.minhasAreas("A").getBody());
+
+        List<Integer> listaIAreas = new ArrayList<>();
+        chamado.getCaspAreasList().forEach(area -> {
+            listaIAreas.add(area.getIArea());
+        });
+        mv.addObject("areachamado", areasController.areasComUsuariosAnalistasDoChamado(listaIAreas));
         return mvComAcoes(chamado, permissoes.usuarioLogadoModel(), mv);
     }
 

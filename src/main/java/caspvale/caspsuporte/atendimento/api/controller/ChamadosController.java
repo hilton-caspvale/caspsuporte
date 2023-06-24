@@ -1,8 +1,10 @@
 package caspvale.caspsuporte.atendimento.api.controller;
 
+import caspvale.caspsuporte.atendimento.api.assembler.AnexosAssembler;
 import caspvale.caspsuporte.atendimento.api.assembler.ChamadosAssembler;
 import caspvale.caspsuporte.atendimento.api.assembler.ChamadosInputAssembler;
 import caspvale.caspsuporte.atendimento.api.assembler.UsuariosAssembler;
+import caspvale.caspsuporte.atendimento.api.model.AnexosModel;
 import caspvale.caspsuporte.atendimento.api.model.ChamadosInputModel;
 import caspvale.caspsuporte.atendimento.api.model.ChamadosModel;
 import caspvale.caspsuporte.atendimento.api.model.QuantidadeChamados;
@@ -13,12 +15,17 @@ import caspvale.caspsuporte.atendimento.domain.service.ChamadosService;
 import caspvale.caspsuporte.atendimento.domain.service.UsuariosService;
 import caspvale.caspsuporte.atendimento.common.Permissoes;
 import caspvale.caspsuporte.atendimento.domain.model.CaspAnexos;
+import caspvale.caspsuporte.atendimento.domain.model.CaspArquivos;
 import caspvale.caspsuporte.atendimento.domain.service.AnexosService;
+import caspvale.caspsuporte.atendimento.domain.service.ArquivosService;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.validation.Valid;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.http.ResponseEntity;
@@ -46,19 +53,25 @@ public class ChamadosController {
 
     private final ChamadosAssembler chamadosAssembler;
     private final ChamadosInputAssembler chamadosInputAssembler;
+    private final AnexosAssembler anexosAssembler;
     private final ChamadosService chamadosService;
     private final Permissoes permissoes;
     private final AnexosService anexosService;
+    private final ArquivosService arquivosService;
 
     public ChamadosController(ChamadosService chamadosService,
             Permissoes permissoes, ChamadosAssembler chamadosAssembler,
+            AnexosAssembler anexosAssembler,
             ChamadosInputAssembler chamadosInputAssembler,
-            AnexosService anexosService) {
+            AnexosService anexosService,
+            ArquivosService arquivosService) {
         this.chamadosService = chamadosService;
         this.permissoes = permissoes;
         this.chamadosAssembler = chamadosAssembler;
+        this.anexosAssembler = anexosAssembler;
         this.chamadosInputAssembler = chamadosInputAssembler;
         this.anexosService = anexosService;
+        this.arquivosService = arquivosService;
     }
 
     @GetMapping()
@@ -120,6 +133,23 @@ public class ChamadosController {
         return ResponseEntity.ok(chamadosService.movimentarChamado(caspChamado, acao, comentario, caspUsuarioLogado, agenda, usuarioEncaminhar));
     }
 
+    @PatchMapping("/{id}/encerrar")
+    public ResponseEntity<?> encerrarChamado(@PathVariable Integer id,
+            @RequestBody(required = true) Object requestBody) {
+        CaspUsuarios caspUsuarioLogado = permissoes.caspUsuarioLogado();
+        CaspChamados caspChamadoLocalizado = chamadosService.chamadoLocalizadoPermitidoParaUsuario(id, caspUsuarioLogado);
+        if (requestBody instanceof Map) {
+            Map<String, Object> jsonMap = (Map<String, Object>) requestBody;
+            String descricaoProblema = (String) jsonMap.get("descricaoProblema");
+            String descricaoSolucao = (String) jsonMap.get("descricaoSolucao");
+            caspChamadoLocalizado.setDescricaoProblema(descricaoProblema);
+            caspChamadoLocalizado.setDescricaoSolucao(descricaoSolucao);
+            return ResponseEntity.ok(chamadosService.movimentarChamado(caspChamadoLocalizado, "encerrar", null, caspUsuarioLogado, null, null));
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Conteúdo indevido!");
+        }
+    }
+
     @PatchMapping(path = "/{id}/anexar"/*, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}*/)
     public ResponseEntity<?> pathAnexos(@PathVariable Integer id,
             @RequestParam("file") List<MultipartFile> file,
@@ -132,7 +162,7 @@ public class ChamadosController {
 
     @DeleteMapping("/{id}/anexos/{comentario}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<?> deletarComentario(@PathVariable Integer id, @PathVariable Integer comentario) {
+    public ResponseEntity<?> deletarAnexo(@PathVariable Integer id, @PathVariable Integer comentario) {
         chamadosService.chamadoLocalizadoPermitidoParaUsuario(id, permissoes.caspUsuarioLogado());
         CaspAnexos caspAnexo = anexosService.buscarOuFalhar(comentario);
         anexosService.permiteExcluirAnexo(caspAnexo, permissoes.caspUsuarioLogado().getIUsuario());
@@ -141,6 +171,19 @@ public class ChamadosController {
         } else {
             return ResponseEntity.ok("Não foi possível excluir o registro!");
         }
+    }
+
+    @GetMapping("/{id}/anexos/{ianexo}")
+    public HttpEntity<byte[]> download(@PathVariable("id") Integer id,
+            @PathVariable("ianexo") Integer ianexo) {
+        chamadosService.chamadoLocalizadoPermitidoParaUsuario(id, permissoes.caspUsuarioLogado());
+        AnexosModel anexosModel = anexosAssembler.toModel(anexosService.buscarOuFalhar(ianexo));
+        CaspArquivos caspArquivos = arquivosService.buscarOuFalhar(anexosModel.getIArquivo());
+        byte[] bytes = caspArquivos.getArquivo();
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Content-Disposition", "attachment;filename=\"" + anexosModel.getDescricaoArquivo() + "\"");
+        HttpEntity<byte[]> entity = new HttpEntity<>(bytes, httpHeaders);
+        return entity;
     }
 
     public void debug(CaspChamados caspChamados) {

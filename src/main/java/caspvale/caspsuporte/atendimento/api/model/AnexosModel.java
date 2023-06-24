@@ -26,10 +26,11 @@ public class AnexosModel {
     private String situacaoArquivo;
     private TiposArquivosInputModel iTipoArquivo;
     private UsuariosInputModel iUsuario;
-    private ArquivosInputModel iArquivo;
-    
+    //private ArquivosInputModel iArquivo;
+    private Integer iArquivo;
+
     @Override
-    public String toString(){
+    public String toString() {
         return iAnexo.toString();
     }
 }

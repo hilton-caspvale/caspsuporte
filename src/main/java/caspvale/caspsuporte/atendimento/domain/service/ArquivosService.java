@@ -44,5 +44,5 @@ public class ArquivosService {
     public CaspArquivos gravar(CaspArquivos caspArquivo) {
         return arquivosRepository.saveAndFlush(caspArquivo);
     }
-
+    
 }

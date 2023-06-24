@@ -19,4 +19,7 @@ public interface AreasRepository extends JpaRepository<CaspAreas, Integer> {
     @Query("SELECT c FROM CaspAreas c WHERE c.situacaoArea like %:situacao% and :usuario MEMBER OF c.caspUsuariosList ORDER BY c.descricaoArea ASC")
     public List<CaspAreas> areasDoUsuario(String situacao, CaspUsuarios usuario);
     
+    @Query("SELECT c FROM CaspAreas c WHERE c.iArea in :listaIAreas ORDER BY c.descricaoArea ASC")
+    public List<CaspAreas> areasDoChamado(List<Integer> listaIAreas);
+    
 }

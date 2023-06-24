@@ -271,7 +271,7 @@
                                                                 <input type="file"
                                                                        id="file"
                                                                        class="row col-md-6 form-control"                                                     
-                                                                       form="formChamado"
+                                                                       form="formAnexo"
                                                                        name="file"
                                                                        multiple="multiple"/>
                                                             </li>
@@ -349,12 +349,15 @@
                                     <button type="button" 
                                             class="btn btn-danger" 
                                             id="liveToastBtn"
-                                            onclick="getChamado()">TESTAR</button>                                        
+                                            onclick="testar1(event)">TESTAR</button>                                        
                                 </div>
                             </div>
                         </div>
                     </div>    
                 </div>
+            </form>
+            <form id="formAnexo" class="form-floating" method="PATCH" action="/atendimentos/anexos" 
+                  enctype='multipart/form-data' th:object="${caspChamados}"> 
             </form>
         </div>
     </div>

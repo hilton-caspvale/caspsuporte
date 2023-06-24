@@ -4,6 +4,7 @@ import caspvale.caspsuporte.atendimento.domain.model.CaspAreas;
 import caspvale.caspsuporte.atendimento.domain.model.CaspUsuarios;
 import caspvale.caspsuporte.domain.exception.AreaNaoEncontradaException;
 import caspvale.caspsuporte.atendimento.domain.repository.AreasRepository;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -20,10 +21,10 @@ public class AreasService {
     @Autowired
     private AreasRepository repository;
 
-    public CaspAreas buscarOuFalhar(Integer id){     
-        return repository.findById(id).orElseThrow(() ->
-                new AreaNaoEncontradaException("Área não localizada!")
-        );        
+    public CaspAreas buscarOuFalhar(Integer id) {
+        return repository.findById(id).orElseThrow(()
+                -> new AreaNaoEncontradaException("Área não localizada!")
+        );
     }
 
     @Transactional
@@ -48,9 +49,31 @@ public class AreasService {
     public List<CaspAreas> listar() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "descricaoArea"));
     }
-    
-   public List<CaspAreas> areasDoUsuario(String situacao, CaspUsuarios usuario) {
-        return repository.areasDoUsuario(situacao, usuario);
-    } 
 
+    public List<CaspAreas> areasDoUsuario(String situacao, CaspUsuarios usuario) {
+        return repository.areasDoUsuario(situacao, usuario);
+    }
+
+    public List<CaspAreas> areasComUsuariosAnalistasDoChamado(List<Integer> listaIAreas) {
+        List<CaspAreas> areas = areasDoChamado(listaIAreas);
+        areas.forEach(area -> {
+            area.setCaspUsuariosList(analistasDasAreas(area));
+        });
+        return areas;
+    }
+
+    private List<CaspAreas> areasDoChamado(List<Integer> listaIAreas) {
+        return repository.areasDoChamado(listaIAreas);
+    }
+
+    private List<CaspUsuarios> analistasDasAreas(CaspAreas area) {
+        List<CaspUsuarios> listaUsuarios = area.getCaspUsuariosList();
+        List<CaspUsuarios> usuariosAnalistas = new ArrayList<>();
+        listaUsuarios.forEach(usuario -> {
+            if (usuario.getITipoUsuario().getDescricaoTipoUsuario().equals("ANALISTA")) {
+                usuariosAnalistas.add(usuario);
+            }
+        });
+        return usuariosAnalistas;
+    }
 }

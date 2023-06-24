@@ -113,7 +113,7 @@ function choicesUsuarios() {
 }
 
 
-function carregaHtml2(uri, elemento) {
+/*function carregaHtml2(uri, elemento) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', getUrl() + uri);
     xhr.setRequestHeader('Content-Type', 'text/html');
@@ -131,7 +131,7 @@ function carregaHtml2(uri, elemento) {
     xhr.onload = function () {
         $("#" + elemento).html(xhr.responseText);
     };
-}
+}*/
 
 function carregaHtml(uri, elemento) {
     fetch(getUrl() + uri, {

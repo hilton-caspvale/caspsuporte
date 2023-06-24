@@ -1,5 +1,6 @@
 var contextPath = '/atendimento/';
 var usuariosPath = contextPath + 'usuarios/';
+var chamadosPatch = contextPath + 'chamados/';
 
 
 function trocarsenha(event) {
@@ -7,36 +8,8 @@ function trocarsenha(event) {
     limparModal();
 }
 
-/*function gravarAnexo(event) {
- let method = 'POST';
- event.preventDefault();
- let form = $('#formAnexo')[0];
- let idChamado = document.getElementById('iChamado').value;
- let data = new FormData(form);
- data.append("iChamado", idChamado);
- console.log('data: ' + data);
- $.ajax({
- url: "/atendimento/chamados/anexo",
- enctype: 'multipart/form-data',
- type: method,
- data: data,
- processData: false,
- contentType: false,
- cache: false,
- timeout: 600000,
- error: function (msg) {
- carregarToast("[" + msg.statusText) + "] - Não foi possível gravar o anexo!";
- return msg;
- },
- success: function (html) {
- carregarToast("Os anexos do chamado " + idChamado + " gravados com sucesso!");
- }
- });
- }*/
-
 function gravarChamado(event) {
     event.preventDefault();
-    let listaEntidades = form.querySelector('#caspEntidadesList');
     let object = getChamado();
     fetch(getUrl() + "/atendimento/chamados", {
         method: "POST",
@@ -48,7 +21,12 @@ function gravarChamado(event) {
             .then(function (response) {
                 if (response.ok) {
                     response.json().then(function (json) {
+                        let file = document.getElementById('file');
+                        if (file.value) {
+                            patchEnviarAnexoNaAbertura(event, json.ichamado);
+                        }
                         carregarToast("Chamado " + json.ichamado + " criado com sucesso!");
+                        visualizarChamado(json.ichamado);
                     });
                 } else {
                     response.json().then(function (json) {
@@ -77,9 +55,9 @@ function gravarChamado(event) {
 function movimentarChamado(event, acao, comentarioId, dataagendamentoinput) {
     event.preventDefault();
     let iChamado = document.querySelector('#iChamado').value;
-    let patchUrl = getUrl() + "/atendimento/chamados/" + iChamado + "/movimentar?acao=" + acao;
+    let patchUrl = getUrl();
+    patchUrl += "/atendimento/chamados/" + iChamado + "/movimentar?acao=" + acao;
     let comentario = '';
-
     if (comentarioId !== null) {
         let comentarioElement = document.getElementById(comentarioId);
         if (comentarioElement) {
@@ -100,7 +78,6 @@ function movimentarChamado(event, acao, comentarioId, dataagendamentoinput) {
             }
         }
     }
-
     fetch(patchUrl, {
         method: "PATCH",
         body: comentario
@@ -137,20 +114,18 @@ function movimentarChamado(event, acao, comentarioId, dataagendamentoinput) {
 
 function setarIAnexo(event) {
     event.preventDefault();
-    var currentTarget = $(event.currentTarget);
-    var idAnexo = currentTarget.attr('data-anexo');
-    var iChamado = currentTarget.attr('data-id');
-    console.log('anexo: ' + idAnexo);
-    console.log('iChamado: ' + iChamado);
+    let currentTarget = $(event.currentTarget);
+    let idAnexo = currentTarget.attr('data-anexo');
+    let iChamado = currentTarget.attr('data-id');
     document.getElementById("btExcluir").setAttribute("data-anexo", idAnexo);
     document.getElementById("btExcluir").setAttribute("data-id", iChamado);
 }
 
 function deletarComentario(event) {
     event.preventDefault();
-    var currentTarget = $(event.currentTarget);
-    var idAnexo = currentTarget.attr('data-anexo');
-    var iChamado = currentTarget.attr('data-id');
+    let currentTarget = $(event.currentTarget);
+    let idAnexo = currentTarget.attr('data-anexo');
+    let iChamado = currentTarget.attr('data-id');
     fetch(getUrl() + "/atendimento/chamados/" + iChamado + "/anexos/" + idAnexo, {
         method: "DELETE"
     })
@@ -180,14 +155,13 @@ function deletarComentario(event) {
                 }
             })
             .catch(function (error) {
-                carregarToast('Erro ao processar requisição!');
+                carregarToast('Erro ao processar requisição! ' + error);
             });
 }
 
-function patchEnviarAnexo(method, event) {
+function patchEnviarAnexo(event) {
     event.preventDefault();
     let form = $('#formAnexo')[0];
-    console.log('form: ' + form);
     const idChamado = document.getElementById('ichamado').value;
     const comentarioAnexo = document.getElementById('comentarioAnexo').value;
     var data = new FormData(form);
@@ -196,7 +170,7 @@ function patchEnviarAnexo(method, event) {
     $.ajax({
         url: "/atendimento/chamados/" + idChamado + "/anexar",
         enctype: 'multipart/form-data',
-        type: method,
+        type: 'PATCH',
         data: data,
         processData: false,
         contentType: false,
@@ -212,6 +186,90 @@ function patchEnviarAnexo(method, event) {
         }
     });
 }
+
+function patchEnviarAnexoNaAbertura(event, idChamado) {
+    event.preventDefault();
+    let form = $('#formAnexo')[0];
+    let comentarioAnexo = '';
+    var data = new FormData(form);
+    data.append("iChamado", idChamado);
+    data.append("comentarioAnexo", comentarioAnexo);
+    $.ajax({
+        url: "/atendimento/chamados/" + idChamado + "/anexar",
+        enctype: 'multipart/form-data',
+        type: 'PATCH',
+        data: data,
+        processData: false,
+        contentType: false,
+        cache: false,
+        timeout: 600000,
+        error: function (msg) {
+            carregarToast(msg.responseJSON.detail);
+            return msg;
+        },
+        success: function (html) {
+//            visualizarChamado(idChamado);
+//            carregarToast(html);
+        }
+    });
+}
+
+function encerrarChamado(event) {
+    event.preventDefault();
+    let currentTarget = $(event.currentTarget);
+    let idChamado = currentTarget.attr('data-id');
+    let uri = getUrl() + "/atendimento/chamados/" + idChamado + "/encerrar";
+    let conteudo = {
+        descricaoProblema: document.getElementById('descricaoProblemaModal').value,
+        descricaoSolucao: document.getElementById('descricaoSolucaoModal').value
+    };
+    let boddy = JSON.stringify(conteudo);
+    fetch(uri, {
+        method: "PATCH",
+        headers: new Headers({
+            'Content-Type': 'application/json'
+        }),
+        body: boddy
+    })
+            .then(function (response) {
+                console.log("response.ok: " + response.ok);
+                if (response.ok) {
+                    response.text().then(function (text) {
+                        carregarToast(text);
+                        visualizarChamado(idChamado);
+                    });
+                } else {
+                    response.json().then(function (json) {
+                        if (json.status === 500) {
+                            carregarToast(json.userMessage);
+                        } else {
+                            if (json.detail === undefined) {
+                                carregarToast(response.status + ' - Recurso não encontrado! ' + json.path);
+                            } else {
+
+                                let detalhe = '';
+                                json.objects.forEach(ob => {
+                                    detalhe = detalhe + 'Campo <strong>' + ob.name + '</strong> ' + ob.userMessage + '<br>';
+                                });
+                                alertaCampos(json.userMessage, detalhe);
+                            }
+                        }
+                    });
+                }
+            })
+            .catch(function (error) {
+                carregarToast('Erro ao processar requisição!');
+            });
+}
+
+/*function baixarArquivo(event) {
+ event.preventDefault();
+ let currentTarget = $(event.currentTarget);
+ let idAnexo = currentTarget.attr('data-anexo');
+ let iChamado = currentTarget.attr('data-id');
+ let uri = chamadosPatch + iChamado + '/anexos/' + idAnexo;
+ carregaHtml(uri, 'root');
+ }*/
 
 function alertaCampos(mensagem, detalhe) {
     let wrapper = document.createElement('div');

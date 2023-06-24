@@ -1,7 +1,9 @@
 package caspvale.caspsuporte.atendimento.api.controller;
 
 import caspvale.caspsuporte.atendimento.api.assembler.AreasAssembler;
+import caspvale.caspsuporte.atendimento.api.assembler.AreasUsuariosAssembler;
 import caspvale.caspsuporte.atendimento.api.model.AreasModel;
+import caspvale.caspsuporte.atendimento.api.model.AreasUsuariosModel;
 import caspvale.caspsuporte.atendimento.domain.model.CaspAreas;
 import caspvale.caspsuporte.atendimento.domain.model.CaspUsuarios;
 import caspvale.caspsuporte.domain.exception.NegocioException;
@@ -29,15 +31,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RestController
 @RequestMapping("/atendimento/areas")
 public class AreasController {
-    
+
     private final AreasAssembler areasAssembler;
+    private final AreasUsuariosAssembler areasUsuariosAssembler;
     private final AreasService areasService;
     private final UsuariosService usuariosService;
     private final Permissoes permissoes;
 
     public AreasController(AreasAssembler areasAssembler, AreasService areasService,
+            AreasUsuariosAssembler areasUsuariosAssembler,
             UsuariosService usuariosService, Permissoes permissoes) {
         this.areasAssembler = areasAssembler;
+        this.areasUsuariosAssembler = areasUsuariosAssembler;
         this.areasService = areasService;
         this.usuariosService = usuariosService;
         this.permissoes = permissoes;
@@ -48,14 +53,14 @@ public class AreasController {
         permissoes.restritoAoCliente();
         return ResponseEntity.ok(areasAssembler.toCollectionModel(areasService.listar()));
     }
-    
+
     @GetMapping("/minhas-areas")
     public ResponseEntity<?> minhasAreas(
             @RequestParam(value = "situacao", required = false, defaultValue = "") String situacao) {
         CaspUsuarios usuario = usuariosService.buscarUsuarioPorLogin(permissoes.login());
         return ResponseEntity.ok(areasAssembler.toCollectionModel(areasService.areasDoUsuario(situacao, usuario)));
     }
-    
+
     @GetMapping("/areas-do-usuario")
     public ResponseEntity<?> areasDoUsuario(
             @RequestParam(value = "situacao", required = false, defaultValue = "") String situacao,
@@ -67,7 +72,7 @@ public class AreasController {
     }
 
     @GetMapping("/{iArea}")
-    public ResponseEntity<?> area(@PathVariable @Valid Integer iArea) {  
+    public ResponseEntity<?> area(@PathVariable @Valid Integer iArea) {
         permissoes.restritoAoCliente();
         return ResponseEntity.ok(areasAssembler.toModel(areasService.buscarOuFalhar(iArea)));
     }
@@ -75,7 +80,7 @@ public class AreasController {
     @PostMapping
     public ResponseEntity<?> adicionar(@Valid @RequestBody AreasModel areasModel) {
         permissoes.exclusivoAdministrador();
-        if(areasModel.getIArea() != null){
+        if (areasModel.getIArea() != null) {
             throw new NegocioException("O código da área não pode ser informado para novos cadastros!");
         }
         CaspAreas areaNova = areasService.novo(areasAssembler.toEntity(areasModel));
@@ -83,14 +88,14 @@ public class AreasController {
     }
 
     @PutMapping("/{iArea}")
-    public ResponseEntity editar(@Valid @RequestBody AreasModel areasModel, @PathVariable Integer iArea) { 
+    public ResponseEntity editar(@Valid @RequestBody AreasModel areasModel, @PathVariable Integer iArea) {
         permissoes.exclusivoAdministrador();
         CaspAreas caspAreaAtual = areasService.buscarOuFalhar(iArea);
         if (areasModel.getIArea() == null || caspAreaAtual.getIArea() != iArea) {
             throw new NegocioException("Conteúdo difere do item selecionado!");
         }
         CaspAreas caspAreaEditada = areasAssembler.toEntity(areasModel);
-        AreasModel areaEdidata = areasAssembler.toModel(areasService.editar(caspAreaEditada,caspAreaAtual));
+        AreasModel areaEdidata = areasAssembler.toModel(areasService.editar(caspAreaEditada, caspAreaAtual));
         return ResponseEntity.ok(areaEdidata);
     }
 
@@ -99,5 +104,9 @@ public class AreasController {
         permissoes.exclusivoAdministrador();
         areasService.deletar(iArea);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(areasAssembler.toModel(new CaspAreas()));
+    }
+
+    public List<AreasUsuariosModel> areasComUsuariosAnalistasDoChamado(List<Integer> listaIAreas) {
+        return areasUsuariosAssembler.toCollectionModel(areasService.areasComUsuariosAnalistasDoChamado(listaIAreas));
     }
 }
