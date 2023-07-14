@@ -92,7 +92,7 @@
                                                             th:if="${editar}!=null"
                                                             id="btEditarChamado"
                                                             th:attr="data-id=*{iChamado}"
-                                                            onclick="getModelAndView('/atendimentos/editar', '#tabelapainel', event)"
+                                                            onclick="chamadoEdicao(event)"
                                                             data-bs-toggle="tooltip" data-bs-placement="top" 
                                                             title="Editar atendimento">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
@@ -360,10 +360,11 @@
                                 placeholder="Usuário">
                             <optgroup th:each="area : ${areachamado}"
                                       th:value="${area}"
+                                      id="listaUsuarios"
                                       th:label="${area.descricaoArea}"><!-- '['+${ent.iTipoEntidade.tipoDescricao}+'] '+-->
                                 <option th:each="usu : ${area.caspUsuariosList}"
-                                        th:value="${usu}"                                            
-                                        th:text="${usu.nomeUsuario}"                                  
+                                        th:value="${usu}" 
+                                        th:text="${usu.nomeUsuario}"
                                         contenteditable="false"/>
                             </optgroup>
                             <!-- th:if="${usu.iTipoUsuario.iTipoUsuario}==2? (${usu.situacaoUsuario}=='A'? true : false) : false"-->

@@ -1,13 +1,5 @@
 package caspvale.caspsuporte.atendimento.view;
 
-import caspvale.caspsuporte.atendimento.api.controller.AreasController;
-import caspvale.caspsuporte.atendimento.api.controller.ChamadosController;
-import caspvale.caspsuporte.atendimento.api.controller.EntidadesController;
-import caspvale.caspsuporte.atendimento.api.controller.ProblemasController;
-import caspvale.caspsuporte.atendimento.api.controller.SistemasController;
-import caspvale.caspsuporte.atendimento.api.controller.UsuariosController;
-import caspvale.caspsuporte.atendimento.api.model.ChamadosModel;
-import caspvale.caspsuporte.atendimento.domain.service.ChamadosService;
 import caspvale.caspsuporte.atendimento.common.Rotas;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

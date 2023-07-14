@@ -47,9 +47,6 @@ public class Permissoes {
 
     public String login() {
         String login = context().getAuthentication().getName();
-//        System.out.println("login> "+login);
-//        System.out.println("getPrincipal: "+context().getAuthentication().getPrincipal());
-        //System.out.println("getAuthorities: "+context().getAuthentication().getPrincipal());
         return login;
     }
 
@@ -109,7 +106,7 @@ public class Permissoes {
                 return true;
             }
         }
-        throw new UsuarioRestritoException();
+        throw new UsuarioRestritoException("O usuário não tem permissão para nenhuma das entidades no chamado!");
     }
 
     private boolean permissaoPorArea(ChamadosModel chamado, UsuariosModel usuarioLogadoModel) {
@@ -119,7 +116,7 @@ public class Permissoes {
                 return true;
             }
         }
-        throw new UsuarioRestritoException();
+        throw new UsuarioRestritoException("O usuário não tem permissão para nenhuma das áreas no chamado!");
     }
 
     private boolean permissaoPorSistema(ChamadosModel chamado, UsuariosModel usuarioLogadoModel) {
@@ -129,7 +126,7 @@ public class Permissoes {
                 return true;
             }
         }
-        throw new UsuarioRestritoException();
+        throw new UsuarioRestritoException("O usuário não tem permissão para nenhum dos sistemas no chamado!");
     }
 
     public UsuariosModel usuarioLogadoModel() {
@@ -142,9 +139,9 @@ public class Permissoes {
 
     public void permissoesAberturaUsuarioLogado(ChamadosModel chamado) {
         UsuariosModel usuarioLogadoModel = usuarioLogadoModel();
-        System.out.println(permissaoPorEntidade(chamado, usuarioLogadoModel));
-        System.out.println(permissaoPorArea(chamado, usuarioLogadoModel));
-        System.out.println(permissaoPorSistema(chamado, usuarioLogadoModel));
+        permissaoPorEntidade(chamado, usuarioLogadoModel);
+        permissaoPorArea(chamado, usuarioLogadoModel);
+        permissaoPorSistema(chamado, usuarioLogadoModel);
     }
 
     public void permissoesPorEntidadeAreaSistema(CaspChamados caspChamado, CaspUsuarios caspUsuario) {

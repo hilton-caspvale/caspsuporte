@@ -136,23 +136,27 @@ function editarCliente(event) {
 }
 
 function editarUsuarioAbertura(event) {
-    let form = document.querySelector('#cadastroUsuarioModal');
+    event.preventDefault();
+    let form = document.querySelector('#edicaoUsuarioModalAbertura');
     let login = form.querySelector('#nlogin').value;
-    let tipo = form.querySelector('#itipoUsuario').value;    
+    let tipo = form.querySelector('#itipoUsuario').value;
     if (usuarioLogado() === login) {
-        requestAtendimento(usuariosPath + event.currentTarget.value, 'PUT', getUsuario('#cadastroUsuarioModal'), null);
+        return requestAtendimento(usuariosPath + event.currentTarget.value, 'PUT', getUsuario('#edicaoUsuarioModalAbertura'), null);
     } else {
         if (tipo === '3') {
-            requestAtendimento(clientesPath + event.currentTarget.value, 'PUT', getCliente('#cadastroUsuarioModal'), null);
+            return requestAtendimento(clientesPath + event.currentTarget.value, 'PUT', getCliente('#edicaoUsuarioModalAbertura'), null);
         } else {
-            requestAtendimento(usuariosPath + event.currentTarget.value, 'PUT', getUsuario('#cadastroUsuarioModal'), null);
+            return requestAtendimento(usuariosPath + event.currentTarget.value, 'PUT', getUsuario('#edicaoUsuarioModalAbertura'), null);
         }
     }
 }
 
 function criarClienteAbertura(event) {
-    let status = requestAtendimento(clientesPath + event.currentTarget.value, 'POST', getCliente('#cadastroUsuarioModal'), null);
-    console.log('STATUS: '+status);
+    requestAtendimento(clientesPath + event.currentTarget.value, 'POST', getCliente('#cadastroUsuarioModalAbertura'), null);
+    let form = document.querySelector('#cadastroUsuarioModalAbertura');
+    let novoLogin = form.querySelector('#nlogin').value;
+    chamadoUsuarioEditado(novoLogin);
+    limparModal();
 }
 
 function criarCliente(event) {

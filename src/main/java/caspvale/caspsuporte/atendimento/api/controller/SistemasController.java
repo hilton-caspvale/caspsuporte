@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author Hilton
  */
 @RestController
-@RequestMapping("/atendimento")
+@RequestMapping("/atendimento/sistemas")
 public class SistemasController {
 
     private final SistemasAssembler sistemasAssembler;
@@ -42,7 +42,7 @@ public class SistemasController {
         this.permissoes = permissoes;
     }
 
-    @GetMapping("/sistemas")
+    @GetMapping
     public ResponseEntity<?> listar() {
         permissoes.restritoAoCliente();
         return ResponseEntity.ok(sistemasAssembler.toCollectionModel(sistemasService.listar()));
@@ -64,13 +64,13 @@ public class SistemasController {
         return ResponseEntity.ok(sistemasAssembler.toCollectionModel(sistemasService.sistemasDoUsuario(situacao, usuario)));
     }
 
-    @GetMapping("/sistemas/{iSistema}")
+    @GetMapping("/{iSistema}")
     public ResponseEntity<SistemasModel> sistema(@PathVariable @Valid Integer iSistema) {
         permissoes.restritoAoCliente();
         return ResponseEntity.ok(sistemasAssembler.toModel(sistemasService.buscarOuFalhar(iSistema)));
     }
 
-    @PostMapping("/sistemas")
+    @PostMapping
     public ResponseEntity<?> adicionar(@Valid @RequestBody SistemasModel sistemasModel) {
         permissoes.restritoAoCliente();
         if (sistemasModel.getISistema() != null) {
@@ -80,7 +80,7 @@ public class SistemasController {
         return ResponseEntity.status(HttpStatus.CREATED).body(sistemasAssembler.toModel(sistemaNovo));
     }
 
-    @PutMapping("/sistemas/{iSistema}")
+    @PutMapping("/{iSistema}")
     public ResponseEntity editar(@Valid @RequestBody SistemasModel sistemasModel, @PathVariable Integer iSistema) {
         permissoes.restritoAoCliente();
         CaspSistemas caspSistemaAtual = sistemasService.buscarOuFalhar(iSistema);
@@ -92,7 +92,7 @@ public class SistemasController {
         return ResponseEntity.ok(sistemaEditado);
     }
 
-    @DeleteMapping("/sistemas/{iSistema}")
+    @DeleteMapping("/{iSistema}")
     public ResponseEntity deletar(@PathVariable Integer iSistema) {
         permissoes.restritoAoCliente();
         sistemasService.deletar(iSistema);

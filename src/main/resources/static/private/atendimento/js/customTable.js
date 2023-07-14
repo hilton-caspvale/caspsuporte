@@ -98,7 +98,6 @@ function bgArea(descricaoArea) {
 }
 
 function entidades(value) {
-    //alert("value["+value+"]");
     let saida = [];
     let classe_cor = "cor-g";
     JSON.parse(JSON.stringify(value)).forEach(function (el) {

@@ -61,6 +61,7 @@ public class ChamadosInputModel {
     private String situacaoChamado;
     private String usuarioAlteracao;
     private LocalDateTime dtAlteracao;
+    @NotEmpty
     private List<AreasInputModel> caspAreasList;
     @NotEmpty
     private List<EntidadesInputModel> caspEntidadesList;

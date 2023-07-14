@@ -1,4 +1,4 @@
-<form id="cadastroUsuarioModal" class="form-floating needs-validation"
+<form id="edicaoUsuarioModalAbertura" class="form-floating needs-validation"
       method="POST" action="/atendimento/usuarios" 
       th:object="${usuarioModel}">     
     <div class="row justify-content-between">
@@ -120,13 +120,21 @@
     </div>
     <div class="col-md">
         <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" onclick="chamadoUsuarioEditado(document.getElementById('nlogin').value);limparModal();">
+            <button type="button" 
+                    class="btn btn-outline-secondary"
+                    data-bs-dismiss="modal"                    
+                    onclick="">
                 <i class="fas fa-times"></i>
-                Fechar e atuallziar página</button>
-            <button type='button' class='btn btn-success bg-gradient' th:value="*{iUsuario}" id="gravarCliente"
-                    onclick="editarUsuarioAbertura(event)">
+                Fechar
+            </button>
+            <button type='button' class='btn btn-success bg-gradient'
+                    th:value="*{iUsuario}" id="gravarCliente"
+                    th:attr="data-login=*{nlogin}"
+                    onclick=""
+                    data-bs-dismiss="modal">
                 <i class="fas fa-check"></i>
-                Editar</button>   
+                Editar e atualizar página
+            </button>   
         </div>
     </div>
 </form>

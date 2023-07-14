@@ -37,4 +37,9 @@ public class UsuariosModel {
     private List<SistemasInputModel> caspSistemasList;
     private List<EntidadesInputModel> caspEntidadesList;
     private TiposUsuariosInputModel iTipoUsuario;
+    
+    @Override
+    public String toString(){
+        return iUsuario.toString();
+    }
 }

@@ -21,6 +21,7 @@ public class UsuariosInputModel {
     private Integer iUsuario;
     private String nlogin;
     private String nome;
+    private String contato;
     
     @Override
     public String toString(){

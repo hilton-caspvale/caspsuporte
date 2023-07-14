@@ -42,7 +42,7 @@ public class OrigensService {
     }
 
     public List<CaspOrigens> listar() {
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "descricaoOrigem"));
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "iOrigemChamado"));
     }
 
 }

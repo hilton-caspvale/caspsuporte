@@ -97,12 +97,11 @@ public class ClientesView {
 
     @GetMapping("conteudoModalClientes")
     public ModelAndView conteudoModalEdicaoClientes(@Valid @RequestParam(value = "id", required = false) Integer id,
-            @RequestParam(value = "cadastro-abertura", required = false) boolean cadastroAbertura) {
+            @RequestParam(value = "abertura", required = false) boolean abertura) {
         rotas.viewsDaRota();
-
         ModelAndView mv = new ModelAndView();
         if (id == null) {
-            if (cadastroAbertura) {
+            if (abertura) {
                 mv.setViewName(rotas.CADASTRAR_CLIENTE_ABERTURA);
             } else {
                 mv.setViewName(rotas.CADASTRAR_CLIENTE);

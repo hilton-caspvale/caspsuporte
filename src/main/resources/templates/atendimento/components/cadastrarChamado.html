@@ -96,7 +96,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <div th:if="${entidadesDoUsuario.size} > 1">
-                                    <select class="form-control choicesmultiple"                                             
+                                    <select class="form-control choicesmultiple link-success"                                             
                                             multiple=""     
                                             placeholder="Entidade"
                                             th:field="*{caspEntidadesList}"
@@ -109,7 +109,7 @@
                                 </div>
                                 <div th:if="${entidadesDoUsuario.size} == 1"
                                      class="form-floating">
-                                    <select class="form-control" 
+                                    <select class="form-control link-success" 
                                             aria-label="Entidade"
                                             th:field="*{caspEntidadesList}"
                                             id="entidades" required>
@@ -126,7 +126,7 @@
                             <div class="col-md-6 mb-3">
                                 <div th:if="${areasDoUsuario.size} == 1"
                                      class="form-floating">
-                                    <select class="form-control"
+                                    <select class="form-control link-success"
                                             aria-label="Área"
                                             th:field="*{caspAreasList}"
                                             id="areas">
@@ -138,7 +138,7 @@
                                     <label for="areas">Área</label>                                                
                                 </div>
                                 <div th:if="${areasDoUsuario.size} > 1">
-                                    <select class="form-control choicesmultiple" 
+                                    <select class="form-control choicesmultiple link-success" 
                                             multiple=""   
                                             th:field="*{caspAreasList}"
                                             id="areas"
@@ -154,7 +154,7 @@
                         <div class="row">
                             <div class="col-md mb-3">
                                 <div th:if="${sistemasDoUsuario.size} > 1">
-                                    <select class="form-control choicesmultiple"                                             
+                                    <select class="form-control choicesmultiple link-success"                                             
                                             placeholder="Sistemas"
                                             multiple=""   
                                             th:field="*{caspSistemasList}"
@@ -167,7 +167,7 @@
                                 </div>
                                 <div th:if="${sistemasDoUsuario.size} == 1"
                                      class="form-floating">     
-                                    <select class="form-control"
+                                    <select class="form-control link-success"
                                             aria-label="Sistemas"
                                             th:field="*{caspSistemasList}"
                                             id="sistemas">
@@ -182,7 +182,7 @@
                             <div class="col-md mb-3">
                                 <div th:if="${problemas.size} == 1"
                                      class="form-floating">     
-                                    <select class="form-control"
+                                    <select class="form-control link-success"
                                             aria-label="Problema"
                                             th:field="*{caspProblemasList}"
                                             id="problemas">
@@ -194,7 +194,7 @@
                                     <label for="problemas">Sistema</label>
                                 </div>
                                 <div th:if="${problemas.size} > 1">
-                                    <select class="form-control choicesmultiple"                                             
+                                    <select class="form-control choicesmultiple link-success"                                             
                                             multiple=""   
                                             th:field="*{caspProblemasList}"
                                             id="problemas"
@@ -209,12 +209,13 @@
                         </div>
 
                         <div class="row">                            
-                            <div class="col-md-4 mb-3" th:if="${role}=='ANALISTA'? true : (${role}=='ADMINISTRADOR'? true : false)">
+                            <div class="col-md-4 mb-3">
                                 <div class="form-floating">
                                     <select class="form-control link-success"
                                             aria-label="Origem"
                                             th:field="*{iOrigemChamado}"
-                                            id="origem">
+                                            id="origem"
+                                            th:attr="disabled=${role == 'CLIENTE'}">
                                         <option th:each="listaorigem : ${origens}" 
                                                 th:value="${listaorigem}" 
                                                 th:text="${listaorigem.descricaoOrigem}"
@@ -223,9 +224,9 @@
                                     <label for="origem">Origem</label>
                                 </div>
                             </div>
-                            <div class="col-md-4 mb-3" th:if="${role}=='ANALISTA'? true : (${role}=='ADMINISTRADOR'? true : false)">
+                            <div class="col-md-4 mb-3">
                                 <div class="form-floating">
-                                    <select class="form-control"
+                                    <select class="form-control link-success"
                                             aria-label="Prioridade"
                                             th:field="*{iPrioridade}"
                                             id="prioridade">
@@ -237,12 +238,13 @@
                                     <label for="prioridade">Prioridade</label>
                                 </div>
                             </div>
-                            <div class="col-md-4 mb-3" th:if="${role} == 'ANALISTA'? true : (${role}==ADMINISTRADOR? true : false)">
+                            <div class="col-md-4 mb-3" ><!-- th:if="${role} == 'ANALISTA'? true : (${role}==ADMINISTRADOR? true : false)" -->
                                 <div class="form-floating">
-                                    <select class="form-control" 
+                                    <select class="form-control link-success" 
                                             aria-label="Nível"
                                             th:field="*{iNivel}"
-                                            id="nivel">
+                                            id="nivel"
+                                            th:attr="disabled=${role == 'CLIENTE'}">
                                         <option th:each="listanivel : ${niveis}" 
                                                 th:value="${listanivel}" 
                                                 th:text="${listanivel.descricaoNivel}"
@@ -291,8 +293,7 @@
                                     <input type="text"
                                            class="form-control" placeholder="Resumo"
                                            th:field="*{resumoChamado}"
-                                           form="formChamado"
-                                           id="resumoChamado"/>
+                                           form="formChamado"/>
                                     <label for="resumoChamado" class="col-sm col-form-label">Resumo</label>
                                 </div>
                             </div>
@@ -337,19 +338,11 @@
                         </div>
                         <div class="row">
                             <div class="col-md mb-3">
-                                <div class="text-lg-center">
+                                <div class="text-lg-end">
                                     <button type="button" 
                                             class="btn btn-success" 
                                             id="liveToastBtn"
                                             onclick="gravarChamado(event)">Gravar</button>                                        
-                                </div>
-                            </div>
-                            <div class="col-md mb-3">
-                                <div class="text-lg-center">
-                                    <button type="button" 
-                                            class="btn btn-danger" 
-                                            id="liveToastBtn"
-                                            onclick="testar1(event)">TESTAR</button>                                        
                                 </div>
                             </div>
                         </div>

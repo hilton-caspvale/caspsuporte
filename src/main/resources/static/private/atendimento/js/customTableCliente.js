@@ -1,11 +1,19 @@
-function modalXL(){
-    addClass('tamanhoModal','modal-xl');
-    delClass('tamanhoModal','modal-lg');
+function modalXL() {
+    addClass('tamanhoModal', 'modal-xl');
+    delClass('tamanhoModal', 'modal-lg');
 }
 
-function modalSM(){
-    addClass('tamanhoModal','modal-sm');
-    delClass('tamanhoModal','modal-lg');
+function modalSM() {
+    addClass('tamanhoModal', 'modal-sm');
+    delClass('tamanhoModal', 'modal-lg');
+}
+
+function textoNormalTabela(value) {
+    return value;//'<p style="font-size: 12px">'+value+'</p>';
+}
+
+function spanTabela(value) {
+    return '<span class="badge text-dark">' + value + '</span>';
 }
 
 function situacaoTabela(value) {
@@ -16,9 +24,34 @@ function situacaoTabela(value) {
     }
 }
 
+function situacaoChamado(value) {
+    switch (value.situacao) {
+        case 'A':
+            return '<span class="badge bg-warning bg-gradient text-dark text-wrap">' + value.descricaoSituacao + '</span>';
+        case 'R':
+            return '<span class="badge bg-primary bg-gradient text-dark text-wrap">' + value.descricaoSituacao + '</span>';
+        case 'E':
+            return '<span class="badge bg-secondary bg-gradient text-dark text-wrap">' + value.descricaoSituacao + '</span>';
+        case 'C':
+            return '<span class="badge bg-danger bg-gradient text-dark text-wrap">' + value.descricaoSituacao + '</span>';
+        default:
+            return '<span class="badge bg-secondary bg-gradient text-dark text-wrap">' + value.descricaoSituacao + '</span>';
+    }
+    if (value === 'A') {
+
+    } else {
+        return '<span class="badge bg-secondary bg-gradient">Inativo</span>';
+    }
+}
+
+function acoesTabelaChamado(value) {
+    let url = "'/mv/atendimento/chamado/" + value + "','root'";
+    return '<div class="btn-group btn-group-sm" role="group"><a class="btn btn-outline-success" role="button"title="Abrir" data-id=' + value + ' onclick="carregaHtml(' + url + ')">' + value + '</a></div>';
+}
+
 function acoesTabela(uriModal, tituloModal, value) {
     let parametroId = '?id=';
-    let uri = uriModal+parametroId+value;    
+    let uri = uriModal + parametroId + value;
     return '<div class="btn-group btn-group-sm" role="group"><a role="button" class="btn btn-outline-secondary" data-id=' + value + ' onclick="carregaHtml(' + "'" + uri + '' + "'" + ', ' + "'" + 'modalBody' + "'" + ');mostraModal(' + "'" + '#modal' + "'" + ');$(' + "'" + '#staticBackdropLabel' + "'" + ').html(' + "'" + tituloModal + "'" + ')"><i class="fas fa-pencil-alt"></i></a></div>';
 }
 
@@ -128,10 +161,60 @@ function acoesTabelaEntidades(value) {
 
 function botaoAddEntidades() {
     let uriModal = '/mv/atendimento/conteudoModalEntidades';
-    let tituloModal = 'Adicionar Entidade';    
+    let tituloModal = 'Adicionar Entidade';
     return botaoAddTabela(uriModal, tituloModal);
 }
 
 function botaoAddTabelaChamado() {
     chamadoUsuarioLogado();
+}
+
+function bgArea(descricaoArea) {
+    let classe_cor = "cor-g";
+    switch (descricaoArea) {
+        case 'CONTABILIDADE':
+            classe_cor = "cor-contabil";
+            break;
+        case "ADMINISTRAÇÃO E GESTÃO":
+            classe_cor = "cor-compras";
+            break;
+        case 'ARRECADAÇÃO E FISCALIZAÇÃO':
+            classe_cor = "cor-tributos";
+            break;
+        case 'RECURSOS HUMANOS':
+            classe_cor = "cor-rh";
+            break;
+        case 'FERRAMENTAS':
+            classe_cor = "cor-betha text-dark";
+            break;
+        case 'SUPORTE':
+            classe_cor = "cor-suporte text-dark";
+            break;
+        default:
+            classe_cor = "cor-g text-dark";
+            break;
+    }
+    return classe_cor;
+}
+
+function entidades(value) {
+    let saida = [];
+    let classe_cor = "cor-g";
+    JSON.parse(JSON.stringify(value)).forEach(function (el) {
+        saida.push('<span class="badge ' + classe_cor + ' text-dark" style="padding: 7px;margin-right: 3px;margin-top: 3px;">' + el.nomeEntidade + '</span>');
+    });
+    return saida;
+}
+
+function areas(value) {
+    let saida = [];
+    JSON.parse(JSON.stringify(value)).forEach(function (el) {
+        saida.push('<span class="badge ' + bgArea(el.descricaoArea) + ' " style="padding: 7px;margin-right: 3px;margin-top: 3px;">' + el.descricaoArea + '</span>');
+    });
+    return saida;
+}
+
+function atualizarTabela(idtabela) {
+    let $table = $('#' + idtabela);
+    $table.bootstrapTable('refresh');
 }

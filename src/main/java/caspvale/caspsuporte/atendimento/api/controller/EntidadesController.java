@@ -8,6 +8,7 @@ import caspvale.caspsuporte.atendimento.domain.service.EntidadesService;
 import caspvale.caspsuporte.atendimento.domain.service.UsuariosService;
 import caspvale.caspsuporte.domain.exception.NegocioException;
 import caspvale.caspsuporte.atendimento.common.Permissoes;
+import java.util.List;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class EntidadesController {
     private final Permissoes permissoes;
 
     public EntidadesController(EntidadesAssembler entidadesAssembler, EntidadesService entidadesService,
-            UsuariosService usuariosService,Permissoes permissoes) {
+            UsuariosService usuariosService, Permissoes permissoes) {
         this.entidadesAssembler = entidadesAssembler;
         this.entidadesService = entidadesService;
         this.usuariosService = usuariosService;
@@ -47,22 +48,23 @@ public class EntidadesController {
         permissoes.restritoAoCliente();
         return ResponseEntity.ok(entidadesAssembler.toCollectionModel(entidadesService.listar()));
     }
-    
+
     @GetMapping("/minhas-entidades")
     public ResponseEntity<?> minhasEntidades(
-    @RequestParam(value = "situacao", required = false, defaultValue = "") String situacao) {
+            @RequestParam(value = "situacao", required = false, defaultValue = "") String situacao) {
         CaspUsuarios usuario = usuariosService.buscarUsuarioPorLogin(permissoes.login());
-        return ResponseEntity.ok(entidadesAssembler.toCollectionModel(entidadesService.entidadesDoUsuario(situacao, usuario)));
+        List<CaspEntidades> entidades = entidadesService.entidadesDoUsuario(situacao, usuario);
+        return ResponseEntity.ok(entidadesAssembler.toCollectionModel(entidades));
     }
-    
+
     @GetMapping("/entidades-do-usuario")
     public ResponseEntity<?> entidadesDoUsuario(
-    @RequestParam(value = "situacao", required = false, defaultValue = "") String situacao,
+            @RequestParam(value = "situacao", required = false, defaultValue = "") String situacao,
             @RequestParam(value = "login", required = true) String login) {
         permissoes.restritoAoCliente();
         CaspUsuarios usuario = usuariosService.buscarUsuarioPorLogin(login);
         return ResponseEntity.ok(entidadesAssembler.toCollectionModel(entidadesService.entidadesDoUsuario(situacao, usuario)));
-    }    
+    }
 
     @GetMapping("/{iEntidade}")
     public ResponseEntity<?> entidade(@PathVariable @Valid Integer iEntidade) {
@@ -88,7 +90,7 @@ public class EntidadesController {
             throw new NegocioException("Conteúdo difere do item selecionado!");
         }
         CaspEntidades caspEntidadesEditado = entidadesAssembler.toEntity(entidadesModel);
-        EntidadesModel tiposEntidadesEditado = entidadesAssembler.toModel(entidadesService.editar(caspEntidadesEditado,caspEntidadesAtual));
+        EntidadesModel tiposEntidadesEditado = entidadesAssembler.toModel(entidadesService.editar(caspEntidadesEditado, caspEntidadesAtual));
         return ResponseEntity.ok(tiposEntidadesEditado);
     }
 

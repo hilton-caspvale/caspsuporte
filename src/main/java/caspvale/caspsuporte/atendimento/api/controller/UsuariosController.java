@@ -48,7 +48,7 @@ public class UsuariosController {
     @GetMapping("consulta-login")
     public ResponseEntity<?> consultaLogin(@RequestParam(value = "nlogin", required = true) String nlogin) {
         UsuariosModel usuariosModel = usuariosAssembler.toModel(usuariosService.buscarUsuarioPorLogin(nlogin));
-        return ResponseEntity.ok(new UsuariosInputModel(usuariosModel.getIUsuario(), usuariosModel.getNlogin(), usuariosModel.getNomeUsuario()));
+        return ResponseEntity.ok(new UsuariosInputModel(usuariosModel.getIUsuario(), usuariosModel.getNlogin(), usuariosModel.getNomeUsuario(), usuariosModel.getContatoUsuario()));
     }
 
     @PatchMapping("/{nLogin}/trocar-senha")

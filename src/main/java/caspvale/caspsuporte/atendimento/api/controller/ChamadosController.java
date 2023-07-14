@@ -115,11 +115,24 @@ public class ChamadosController {
     @PostMapping
     public ResponseEntity<?> cadastrarNovoChamado(@Valid @RequestBody ChamadosInputModel chamadosInputModel) {
         ChamadosModel chamadoModel = chamadosInputAssembler.toEntity(chamadosInputModel);
+        System.out.println("111");
         permissoes.permissoesAberturaUsuarioLogado(chamadoModel);
+        System.out.println("222");
         CaspChamados chamado = chamadosAssembler.toEntity(chamadoModel);
         CaspChamados novoChamado = chamadosService.novoChamado(chamado);
+        System.out.println("333");
         ChamadosModel novoChamadoModel = chamadosAssembler.toModel(novoChamado);
         return ResponseEntity.ok(novoChamadoModel);
+    }
+
+    @PutMapping
+    public ResponseEntity<?> editarChamado(@Valid @RequestBody ChamadosInputModel chamadosInputModel) {
+        ChamadosModel chamadoModel = chamadosInputAssembler.toEntity(chamadosInputModel);
+        permissoes.permissoesAberturaUsuarioLogado(chamadoModel);
+        CaspChamados chamado = chamadosAssembler.toEntity(chamadoModel);
+        CaspChamados chamadoEditado = chamadosService.editarChamado(chamado);
+        ChamadosModel chamadoEditadoRetorno = chamadosAssembler.toModel(chamadoEditado);
+        return ResponseEntity.ok(chamadoEditadoRetorno);
     }
 
     @PatchMapping("/{id}/movimentar")

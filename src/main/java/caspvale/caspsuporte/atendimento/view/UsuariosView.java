@@ -13,7 +13,6 @@ import caspvale.caspsuporte.atendimento.api.model.UsuariosModel;
 import caspvale.caspsuporte.atendimento.view.common.ViewObjects;
 import caspvale.caspsuporte.atendimento.common.Rotas;
 import caspvale.caspsuporte.atendimento.common.Permissoes;
-import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;

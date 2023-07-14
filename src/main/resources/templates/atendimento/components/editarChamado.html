@@ -1,9 +1,9 @@
-<div th:fragment="cadastrarChamado">
+<div th:fragment="editarChamado">
     <div class="row justify-content-md-center">
         <div class="col col-md-8">
             <div id="alertaChamado"></div>
-            <form id="formChamado" class="row g-3" 
-                  method="POST" 
+            <form id="formEdicaoChamado" class="row g-3" 
+                  method="PATCH" 
                   action="/atendimento/chamados" th:object="${chamado}">
                 <!--<div th:replace="fragments/layout :: msggeral"></div>
                 <div th:replace="fragments/layout :: msgcampos"></div>
@@ -20,30 +20,17 @@
                         </div>
                     </div>
                     <div class="card-body ">                                  
-                        <input type="hidden" form="formChamado" th:field="*{iChamado}" id="iChamado"/>
-                        <input type="hidden" form="formChamado" th:field="*{iSituacao}" id="iSituacao"/>
-                        <input type="hidden" form="formChamado" th:field="*{iusuarioAbertura}" id="iusuarioAbertura"/>
 
-                        <div class="row" th:if="*{iChamado == null}">
-                            <div class="col-md mb-3" th:if="${role}=='ANALISTA'? true : (${role}=='ADMINISTRADOR'? true : false)">
-                                <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                    <button type="button" class="btn btn-outline-secondary" onclick="modalSelecionarUsuario()">
-                                        Selecionar outro usuário <i class="bi bi-search"></i></button>
-                                    <button type="button" class="btn btn-outline-success"
-                                            onclick="modalEditarUsuario('iusuarioAbertura')">Editar <i class="bi bi-pencil-square"></i></button>
-                                    <button type="button" class="btn btn-outline-success"
-                                            onclick="modalCriarUsuarioAbertura()"><i class="bi bi-person-plus-fill"></i></button>                                    
-                                </div>
-                            </div>
-                        </div>
+                        <input type="hidden" form="formEdicaoChamado" th:field="*{iUsuarioAbertura.iUsuario}" id="iusuarioAbertura"/>
                         <div class="row justify-content-between">
                             <div class="col-md-3 mb-3">
                                 <div class="form-floating">                                    
                                     <input type="text"
                                            class="form-control" placeholder="LOGIN"
-                                           th:field="*{nlogin}"   
+                                           th:field="*{iUsuarioAbertura.nlogin}"   
                                            id="nlogin"
-                                           form="formChamado"
+                                           form="formEdicaoChamado"
+                                           disabled=""
                                            readonly=""/>
                                     <label for="nlogin" class="col-sm col-form-label">LOGIN</label>
                                 </div>
@@ -52,9 +39,10 @@
                                 <div class="form-floating">                                    
                                     <input type="text"
                                            class="form-control" placeholder="Nome"
-                                           th:field="*{nomeUsuario}"
+                                           th:field="*{iUsuarioAbertura.nome}"
                                            id="nomeUsuario"
-                                           form="formChamado"
+                                           form="formEdicaoChamado"
+                                           disabled=""
                                            readonly=""/>
                                     <label for="nomeUsuario" class="col-sm col-form-label">Nome</label>
                                 </div>
@@ -66,7 +54,8 @@
                                            th:field="*{dataAbertura}"
                                            id="dataAbertura"
                                            disabled=""
-                                           form="formChamado"/>
+                                           readonly=""
+                                           form="formEdicaoChamado"/>
                                     <label for="dataAbertura" class="col-sm col-form-label">Data</label>
                                 </div>                                     
                             </div>
@@ -76,8 +65,8 @@
                                 <div class="form-floating">                                       
                                     <input type="text"
                                            class="form-control" placeholder="Contato"
-                                           th:field="*{contatoSolicitante}"
-                                           form="formChamado"
+                                           th:field="*{iUsuarioAbertura.contato}"
+                                           form="formEdicaoChamado"
                                            id="contato"/>                                    
                                     <label for="contato" class="col-sm col-form-label">Contato</label>
                                 </div>
@@ -87,7 +76,7 @@
                                     <input type="text"
                                            class="form-control" placeholder="E-mail"
                                            th:field="*{emailSolicitante}"
-                                           form="formChamado"
+                                           form="formEdicaoChamado"
                                            id="email"/>
                                     <label for="email" class="col-sm col-form-label">E-mail</label>
                                 </div>
@@ -293,7 +282,8 @@
                                     <input type="text"
                                            class="form-control" placeholder="Resumo"
                                            th:field="*{resumoChamado}"
-                                           form="formChamado"/>
+                                           form="formEdicaoChamado"
+                                           id="resumoChamado"/>
                                     <label for="resumoChamado" class="col-sm col-form-label">Resumo</label>
                                 </div>
                             </div>
@@ -337,11 +327,13 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md mb-3">
+                            <div class="col-md mb-3">   
                                 <div class="text-lg-end">
                                     <button type="button" 
                                             class="btn btn-success" 
                                             id="liveToastBtn"
+                                            data-edicao="edicao"
+                                            th:attr="data-id=*{iChamado}"
                                             onclick="gravarChamado(event)">Gravar</button>                                        
                                 </div>
                             </div>

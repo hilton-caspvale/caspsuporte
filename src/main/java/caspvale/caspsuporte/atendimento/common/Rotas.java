@@ -1,10 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/springframework/Configuration.java to edit this template
- */
+
 package caspvale.caspsuporte.atendimento.common;
 
-import caspvale.caspsuporte.atendimento.common.Permissoes;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -45,7 +41,9 @@ public class Rotas {
     public String EDITAR_USUARIO_ABERTURA = "redirect:/index";
     public String TROCAR_SENHA = "redirect:/index";
     public String CADASTRAR_CHAMADO = "redirect:/index";
+    public String EDITAR_CHAMADO = "redirect:/index";
     public String PAGINA_CHAMADO = "redirect:/index";
+    public String PAGINA_EDICAO_CHAMADO = "redirect:/index";
     public String MODAL_SELECIONAR_USUARIO = "redirect:/index";
     public String SELECIONAR_USUARIO = "redirect:/index";
     public String VER_CHAMADO = "redirect:/index";
@@ -70,9 +68,11 @@ public class Rotas {
         EDITAR_ENTIDADE = "/atendimento/components/editarEntidade";
         MENU_ATENDIMENTO = "/atendimento/components/analista/menuAtendimento";
         CADASTRAR_CHAMADO = "/atendimento/components/cadastrarChamado";
+        EDITAR_CHAMADO = "/atendimento/components/editarChamado";
         MODAL_SELECIONAR_USUARIO = "/atendimento/components/selecionarUsuario";
         SELECIONAR_USUARIO = "/atendimento/components/selectUsuario";
         PAGINA_CHAMADO = "/atendimento/pageChamado";
+        PAGINA_EDICAO_CHAMADO = "/atendimento/pageEdicaoChamado";
         VER_CHAMADO = "/atendimento/components/verChamado";
     }
 
@@ -102,9 +102,11 @@ public class Rotas {
         EDITAR_AREA = "/atendimento/components/admin/editarArea";
         MENU_ATENDIMENTO = "/atendimento/components/admin/menuAtendimento";
         CADASTRAR_CHAMADO = "/atendimento/components/cadastrarChamado";
+        EDITAR_CHAMADO = "/atendimento/components/editarChamado";
         MODAL_SELECIONAR_USUARIO = "/atendimento/components/selecionarUsuario";
         SELECIONAR_USUARIO = "/atendimento/components/selectUsuario";
         PAGINA_CHAMADO = "/atendimento/pageChamado";
+        PAGINA_EDICAO_CHAMADO = "/atendimento/pageEdicaoChamado";
         VER_CHAMADO = "/atendimento/components/verChamado";
     }
 
@@ -112,7 +114,9 @@ public class Rotas {
         TROCAR_SENHA = "/atendimento/components/trocarSenha";
         MENU_ATENDIMENTO = "/atendimento/components/cliente/menuAtendimento";
         CADASTRAR_CHAMADO = "/atendimento/components/cadastrarChamado";
+        EDITAR_CHAMADO = "/atendimento/components/editarChamado";
         PAGINA_CHAMADO = "/atendimento/pageChamado";
+        PAGINA_EDICAO_CHAMADO = "/atendimento/pageEdicaoChamado";
         VER_CHAMADO = "/atendimento/components/verChamado";
     }
 
@@ -131,44 +135,25 @@ public class Rotas {
                 break;
         }
     }
-    
-    public String login(){
+
+    public String login() {
         return permissoes.login();
     }
-    
-    public String role(){
+
+    public String role() {
         return permissoes.role();
     }
 
-//    public String login() {
-//        return SecurityContextHolder.getContext().getAuthentication().getName();
-//    }
-//
-//    public String role() {
-//        return SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString().replace("[", "").replace("]", "");
-//    }
-//    
-//    public boolean perfilCliente(){
-//        return role().equals("CLIENTE");
-//    }
-//    
-//    public boolean perfilAnalista(){
-//        return role().equals("ANALISTA");
-//    }
-//    
-//    public boolean perfilAdmin(){
-//        return role().equals("ADMINISTRADOR");
-//    }
-//    
-//    public void restricaoAoCliente(){
-//        if(perfilCliente()){
-//            throw new UsuarioRestritoException();
-//        }
-//    }
-//    
-//    public void exclusivoAdmin(){
-//        if(!perfilAdmin()){
-//            throw new UsuarioRestritoException();
-//        }
-//    }
+    public boolean roleCLIENTE() {
+        return role().equals("CLIENTE");
+    }
+
+    public boolean roleANALISTA() {
+        return role().equals("ANALISTA");
+    }
+
+    public boolean roleADMIN() {
+        return role().equals("ADMINISTRADOR");
+    }
+
 }

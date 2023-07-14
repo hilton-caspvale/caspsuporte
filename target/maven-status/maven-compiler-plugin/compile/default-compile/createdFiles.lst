@@ -35,6 +35,7 @@ caspvale\caspsuporte\atendimento\domain\model\CaspTiposArquivos.class
 caspvale\caspsuporte\domain\exception\UsuarioRestritoException.class
 caspvale\caspsuporte\atendimento\api\assembler\TiposEntidadesAssembler.class
 caspvale\caspsuporte\domain\exception\EntidadeEmUsoException.class
+caspvale\caspsuporte\atendimento\view\common\StringToCSS.class
 caspvale\caspsuporte\atendimento\view\ChamadosView.class
 caspvale\caspsuporte\atendimento\domain\model\CaspEntidades.class
 caspvale\caspsuporte\api\exceptionHandler\ApiExceptionHandler.class

@@ -123,13 +123,15 @@
     </div>
     <div class="col-md">
         <div class="modal-footer"> 
-            <button id="btfecharnovousuario" type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" onclick="limparModal();">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                 <i class="fas fa-times"></i>
-                Fechar</button>
+                Fechar
+            </button>
             <button type='button' class='btn btn-success bg-gradient moduser' th:value="*{iUsuario}" id="gravarCliente" disabled="" data-bs-dismiss="modal"
                     onclick="criarClienteAbertura(event)">
                 <i class="fas fa-check"></i>
-                Editar</button>   
+                Gravar
+            </button>   
         </div>
     </div>
 </form>

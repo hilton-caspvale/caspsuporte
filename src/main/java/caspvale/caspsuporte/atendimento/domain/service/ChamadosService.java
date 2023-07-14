@@ -1,29 +1,20 @@
 package caspvale.caspsuporte.atendimento.domain.service;
 
-import caspvale.caspsuporte.atendimento.api.model.ChamadosModel;
-import caspvale.caspsuporte.atendimento.api.model.UsuariosModel;
-import caspvale.caspsuporte.atendimento.common.ManipulaArquivos;
 import caspvale.caspsuporte.atendimento.domain.model.CaspChamados;
 import caspvale.caspsuporte.atendimento.domain.model.CaspSituacoes;
 import caspvale.caspsuporte.atendimento.domain.model.CaspUsuarios;
 import caspvale.caspsuporte.atendimento.domain.repository.ChamadosRepository;
 import caspvale.caspsuporte.atendimento.domain.repository.SituacoesRepository;
 import caspvale.caspsuporte.domain.exception.EntidadeNaoEncontradaException;
-import caspvale.caspsuporte.domain.exception.UsuarioRestritoException;
 import caspvale.caspsuporte.atendimento.common.Permissoes;
-import caspvale.caspsuporte.atendimento.domain.model.CaspAnexos;
-import caspvale.caspsuporte.atendimento.domain.repository.AnexosRepository;
-import caspvale.caspsuporte.atendimento.domain.repository.UsuariosRepository;
 import caspvale.caspsuporte.domain.exception.NegocioException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -75,11 +66,30 @@ public class ChamadosService {
         return gravar(popularNovoChamado(chamado));
     }
 
-//    @Transactional
-//    public CaspChamados editar(CaspChamados input) {
-//        permissoes.exclusivoAdministrador();
-//        return chamadosRepository.save(input);
-//    }
+    @Transactional
+    public CaspChamados editarChamado(CaspChamados chamadoEdicao) {
+        CaspUsuarios usuarioLogado = permissoes.caspUsuarioLogado();
+        CaspChamados chamadoAtual = chamadoLocalizadoPermitidoParaUsuario(chamadoEdicao.getIChamado(), usuarioLogado);
+        if (!edicaoPermitida(chamadoAtual, usuarioLogado)) {
+            throw new NegocioException("Edição não permitida para este chamado e usuário!");
+        }
+        return gravar(chamadoParaEdicao(chamadoEdicao, chamadoAtual));
+    }
+
+    public boolean edicaoPermitida(CaspChamados chamado, CaspUsuarios usuario) {
+        if (permissoes.roleANALISTA()) {
+            permissoes.permissoesPorEntidadeAreaSistema(chamado, usuario);
+            return Objects.equals(usuario.getIUsuario(), chamado.getIUsuarioAtendimento().getIUsuario());
+        }
+        if (permissoes.roleADMIN()) {
+            return true;
+        }
+        if (permissoes.roleCLIENTE()) {
+            return Objects.equals(usuario.getIUsuario(), chamado.getIUsuarioAbertura().getIUsuario());
+        }
+        return false;
+    }
+
     @Transactional
     public CaspChamados gravar(CaspChamados caspChamado) {
         caspChamado.setUsuarioAlteracao(permissoes.login());
@@ -315,7 +325,7 @@ public class ChamadosService {
             case "ANALISTA":
                 return chamadosRepository.aguardandoAreaEntidadeSistema(login);
             case "CLIENTE":
-                return chamadosRepository.aguardandoClienteUsuario(login);
+                return chamadosRepository.aguardandoAreaEntidadeSistema(login);
             default:
                 return new ArrayList<>();
         }
@@ -329,7 +339,7 @@ public class ChamadosService {
             case "ANALISTA":
                 return chamadosRepository.aguardandoAreaEntidadeSistemaSize(login);
             case "CLIENTE":
-                return chamadosRepository.aguardandoClienteUsuarioSize(login);
+                return chamadosRepository.aguardandoAreaEntidadeSistemaSize(login);
             default:
                 return 0;
         }
@@ -343,7 +353,7 @@ public class ChamadosService {
             case "ANALISTA":
                 return chamadosRepository.emAnaliseAreaEntidadeSistema(login);
             case "CLIENTE":
-                return chamadosRepository.emAnaliseClienteUsuario(login);
+                return chamadosRepository.emAnaliseAreaEntidadeSistema(login);
             default:
                 return new ArrayList<>();
         }
@@ -357,7 +367,7 @@ public class ChamadosService {
             case "ANALISTA":
                 return chamadosRepository.emAnaliseAreaEntidadeSistemaSize(login);
             case "CLIENTE":
-                return chamadosRepository.emAnaliseClienteUsuarioSize(login);
+                return chamadosRepository.emAnaliseAreaEntidadeSistemaSize(login);
             default:
                 return 0;
         }
@@ -371,7 +381,7 @@ public class ChamadosService {
             case "ANALISTA":
                 return chamadosRepository.finalizadosAreaEntidadeSistema(login);
             case "CLIENTE":
-                return chamadosRepository.finalizadosClienteUsuario(login);
+                return chamadosRepository.finalizadosAreaEntidadeSistema(login);
             default:
                 return new ArrayList<>();
         }
@@ -385,7 +395,7 @@ public class ChamadosService {
             case "ANALISTA":
                 return chamadosRepository.finalizadosAreaEntidadeSistemaSize(login);
             case "CLIENTE":
-                return chamadosRepository.finalizadosClienteUsuarioSize(login);
+                return chamadosRepository.finalizadosAreaEntidadeSistemaSize(login);
             default:
                 return 0;
         }
@@ -403,6 +413,20 @@ public class ChamadosService {
         chamado.setDataAbertura(LocalDateTime.now());
         chamado.setSituacaoChamado(situacao.getDescricaoSituacao());
         return chamado;
+    }
+
+    private CaspChamados chamadoParaEdicao(CaspChamados chamadoEdicao, CaspChamados chamadoAtual) {
+        chamadoEdicao.setISituacao(chamadoAtual.getISituacao());
+        chamadoEdicao.setSituacaoChamado(chamadoAtual.getSituacaoChamado());
+        chamadoEdicao.setIUsuarioAbertura(chamadoAtual.getIUsuarioAbertura());
+        chamadoEdicao.setIUsuarioAtendimento(chamadoAtual.getIUsuarioAtendimento());
+        chamadoEdicao.setIUsuarioEncaminhamento(chamadoAtual.getIUsuarioEncaminhamento());
+        chamadoEdicao.setIUsuarioEncerramento(chamadoEdicao.getIUsuarioEncerramento());
+        chamadoEdicao.setDataAbertura(chamadoAtual.getDataAbertura());
+        chamadoEdicao.setDataAgendamento(chamadoAtual.getDataAgendamento());
+        chamadoEdicao.setDataAtendimento(chamadoAtual.getDataAtendimento());
+        chamadoEdicao.setDataEncerramento(chamadoAtual.getDataEncerramento());
+        return chamadoEdicao;
     }
 
     /**

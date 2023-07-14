@@ -73,8 +73,7 @@
                                     <div class="col-md-7">
                                         <h6 class="mb-1">Entidade</h6>
                                         <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
-                                            <li 
-                                                th:if="*{caspEntidadesList.size} > 0"
+                                            <li th:if="*{caspEntidadesList.size} > 0"
                                                 th:each="enti : *{caspEntidadesList}">
                                                 <span class="badge text-wrap text-dark bg-cinza casp-span"
                                                       th:text="${enti.nomeEntidade}"/>
@@ -89,21 +88,14 @@
                                     <div class="col-md-5">
                                         <h6 class="mb-1">Área</h6>                                                    
                                         <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
-                                            <li th:each="area : ${caspChamados.caspAreasList}">
-                                                <span th:fragment="areas-chamado"
-                                                      th:if="*{caspAreasList.size} > 0"
-                                                      class="badge casp-span"  
-                                                      th:each="area : ${caspChamados.caspAreasList}"
-                                                      th:text="${area.descricaoArea}"
-                                                      th:classappend="${area.descricaoArea}=='ADMINISTRAÇÃO E GESTÃO'? 'cor-compras' : 
-                                                      (${area.descricaoArea}=='ARRECADAÇÃO E FISCALIZAÇÃO'? 'cor-tributos' : 
-                                                      (${area.descricaoArea}=='CONTABILIDADE E PLANEJAMENTO'? 'cor-contabil' : 
-                                                      (${area.descricaoArea}=='FERRAMENTAS'? 'cor-betha' : 
-                                                      (${area.descricaoArea}=='PESSOAL E RECURSOS HUMANOS'? 'cor-rh' : 
-                                                      (${area.descricaoArea}=='SAÚDE'? 'cor-saude' : 
-                                                      (${area.descricaoArea}=='SUPORTE CASPVALE'? 'cor-suporte' : ''))))))"/>
-                                                <span class="badge text-wrap text-dark casp-span" 
-                                                      th:if="*{caspAreasList.size} == 0"
+                                            <li th:if="*{caspAreasList.size} > 0"
+                                                th:each="area : *{caspAreasList}">
+                                                <span th:class="'badge text-wrap text-withe casp-span '
+                                                      +${T(caspvale.caspsuporte.atendimento.view.common.StringToCSS).mapDescricaoAreaToCSSClass(area.descricaoArea)}"
+                                                      th:text="${area.descricaoArea}"/>
+                                            </li>
+                                            <li th:if="*{caspAreasList.size} == 0">
+                                                <span class="badge text-wrap text-dark casp-span"
                                                       th:text="'Sem área informada'"/>
                                             </li>
                                         </ul>

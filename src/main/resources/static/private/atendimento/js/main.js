@@ -2,20 +2,7 @@ function getUrl() {
     return 'http://localhost:8081';
 }
 
-function getUriViewAtendimentoCliente() {
-    return '/mv/atendimento-cliente/';
-}
-
-function getUriViewAtendimento() {
-    return '/mv/atendimento/';
-}
-
-function getUriToastGeral() {
-    return '/mv/atendimento/toast';
-}
-
 function usuarioLogado() {
-    //alert('usuarioLogado');
     return document.getElementById('usuarioLogado').value;
 }
 
@@ -112,29 +99,37 @@ function choicesUsuarios() {
     });
 }
 
+function carregaHtmlPromise(uri) {
+    return new Promise((resolve, reject) => {
+        fetch(getUrl() + uri, {
+            method: 'GET',
+            headers: new Headers({
+                'Content-Type': 'text/html'
+            })
+        })
+                .then(response => {
+                    if (!response.ok) {
+                        response.json().then(function (json) {
+                            if (json.detail === undefined) {
+                                carregarToast(response.status + ' - Recurso não encontrado! ' + json.path);
+                            } else {
+                                carregarToast(json.userMessage);
+                            }
+                            reject(new Error('Requisição falhou'));
+                        });
+                    } else {
+                        resolve(response.text());
+                    }
+                })
+                .catch(function (error) {
+                    carregarToast('Erro ao processar requisição!' + error);
+                    reject(error);
+                });
+    });
+}
 
-/*function carregaHtml2(uri, elemento) {
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', getUrl() + uri);
-    xhr.setRequestHeader('Content-Type', 'text/html');
-    xhr.send();
-    xhr.onprogress = function () {
-    };
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-            } else {
-                window.location.href = '/error';
-            }
-        }
-    };
-    xhr.onload = function () {
-        $("#" + elemento).html(xhr.responseText);
-    };
-}*/
-
-function carregaHtml(uri, elemento) {
-    fetch(getUrl() + uri, {
+function carregaHtmlvelho(uri, elemento) {
+    return fetch(getUrl() + uri, {
         method: 'GET',
         headers: new Headers({
             'Content-Type': 'text/html'
@@ -142,7 +137,6 @@ function carregaHtml(uri, elemento) {
     })
             .then(response => {
                 if (!response.ok) {
-                    //throw new Error('Erro na solicitação. Código do status HTTP: ' + response.status);
                     response.json().then(function (json) {
                         if (json.detail === undefined) {
                             carregarToast(response.status + ' - Recurso não encontrado! ' + json.path);
@@ -162,33 +156,25 @@ function carregaHtml(uri, elemento) {
             });
 }
 
-function carregarToast(mensagem) {
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', getUrl() + getUriToastGeral());
-    xhr.send();
-    xhr.onload = function () {
-        let toastId = document.getElementById('toastId');
-        toastId.innerHTML = xhr.responseText;
-        document.getElementById('msgToast').innerHTML = mensagem;
-        new bootstrap.Toast(document.getElementById('liveToast')).show();
-    };
-}
-
-function requestAtendimento(uri, metodo, object, tabela) {
-    fetch(getUrl() + uri, {
-        method: metodo,
-        headers: new Headers({
-            'Content-Type': 'application/json'
-        }),
-        body: object
-    })
-            .then(function (response) {
-                if (response.ok) {
-                    carregarToast("Dados gravador com sucesso!");
-                    if (tabela !== null) {
-                        $('#' + tabela).bootstrapTable('refresh');
-                    }
-                } else {
+function redirectHtml(uri, metodo, elemento, object) {
+    let conteudo;
+    let header = new Headers({'Content-Type': 'text/html'});
+    if (object === null) {
+        metodo = 'GET';
+        conteudo = {
+            method: metodo,
+            headers: header
+        };
+    } else {
+        conteudo = {
+            method: metodo,
+            headers: header,
+            body: object
+        };
+    }
+    fetch(getUrl() + uri, conteudo)
+            .then(response => {
+                if (!response.ok) {
                     response.json().then(function (json) {
                         if (json.detail === undefined) {
                             carregarToast(response.status + ' - Recurso não encontrado! ' + json.path);
@@ -196,54 +182,16 @@ function requestAtendimento(uri, metodo, object, tabela) {
                             carregarToast(json.userMessage);
                         }
                     });
+                } else {
+                    return response.text();
                 }
             })
+            .then(html => {
+                $("#" + elemento).html(html);
+            })
             .catch(function (error) {
-                carregarToast('Erro ao processar requisição!');
+                carregarToast('Erro ao processar requisição!' + error);
             });
-}
-
-function validarUsuario(formulario) {
-    //let login = document.querySelector('#cadastroUsuarioModal input[id="nlogin"]');
-    let form = document.querySelector(formulario);
-    let login = form.querySelector('#nlogin');
-    let usuarioInvalido = form.querySelector('#usuarioInvalido');
-    let botaoGravar = form.querySelector('#gravarCliente');
-    let texto = 'Informe um login';
-    let uri = '/atendimento/usuarios/consulta-login?nlogin=' + login.value;
-    if (login.value === '') {
-        adicionarClass(login, 'is-invalid');
-        deletarClass(login, 'is-valid');
-        botaoGravar.setAttribute('disabled', '');
-        usuarioInvalido.innerHTML = texto;
-    } else {
-        fetch(uri)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('detail: ' + data.detail);
-                    if (data.status === 404) {
-                        if (data.detail === 'Usuário não localizado!') {
-                            texto = "";
-                            adicionarClass(login, 'is-valid');
-                            deletarClass(login, 'is-invalid');
-                            botaoGravar.removeAttribute('disabled');
-                        } else {
-                            adicionarClass(login, 'is-invalid');
-                            deletarClass(login, 'is-valid');
-                            botaoGravar.setAttribute('disabled', '');
-                            usuarioInvalido.innerHTML = 'Não foi possível verificar o login informado!!';
-                        }
-                    } else {
-                        adicionarClass(login, 'is-invalid');
-                        deletarClass(login, 'is-valid');
-                        botaoGravar.setAttribute('disabled', '');
-                        usuarioInvalido.innerHTML = 'Login [' + data.nlogin + '] está em uso!';
-                    }
-                })
-                .catch(function (error) {
-                    console.log('Erro catch: ' + error.message);
-                });
-    }
 }
 
 function trocarSenha() {
@@ -287,4 +235,42 @@ function validarSelectUsuario(select, bt) {
     } else {
         bt.setAttribute('disabled', '');
     }
+}
+
+function alertaCampos(mensagem, detalhe) {
+    let wrapper = document.createElement('div');
+    wrapper.innerHTML = [
+        `<div class="text-start fixed-top" style="margin-top: 4rem">`,
+        `<div class="row justify-content-md-center">`,
+        `<div class="col-md-auto" onclick="this.style.display = 'none'">`,
+        `   <div class="alert alert-danger alert-dismissible" role="alert">`,
+        `       <div>${mensagem}</div>`,
+        `       <hr>`,
+        `       <div>${detalhe}</div>`,
+        '       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+        '   </div>',
+        '</div>',
+        '</div>',
+        '</div>'
+    ].join('');
+    document.getElementById('alertaChamado').append(wrapper);
+}
+
+function alertaUnico(titulo, detalhe) {
+    let wrapper = document.createElement('div');
+    wrapper.innerHTML = [
+        `<div class="text-start fixed-top" style="margin-top: 4rem">`,
+        `<div class="row justify-content-md-center">`,
+        `<div class="col-md-auto" onclick="this.style.display = 'none'">`,
+        `   <div class="alert alert-danger alert-dismissible" role="alert">`,
+        `       <div>${titulo}</div>`,
+        `       <hr>`,
+        `       <div>${detalhe}</div>`,
+        '       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+        '   </div>',
+        '</div>',
+        '</div>',
+        '</div>'
+    ].join('');
+    document.getElementById('alertaChamado').append(wrapper);
 }

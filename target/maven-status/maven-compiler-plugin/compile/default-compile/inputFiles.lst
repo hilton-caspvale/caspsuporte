@@ -123,6 +123,7 @@ C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\ja
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\api\model\AnexosInputModel.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\view\TiposEntidadesView.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\domain\repository\TiposArquivosRepository.java
+C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\view\common\StringToCSS.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\domain\exception\EntidadeNaoEncontradaException.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\api\assembler\AreasUsuariosAssembler.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\atendimento\api\model\PrioridadesModel.java

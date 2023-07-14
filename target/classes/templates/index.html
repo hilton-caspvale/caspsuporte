@@ -56,7 +56,17 @@
                 <div class="row">        
                     <div class="cor-g1 bg-gradient rounded shadow-sm p-2">
                         <div id="principal">                            
-                            <div id="root">TESTE</div>
+                            <div id="root">
+                                <input type="radio" class="btn-check" name="botaoradio1" id="botaoradio1" autocomplete="off"
+                                       onclick="moduloAtendimento()"/>
+                                <label class="btn btn-outline-success" for="botaoradio1">Atendimento</label>
+
+                                <input type="radio" class="btn-check" name="botaoradio2" id="btnradio2" autocomplete="off"
+                                       th:if="${role} == 'ANALISTA'? 'true' : (${role} == 'ADMINISTRADOR'? 'true' : false)"
+                                       onclick="carregaHtml('/mv/ponto', 'root')"/>
+                                <label class="btn btn-outline-success" for="botaoradio2"
+                                       th:if="${role} == 'ANALISTA'? 'true' : (${role} == 'ADMINISTRADOR'? 'true' : false)">Registro de Ponto</label>
+                            </div>
                             <div id="toastId" class="toast-container position-fixed bottom-0 start-0 p-3"></div>
                         </div>                            
                     </div>
@@ -73,14 +83,21 @@
         <script src="/public/js/bootstrap.bundle.min.js"></script>
         <script src="/public/js/choices.min.js"></script>
         <script src="/public/js/sidebars.js"></script>
-        <script src="/private/js/main.js"></script>        
-        <script src="/private/gestao/js/atendimento.js"></script>
-        <script src="/private/gestao/js/getModel.js"></script>        
-        <script src="/private/gestao/js/request.js"></script>
-        <script src="/private/js/request.js"></script>
-        <script src="/private/js/getModelChamado.js"></script>
-        <script src="/private/js/requestFront.js"></script> 
-        <script src="/private/gestao/js/customTable.js"></script>
-        <script>moduloAtendimento()</script>
+        <script src="/private/atendimento/js/main.js"></script>        
+        <script src="/private/atendimento/js/atendimento.js"></script>
+        <script src="/private/atendimento/js/getModel.js"></script>        
+        <script src="/private/atendimento/js/requestGestao.js"
+                th:if="${role} == 'ANALISTA'? 'true' : (${role} == 'ADMINISTRADOR'? 'true' : false)">
+        </script>
+        <script src="/private/atendimento/js/request.js"></script>
+        <script src="/private/atendimento/js/getModelChamado.js"></script>
+        <script src="/private/atendimento/js/requestFront.js"></script> 
+        <script src="/private/atendimento/js/customTable.js" 
+                th:if="${role} == 'ANALISTA'? 'true' : (${role} == 'ADMINISTRADOR'? 'true' : false)">
+        </script>
+        <script src="/private/atendimento/js/customTableCliente.js" 
+                th:if="${role} == 'CLIENTE'? 'true' : 'false'">
+        </script>
+        <!--<script>moduloAtendimento()</script>-->
     </body> 
 </html>

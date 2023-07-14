@@ -9,7 +9,6 @@ import caspvale.caspsuporte.atendimento.api.controller.PrioridadesController;
 import caspvale.caspsuporte.atendimento.api.controller.SistemasController;
 import caspvale.caspsuporte.atendimento.api.controller.UsuariosController;
 import caspvale.caspsuporte.atendimento.api.model.AnexosInputModel;
-import caspvale.caspsuporte.atendimento.api.model.AreasInputModel;
 import caspvale.caspsuporte.atendimento.api.model.AreasModel;
 import caspvale.caspsuporte.atendimento.api.model.ChamadosInputModel;
 import caspvale.caspsuporte.atendimento.api.model.ChamadosModel;
@@ -30,10 +29,13 @@ import java.util.List;
 import javax.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  *
@@ -42,7 +44,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RestController
 @RequestMapping("/mv/atendimento")
 public class ChamadosView {
-
+    
     private final Rotas rotas;
     private final ChamadosController chamadosController;
     private final UsuariosController usuariosController;
@@ -54,7 +56,7 @@ public class ChamadosView {
     private final PrioridadesController prioridadesController;
     private final ViewObjects viewObjects;
     private final Permissoes permissoes;
-
+    
     public ChamadosView(Rotas rotas, ChamadosController chamadosController, EntidadesController entidadesController,
             AreasController areasController, UsuariosController usuariosController,
             SistemasController sistemasController, OrigensController origensController, NiveisController niveisController,
@@ -71,7 +73,7 @@ public class ChamadosView {
         this.permissoes = permissoes;
         this.viewObjects = viewObjects;
     }
-
+    
     @GetMapping("chamado/{iChamado}")
     public ModelAndView verChamado(@Valid @PathVariable Integer iChamado) {
         String login = rotas.login();
@@ -91,7 +93,7 @@ public class ChamadosView {
         mv.addObject("quantidadeComentarios", quantidadeComentarios);
         mv.addObject("quantidadeArquivos", quantidadeArquivos);
         mv.addObject("areasEncaminhar", areasController.minhasAreas("A").getBody());
-
+        
         List<Integer> listaIAreas = new ArrayList<>();
         chamado.getCaspAreasList().forEach(area -> {
             listaIAreas.add(area.getIArea());
@@ -99,7 +101,7 @@ public class ChamadosView {
         mv.addObject("areachamado", areasController.areasComUsuariosAnalistasDoChamado(listaIAreas));
         return mvComAcoes(chamado, permissoes.usuarioLogadoModel(), mv);
     }
-
+    
     @GetMapping("modal-selecionar-usuario")
     public ModelAndView modalSelecionarUsuario() {
         rotas.viewsDaRota();
@@ -107,10 +109,10 @@ public class ChamadosView {
         viewObjects.listaEntidades(mv, entidadesController);
         viewObjects.listaAreas(mv, areasController);
         viewObjects.listaSistemas(mv, sistemasController);
-        mv.addObject("exibir", new String[]{"Todos", "Ativos", "Inativos"});
+        mv.addObject("exibir", new String[]{"Ativos", "Inativos", "Todos"});
         return mv;
     }
-
+    
     @GetMapping("selecionar-usuario")
     public ModelAndView selecionarUsuario(@RequestParam(value = "entidades", required = false, defaultValue = "0") int entidades,
             @RequestParam(value = "areas", required = false, defaultValue = "0") int areas,
@@ -123,17 +125,27 @@ public class ChamadosView {
         mv.addObject("usuariosAbertura", usuariosAberturaModel);
         return mv;
     }
-
+    
     @GetMapping("chamado")
-    public ModelAndView pageChamado(@RequestParam(value = "user", required = true) String user) {
-        rotas.viewsDaRota();
+    public ModelAndView pageChamado(@RequestParam(value = "user", required = true) String user, RedirectAttributes attributes) {
+        rotas.viewsDaRota();        
         ModelAndView mv = new ModelAndView(rotas.PAGINA_CHAMADO);
         String loginPermitido = loginPermitido(user);
-        List<EntidadesModel> entidadesDoUsuario = (List<EntidadesModel>) entidadesController.entidadesDoUsuario("A", loginPermitido).getBody();
-        List<SistemasModel> sistemasDoUsuario = (List<SistemasModel>) sistemasController.sistemasDoUsuario(loginPermitido, "A").getBody();
-        List<AreasModel> areasDoUsuario = (List<AreasModel>) areasController.areasDoUsuario("A", loginPermitido).getBody();
+        List<EntidadesModel> entidadesDoUsuario = new ArrayList<>();
+        List<SistemasModel> sistemasDoUsuario = new ArrayList<>();
+        List<AreasModel> areasDoUsuario = new ArrayList<>();
+        if (rotas.roleADMIN() || rotas.roleANALISTA()) {
+            entidadesDoUsuario = (List<EntidadesModel>) entidadesController.entidadesDoUsuario("A", loginPermitido).getBody();
+            sistemasDoUsuario = (List<SistemasModel>) sistemasController.sistemasDoUsuario(loginPermitido, "A").getBody();
+            areasDoUsuario = (List<AreasModel>) areasController.areasDoUsuario("A", loginPermitido).getBody();
+        } else {
+            entidadesDoUsuario = (List<EntidadesModel>) entidadesController.minhasEntidades("A").getBody();
+            sistemasDoUsuario = (List<SistemasModel>) sistemasController.meusSistemas("A").getBody();
+            areasDoUsuario = (List<AreasModel>) areasController.minhasAreas("A").getBody();
+        }
+        
         List<ProblemasInputModel> problemas = new ArrayList<>();
-
+        
         sistemasDoUsuario.forEach(sistema -> {
             sistema.getCaspProblemasList().forEach(problema -> {
                 if (!problemas.contains(problema)) {
@@ -141,10 +153,10 @@ public class ChamadosView {
                 }
             });
         });
-
+        ChamadosInputModel chamadoInput = novoChamado(loginPermitido);
         mv.addObject("role", rotas.role());
         mv.addObject("login", rotas.login());
-        mv.addObject("chamado", novoChamado(user));
+        mv.addObject("chamado", chamadoInput);
         mv.addObject("entidadesDoUsuario", entidadesDoUsuario);
         mv.addObject("sistemasDoUsuario", sistemasDoUsuario);
         mv.addObject("areasDoUsuario", areasDoUsuario);
@@ -155,11 +167,15 @@ public class ChamadosView {
         mv.addObject("situacoes", new String[]{"A", "I"});
         return mv;
     }
-
+    
     private ChamadosInputModel novoChamado(String nlogin) {
-        UsuariosModel usuario = (UsuariosModel) usuariosController.buscarPorLogin(loginPermitido(nlogin)).getBody();
+        UsuariosModel usuario = new UsuariosModel();
+        if (rotas.role().equals("ADMINISTRADOR") || rotas.role().equals("ANALISTA")) {
+            usuario = (UsuariosModel) usuariosController.buscarPorLogin(loginPermitido(nlogin)).getBody();
+        } else {
+            usuario = permissoes.usuarioLogadoModel();
+        }
         ChamadosInputModel chamado = new ChamadosInputModel();
-        //chamado.setIUsuarioAbertura(new UsuariosInputModel(usuario.getIUsuario(), usuario.getNlogin(), usuario.getNomeUsuario()));
         chamado.setIusuarioAbertura(usuario.getIUsuario());
         chamado.setNlogin(usuario.getNlogin());
         chamado.setNomeUsuario(usuario.getNomeUsuario());
@@ -167,7 +183,51 @@ public class ChamadosView {
         chamado.setEmailSolicitante(usuario.getEmailUsuario());
         return chamado;
     }
-
+    
+    
+    @GetMapping("edicaoChamado")
+    public ModelAndView pageEdicaoChamado(@RequestParam(value = "iChamado", required = true) Integer iChamado) {
+        rotas.viewsDaRota();
+        ModelAndView mv = new ModelAndView(rotas.PAGINA_EDICAO_CHAMADO);
+        List<EntidadesModel> entidadesDoUsuario = new ArrayList<>();
+        List<SistemasModel> sistemasDoUsuario = new ArrayList<>();
+        List<AreasModel> areasDoUsuario = new ArrayList<>();
+        ChamadosModel chamadosModel = (ChamadosModel) chamadosController.get(iChamado).getBody();
+        String loginPermitido = chamadosModel.getIUsuarioAbertura().getNlogin();
+        
+        if (rotas.roleADMIN() || rotas.roleANALISTA()) {
+            entidadesDoUsuario = (List<EntidadesModel>) entidadesController.entidadesDoUsuario("A", loginPermitido).getBody();
+            sistemasDoUsuario = (List<SistemasModel>) sistemasController.sistemasDoUsuario(loginPermitido, "A").getBody();
+            areasDoUsuario = (List<AreasModel>) areasController.areasDoUsuario("A", loginPermitido).getBody();
+        } else {
+            entidadesDoUsuario = (List<EntidadesModel>) entidadesController.minhasEntidades("A").getBody();
+            sistemasDoUsuario = (List<SistemasModel>) sistemasController.meusSistemas("A").getBody();
+            areasDoUsuario = (List<AreasModel>) areasController.minhasAreas("A").getBody();
+        }
+        
+        List<ProblemasInputModel> problemas = new ArrayList<>();
+        
+        sistemasDoUsuario.forEach(sistema -> {
+            sistema.getCaspProblemasList().forEach(problema -> {
+                if (!problemas.contains(problema)) {
+                    problemas.add(problema);
+                }
+            });
+        });
+        mv.addObject("role", rotas.role());
+        mv.addObject("login", rotas.login());
+        mv.addObject("chamado", chamadosModel);
+        mv.addObject("entidadesDoUsuario", entidadesDoUsuario);
+        mv.addObject("sistemasDoUsuario", sistemasDoUsuario);
+        mv.addObject("areasDoUsuario", areasDoUsuario);
+        mv.addObject("problemas", problemas);
+        mv.addObject("origens", (List<OrigensModel>) origensController.listar().getBody());
+        mv.addObject("niveis", (List<NiveisModel>) niveisController.listar().getBody());
+        mv.addObject("prioridades", (List<PrioridadesModel>) prioridadesController.listar().getBody());
+        mv.addObject("situacoes", new String[]{"A", "I"});
+        return mv;
+    }
+    
     private String loginPermitido(String login) {
         switch (rotas.role()) {
             case "ADMINISTRADOR":
@@ -180,7 +240,7 @@ public class ChamadosView {
                 throw new UsuarioRestritoException();
         }
     }
-
+    
     private ModelAndView mvComAcoes(ChamadosModel chamado, UsuariosModel usuarioLogado, ModelAndView mv) {
         if (chamado.getISituacao() != null) {
             String role = rotas.role();
@@ -202,7 +262,7 @@ public class ChamadosView {
                             mv.addObject("comentario", "Comentário");
                         }
                     }
-
+                    
                     break;
                 case "EM ATENDIMENTO":
                     if (role.equals("ANALISTA")) {
