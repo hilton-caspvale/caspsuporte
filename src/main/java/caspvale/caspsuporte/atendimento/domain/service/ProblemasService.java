@@ -19,10 +19,10 @@ public class ProblemasService {
     @Autowired
     private ProblemasRepository repository;
 
-    public CaspProblemas buscarOuFalhar(Integer id){        
-        return repository.findById(id).orElseThrow(() ->
-                new EntidadeNaoEncontradaException("Problema não localizado!")
-        );        
+    public CaspProblemas buscarOuFalhar(Integer id) {
+        return repository.findById(id).orElseThrow(()
+                -> new EntidadeNaoEncontradaException("Problema não localizado!")
+        );
     }
 
     @Transactional
@@ -44,7 +44,7 @@ public class ProblemasService {
     public List<CaspProblemas> listar() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "descricaoProblema"));
     }
-    
+
     public List<CaspProblemas> listarPorSituacao(String situacao) {
         return repository.findAllBySituacaoProblema(situacao, Sort.by(Sort.Direction.ASC, "descricaoProblema"));
     }

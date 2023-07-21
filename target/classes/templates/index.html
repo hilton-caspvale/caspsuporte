@@ -55,7 +55,9 @@
             <main class="container" style="margin-bottom:20rem;"> 
                 <div class="row">        
                     <div class="cor-g1 bg-gradient rounded shadow-sm p-2">
-                        <div id="principal">                            
+
+                        <div id="principal">
+                            <div id="alertaGeral"></div>                            
                             <div id="root">
                                 <input type="radio" class="btn-check" name="botaoradio1" id="botaoradio1" autocomplete="off"
                                        onclick="moduloAtendimento()"/>
@@ -68,17 +70,18 @@
                                        th:if="${role} == 'ANALISTA'? 'true' : (${role} == 'ADMINISTRADOR'? 'true' : false)">Registro de Ponto</label>
                             </div>
                             <div id="toastId" class="toast-container position-fixed bottom-0 start-0 p-3"></div>
+
                         </div>                            
                     </div>
                 </div>
             </main>
         </section>
 
-        <footer>
+       <!-- <footer>
             <div class="d-flex flex-column flex-sm-row justify-content-end py-1 border-top fixed-bottom">
                 <p>&copy; 2022 CASPVALE, Todos os direitos reservados.</p>                
             </div>
-        </footer>
+        </footer>-->
         <script src="/public/js/jquery-3.6.0.min.js"></script>
         <script src="/public/js/bootstrap.bundle.min.js"></script>
         <script src="/public/js/choices.min.js"></script>

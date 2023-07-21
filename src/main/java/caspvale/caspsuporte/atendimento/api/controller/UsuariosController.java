@@ -73,7 +73,7 @@ public class UsuariosController {
         }
         return ResponseEntity.ok(usuariosAssembler.toModel(usuariosService.buscarUsuarioPorLogin(login)));
     }
-    
+
     @GetMapping
     public ResponseEntity<?> listarUsuariosFiltros(@RequestParam(value = "entidades", required = false, defaultValue = "0") int entidades,
             @RequestParam(value = "areas", required = false, defaultValue = "0") int areas,
@@ -82,7 +82,7 @@ public class UsuariosController {
         permissoes.exclusivoAdministrador();
         return ResponseEntity.ok(usuariosAssembler.toCollectionModel(usuariosService.usuariosPorFilstros(entidades, areas, sistemas, exibir)));
     }
-    
+
     @GetMapping("usuarios-abetura")
     public ResponseEntity<?> listarUsuariosAbertura(@RequestParam(value = "entidades", required = false, defaultValue = "0") int entidades,
             @RequestParam(value = "areas", required = false, defaultValue = "0") int areas,
@@ -90,7 +90,7 @@ public class UsuariosController {
             @RequestParam(value = "exibir", required = false, defaultValue = "false") String exibir,
             @RequestParam(value = "somenteClientes", required = false, defaultValue = "false") boolean somenteClientes) {
         permissoes.restritoAoCliente();
-        return ResponseEntity.ok(usuariosAbetruraAssembler.toCollectionModel(usuariosService.usuariosAbertura(somenteClientes,entidades, areas, sistemas, exibir)));
+        return ResponseEntity.ok(usuariosAbetruraAssembler.toCollectionModel(usuariosService.usuariosAbertura(somenteClientes, entidades, areas, sistemas, exibir)));
     }
 
     @PostMapping
@@ -104,17 +104,21 @@ public class UsuariosController {
     }
 
     @PutMapping("/{iUsuario}")
-    public ResponseEntity editarUsuario(@Valid @RequestBody UsuariosModel usuariosModel, @PathVariable Integer iUsuario) {        
+    public ResponseEntity editarUsuario(@Valid @RequestBody UsuariosModel usuariosModel, @PathVariable Integer iUsuario) {
         permissoes.restritoAoCliente();
         CaspUsuarios caspUsuariosAtual = usuariosService.buscarOuFalhar(iUsuario);
-        if(!permissoes.login().equals(caspUsuariosAtual.getNlogin())){
-            permissoes.exclusivoAdministrador();
-        }        
+
+        if (!permissoes.permiteEditarUsuario(caspUsuariosAtual.getNlogin())) {
+            throw new NegocioException("Sem permissão para editar esse usuário!");
+        }
+//        if (!permissoes.login().equals(caspUsuariosAtual.getNlogin())) {
+//            permissoes.exclusivoAdministrador();
+//        }
         if (usuariosModel.getIUsuario() == null || caspUsuariosAtual.getIUsuario() != iUsuario) {
             throw new NegocioException("Conteúdo difere do item selecionado!");
         }
         CaspUsuarios usuarioParaEditar = usuariosAssembler.toEntity(usuariosModel);
-        CaspUsuarios caspUsuariosEditado = usuariosService.editarUsuario(usuarioParaEditar, caspUsuariosAtual);        
+        CaspUsuarios caspUsuariosEditado = usuariosService.editarUsuario(usuarioParaEditar, caspUsuariosAtual);
         UsuariosModel clienteEditado = usuariosAssembler.toModel(caspUsuariosEditado);
         return ResponseEntity.ok(clienteEditado);
     }

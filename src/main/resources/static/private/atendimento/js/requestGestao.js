@@ -11,8 +11,15 @@ var clientesPath = contextPath + 'clientes/';
 var usuariosPath = contextPath + 'usuarios/';
 
 function editarSistema(event) {
-    requestAtendimento(sistemasPath + event.currentTarget.value, 'PUT', getSistema(), 'table');
-    limparModal();
+    requestDef(sistemasPath + event.currentTarget.value, 'PUT', getSistema())
+            .then(response => {
+                carregarToast("Sistema [" + response.descricaoSistema + "] atualizado!", "sucesso");
+                atualizarTabela('table');
+                limparModal();
+            })
+            .catch(error => {
+                requestError(error, 'alertaModal');
+            });
 }
 
 function criarSistema(event) {
@@ -21,13 +28,27 @@ function criarSistema(event) {
 }
 
 function deletarSistema(event) {
-    requestAtendimento(sistemasPath + event.currentTarget.value, 'DELETE', null, 'table');
+    requestDef(sistemasPath + event.currentTarget.value, 'DELETE', null)
+            .then(response => {
+                carregarToast("Sistema excluído!");
+                atualizarTabela('table');
+            })
+            .catch(error => {
+                requestError(error, 'alertaModal');
+            });
     limparModal();
 }
 
 function editarProblema(event) {
-    requestAtendimento(problemasPath + event.currentTarget.value, 'PUT', getProblema(), 'table');
-    limparModal();
+    requestDef(problemasPath + event.currentTarget.value, 'PUT', getProblema())
+            .then(response => {
+                carregarToast("Problema [" + response.descricaoProblema + "] atualizado!", "sucesso");
+                atualizarTabela('table');
+                limparModal();
+            })
+            .catch(error => {
+                requestError(error, 'alertaModal');
+            });
 }
 
 function criarProblema(event) {
@@ -36,7 +57,15 @@ function criarProblema(event) {
 }
 
 function deletarProblema(event) {
-    requestAtendimento(problemasPath + event.currentTarget.value, 'DELETE', null, 'table');
+    requestDef(problemasPath + event.currentTarget.value, 'DELETE', null)
+            .then(response => {
+                carregarToast("Problema excluído!", "sucesso");
+                atualizarTabela('table');
+                limparModal();
+            })
+            .catch(error => {
+                requestError(error, 'alertaModal');
+            });
     limparModal();
 }
 
@@ -130,25 +159,51 @@ function criarEntidade(event) {
     limparModal();
 }
 
+function criarCliente(event) {
+    requestAtendimento(clientesPath + event.currentTarget.value, 'POST', getCliente('#cadastroUsuarioModal'), 'table');
+    limparModal();
+}
+
 function editarCliente(event) {
-    requestAtendimento(clientesPath + event.currentTarget.value, 'PUT', getCliente('#cadastroUsuarioModal'), 'table');
+    requestDef(clientesPath + event.currentTarget.value, 'PUT', getCliente('#cadastroUsuarioModal'))
+            .then(response => {
+                alertaSucesso("Cliente [" + response.nlogin + "] atualizado!", "alertaModal");
+                atualizarTabela('table');
+            })
+            .catch(error => {
+                requestError(error, 'alertaModal');
+            });
+}
+
+function criarUsuario(event) {
+    requestAtendimento(usuariosPath + event.currentTarget.value, 'POST', getUsuario('#cadastroUsuarioModal'), 'table');
+    limparModal();
+}
+
+function editarUsuario(event) {
+    requestAtendimento(usuariosPath + event.currentTarget.value, 'PUT', getUsuario('#cadastroUsuarioModal'), 'table');
     limparModal();
 }
 
 function editarUsuarioAbertura(event) {
     event.preventDefault();
+    let p1;
     let form = document.querySelector('#edicaoUsuarioModalAbertura');
     let login = form.querySelector('#nlogin').value;
     let tipo = form.querySelector('#itipoUsuario').value;
-    if (usuarioLogado() === login) {
-        return requestAtendimento(usuariosPath + event.currentTarget.value, 'PUT', getUsuario('#edicaoUsuarioModalAbertura'), null);
+    if (tipo === '3') {
+        p1 = () => requestAtendimento(clientesPath + event.currentTarget.value, 'PUT', getCliente('#edicaoUsuarioModalAbertura'), null);
     } else {
-        if (tipo === '3') {
-            return requestAtendimento(clientesPath + event.currentTarget.value, 'PUT', getCliente('#edicaoUsuarioModalAbertura'), null);
-        } else {
-            return requestAtendimento(usuariosPath + event.currentTarget.value, 'PUT', getUsuario('#edicaoUsuarioModalAbertura'), null);
-        }
+        p1 = () => requestAtendimento(usuariosPath + event.currentTarget.value, 'PUT', getUsuario('#edicaoUsuarioModalAbertura'), null);
     }
+    const p2 = () => carregaHtml(MV_A_CHAMADO + '?user=' + login, 'root');
+    const promises = [p1, p2];
+    executePromisesSeq(promises)
+            .then(() => {
+            })
+            .catch(error => {
+                alertaUnico("Erro ao processar requisição", error);
+            });
 }
 
 function criarClienteAbertura(event) {
@@ -159,17 +214,7 @@ function criarClienteAbertura(event) {
     limparModal();
 }
 
-function criarCliente(event) {
-    requestAtendimento(clientesPath + event.currentTarget.value, 'POST', getCliente('#cadastroUsuarioModal'), 'table');
-    limparModal();
-}
 
-function editarUsuario(event) {
-    requestAtendimento(usuariosPath + event.currentTarget.value, 'PUT', getUsuario('#cadastroUsuarioModal'), 'table');
-    limparModal();
-}
 
-function criarUsuario(event) {
-    requestAtendimento(usuariosPath + event.currentTarget.value, 'POST', getUsuario('#cadastroUsuarioModal'), 'table');
-    limparModal();
-}
+
+

@@ -28,12 +28,13 @@ function requestAtendimento(uri, metodo, object, tabela) {
                         } else {
                             let detalhe = '';
                             if (json.objects === undefined) {
-                                alertaUnico(json.title, json.userMessage);
+                                alertaUnico(json.title, json.userMessage, 'alertaGeral');
+                                //carregarToast(json.title + "\n" + json.userMessage);
                             } else {
                                 json.objects.forEach(ob => {
                                     detalhe = detalhe + 'Campo <strong>' + ob.name + '</strong> ' + ob.userMessage + '<br>';
                                 });
-                                alertaCampos(json.userMessage, detalhe);
+                                alertaCampos(json.userMessage, detalhe, 'alertaGeral');
                             }
                         }
                         console.log(json);
@@ -85,6 +86,7 @@ function validarUsuario(formulario) {
                 })
                 .catch(function (error) {
                     console.log('Erro catch: ' + error.message);
+                    carregarToast('Erro ao processar requisição! - ' + error.message);
                 });
     }
 }
@@ -115,7 +117,6 @@ function gravarChamado(event) {
         method = 'POST';
         msg_complemento = ' criado com sucesso!';
     }
-    console.log("chamado: " + object);
     fetch(uri, {
         method: method,
         headers: new Headers({
@@ -143,12 +144,12 @@ function gravarChamado(event) {
                             } else {
                                 let detalhe = '';
                                 if (json.objects === undefined) {
-                                    alertaUnico(json.title, json.userMessage);
+                                    alertaUnico(json.title, json.userMessage, 'alertaGeral');
                                 } else {
                                     json.objects.forEach(ob => {
                                         detalhe = detalhe + 'Campo <strong>' + ob.name + '</strong> ' + ob.userMessage + '<br>';
                                     });
-                                    alertaCampos(json.userMessage, detalhe);
+                                    alertaCampos(json.userMessage, detalhe, 'alertaGeral');
                                 }
                             }
                         }
@@ -213,12 +214,12 @@ function movimentarChamado(event, acao, comentarioId, dataagendamentoinput) {
                             } else {
                                 let detalhe = '';
                                 if (json.objects === undefined) {
-                                    alertaUnico(json.title, json.userMessage);
+                                    alertaUnico(json.title, json.userMessage, 'alertaGeral');
                                 } else {
                                     json.objects.forEach(ob => {
                                         detalhe = detalhe + 'Campo <strong>' + ob.name + '</strong> ' + ob.userMessage + '<br>';
                                     });
-                                    alertaCampos(json.userMessage, detalhe);
+                                    alertaCampos(json.userMessage, detalhe, 'alertaGeral');
                                 }
                             }
                         }
@@ -263,12 +264,12 @@ function deletarComentario(event) {
                             } else {
                                 let detalhe = '';
                                 if (json.objects === undefined) {
-                                    alertaUnico(json.title, json.userMessage);
+                                    alertaUnico(json.title, json.userMessage, 'alertaGeral');
                                 } else {
                                     json.objects.forEach(ob => {
                                         detalhe = detalhe + 'Campo <strong>' + ob.name + '</strong> ' + ob.userMessage + '<br>';
                                     });
-                                    alertaCampos(json.userMessage, detalhe);
+                                    alertaCampos(json.userMessage, detalhe, 'alertaGeral');
                                 }
                             }
                         }
@@ -369,12 +370,12 @@ function encerrarChamado(event) {
                             } else {
                                 let detalhe = '';
                                 if (json.objects === undefined) {
-                                    alertaUnico(json.title, json.userMessage);
+                                    alertaUnico(json.title, json.userMessage, 'alertaGeral');
                                 } else {
                                     json.objects.forEach(ob => {
                                         detalhe = detalhe + 'Campo <strong>' + ob.name + '</strong> ' + ob.userMessage + '<br>';
                                     });
-                                    alertaCampos(json.userMessage, detalhe);
+                                    alertaCampos(json.userMessage, detalhe, 'alertaGeral');
                                 }
                             }
                         }
@@ -398,8 +399,37 @@ function atualizarTotais() {
     };
 }
 
+function carregaHtmlPromise(uri) {
+    return new Promise((resolve, reject) => {
+        fetch(getUrl() + uri, {
+            method: 'GET',
+            headers: new Headers({
+                'Content-Type': 'text/html'
+            })
+        })
+                .then(response => {
+                    if (!response.ok) {
+                        response.json().then(function (json) {
+                            if (json.detail === undefined) {
+                                carregarToast(response.status + ' - Recurso não encontrado! ' + json.path);
+                            } else {
+                                carregarToast(json.userMessage);
+                            }
+                            reject(new Error('Requisição falhou'));
+                        });
+                    } else {
+                        resolve(response.text());
+                    }
+                })
+                .catch(function (error) {
+                    carregarToast('Erro ao processar requisição!' + error);
+                    reject(error);
+                });
+    });
+}
+
 function carregaHtml(uri, elemento) {
-    carregaHtmlPromise(uri)
+    return carregaHtmlPromise(uri)
             .then(html => {
                 $("#" + elemento).html(html);
             })
@@ -408,10 +438,10 @@ function carregaHtml(uri, elemento) {
             });
 }
 
-function promiseHtml(promisesEElementos) {
-    // Verifica se o parâmetro é um array
+function promiseHtml(promisesEElementos, promiseAPI) {
+    // Verifica se o primeiro parâmetro é um array
     if (!Array.isArray(promisesEElementos)) {
-        throw new Error('O parâmetro deve ser do tipo array.');
+        throw new Error('O primeiro parâmetro deve ser do tipo array.');
     }
 
     // Verifica se o array tem pelo menos um elemento
@@ -419,9 +449,14 @@ function promiseHtml(promisesEElementos) {
         throw new Error('O array deve ter pelo menos um elemento.');
     }
 
-    // Executa as promises em sequência
+    // Executa a promise para a requisição na API
     let resultPromise = Promise.resolve();
 
+    if (promiseAPI) {
+        resultPromise = promiseAPI;
+    }
+
+    // Executa as promises para carregar o conteúdo HTML
     promisesEElementos.forEach(([promise, elemento]) => {
         resultPromise = resultPromise.then(() => {
             return promise.then(resultado => {
@@ -429,15 +464,113 @@ function promiseHtml(promisesEElementos) {
             });
         });
     });
+
     return resultPromise;
 }
 
-function inserirHtml(elementos) {
-    promiseHtml(elementos)
+function inserirHtml9(elementos, reqapi) {
+    promiseHtml(elementos, reqapi)
             .then(() => {
                 console.log('Inserção de conteúdo concluída.');
             })
             .catch(error => {
                 console.error('Ocorreu um erro:', error);
+            });
+}
+
+function executePromisesSeq(promises) {
+    return promises.reduce((chain, promise) => {
+        return chain.then(() => promise());
+    }, Promise.resolve());
+}
+
+
+
+/* */
+
+function requestDef(url, metodo, object) {
+    let header = new Headers({'Content-Type': 'application/json'});
+
+    if (metodo === 'GET') {
+        object = null;
+        header = new Headers({'Content-Type': 'text/html'});
+    }
+
+    const conteudo = {
+        method: metodo,
+        headers: header,
+        body: object
+    };
+
+    return fetch(url, conteudo)
+            .then(response => {
+                const contentType = response.headers.get('content-type');
+                if (response.ok) {
+                    if (response.status === 204) {
+                        return "";
+                    } else if (contentType && contentType.includes('application/json')) {
+                        return response.json();
+                    } else if (contentType && contentType.includes('text/html')) {
+                        return response.text();
+                    } else {
+                        return response.text();
+                    }
+                } else {
+                    console.log('2');
+                    if (contentType && contentType.includes('application/json')) {
+                        console.log('3');
+                        return response.json()
+                                .then(json => {
+                                    if (json.objects !== undefined) {
+                                        throw {errorType: 'json-object', data: json};
+                                    } else {
+                                        throw {errorType: 'json-default', data: json};
+                                    }
+                                });
+                    } else {
+                        console.log('4');
+                        return response.text()
+                                .then(text => {
+                                    throw {errorType: 'http-error', data: {status: response.status, body: text}};
+                                });
+                    }
+                }
+            })
+            .catch(error => {
+                console.log('5');
+                throw error;
+            });
+}
+
+function requestError(rejection, idLocal) {
+    const {errorType, data} = rejection;
+    switch (errorType) {
+        case 'json-object':
+            let json = JSON.parse(JSON.stringify(rejection.data));
+            let detalhe = '';
+            json.objects.forEach(ob => {
+                detalhe = detalhe + 'Campo <strong>' + ob.name + '</strong> ' + ob.userMessage + '<br>';
+            });
+            return alertaCampos(json.userMessage, detalhe, idLocal);
+        case 'json-default':
+            return carregarToast(JSON.parse(JSON.stringify(rejection.data)).userMessage, 'erro');
+        case 'other':
+            return carregarToast(JSON.parse(JSON.stringify(rejection)).userMessage, 'erro');
+            ;
+        default:
+            return carregarToast(JSON.parse(JSON.stringify(rejection)).userMessage, 'erro');
+            ;
+    }
+}
+
+function requestAPI(url, metodo, object) {
+    return requestDef(url, metodo, object)
+            .then(response => {
+                return response;
+            })
+            .catch(error => {
+                const data = handleFetchError(error);
+                alert(data);
+                return data;
             });
 }

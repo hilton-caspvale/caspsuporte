@@ -12,7 +12,7 @@ function moduloAtendimento() {
         [promise1, '#root'],
         [promise2, '#menuPrincipal']
     ];
-    inserirHtml(elementos);
+    promiseHtml(elementos);
 }
 
 
@@ -30,6 +30,7 @@ function moduloAtendimentoCliente() {
     carregaHtml(uri, elemento);
     menuCadastrosAtendimento();
 }
+
 function menuCadastrosAtendimentoCliente() {
     let uri = '/mv/atendimento-cliente/menuAtendimentoCliente';
     let elemento = 'menuPrincipal';

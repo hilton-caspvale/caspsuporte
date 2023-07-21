@@ -16,6 +16,16 @@ function fecharModal(nomeModal) {
 
 function limparModal() {
     document.getElementById('modalBody').innerHTML = '';
+    limparAlerta();
+}
+
+function limparAlerta() {
+    document.getElementById('alertaGeral').innerHTML = '';
+    document.getElementById('alertaModal').innerHTML = '';
+}
+
+function atualizarTabela(tabela) {
+    $('#' + tabela).bootstrapTable('refresh');
 }
 
 function login() {
@@ -70,7 +80,7 @@ function carregarChoices() {
             removeItemButton: true,
             maxItemCount: 999,
             searchResultLimit: 5,
-            renderChoiceLimit: 9999
+            renderChoiceLimit: 999
         });
 
     });
@@ -79,7 +89,7 @@ function carregarChoices() {
             removeItemButton: true,
             maxItemCount: 1,
             searchResultLimit: 5,
-            renderChoiceLimit: 9999
+            renderChoiceLimit: 999
         });
 
     });
@@ -89,46 +99,17 @@ function choicesUsuarios() {
     document.querySelectorAll('.choicesUsuarios').forEach(function (element) {
         new Choices(element, {
             placeholder: true,
-            placeholderValue: 'TESTE',
+            placeholderValue: 'Usuário',
             removeItemButton: true,
             maxItemCount: 1,
             searchResultLimit: 10,
-            renderChoiceLimit: 9999
+            renderChoiceLimit: 999
         });
 
     });
 }
 
-function carregaHtmlPromise(uri) {
-    return new Promise((resolve, reject) => {
-        fetch(getUrl() + uri, {
-            method: 'GET',
-            headers: new Headers({
-                'Content-Type': 'text/html'
-            })
-        })
-                .then(response => {
-                    if (!response.ok) {
-                        response.json().then(function (json) {
-                            if (json.detail === undefined) {
-                                carregarToast(response.status + ' - Recurso não encontrado! ' + json.path);
-                            } else {
-                                carregarToast(json.userMessage);
-                            }
-                            reject(new Error('Requisição falhou'));
-                        });
-                    } else {
-                        resolve(response.text());
-                    }
-                })
-                .catch(function (error) {
-                    carregarToast('Erro ao processar requisição!' + error);
-                    reject(error);
-                });
-    });
-}
-
-function carregaHtmlvelho(uri, elemento) {
+function carregaHtmlvelho999(uri, elemento) {
     return fetch(getUrl() + uri, {
         method: 'GET',
         headers: new Headers({
@@ -237,7 +218,7 @@ function validarSelectUsuario(select, bt) {
     }
 }
 
-function alertaCampos(mensagem, detalhe) {
+function alertaCampos(mensagem, detalhe, idLocal) {
     let wrapper = document.createElement('div');
     wrapper.innerHTML = [
         `<div class="text-start fixed-top" style="margin-top: 4rem">`,
@@ -247,16 +228,16 @@ function alertaCampos(mensagem, detalhe) {
         `       <div>${mensagem}</div>`,
         `       <hr>`,
         `       <div>${detalhe}</div>`,
-        '       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+        '       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="limparAlerta()"></button>',
         '   </div>',
         '</div>',
         '</div>',
         '</div>'
     ].join('');
-    document.getElementById('alertaChamado').append(wrapper);
+    document.getElementById(idLocal).append(wrapper);
 }
 
-function alertaUnico(titulo, detalhe) {
+function alertaUnico(titulo, detalhe, idLocal) {
     let wrapper = document.createElement('div');
     wrapper.innerHTML = [
         `<div class="text-start fixed-top" style="margin-top: 4rem">`,
@@ -266,11 +247,162 @@ function alertaUnico(titulo, detalhe) {
         `       <div>${titulo}</div>`,
         `       <hr>`,
         `       <div>${detalhe}</div>`,
-        '       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+        '       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="limparAlerta()"></button>',
         '   </div>',
         '</div>',
         '</div>',
         '</div>'
     ].join('');
-    document.getElementById('alertaChamado').append(wrapper);
+    document.getElementById(idLocal).append(wrapper);
 }
+
+function alertaSucesso(detalhe, idLocal) {
+    let wrapper = document.createElement('div');
+    wrapper.innerHTML = [
+        `<div class="text-start fixed-top" style="margin-top: 4rem">`,
+        `<div class="row justify-content-md-center">`,
+        `<div class="col-md-auto" onclick="this.style.display = 'none'">`,
+        `   <div class="alert alert-success alert-dismissible" role="alert">`,
+        `       <div>${detalhe}</div>`,
+        '       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="limparAlerta()"></button>',
+        '   </div>',
+        '</div>',
+        '</div>',
+        '</div>'
+    ].join('');
+    document.getElementById(idLocal).append(wrapper);
+}
+
+function carregarToastOK(mensagem) {
+    let wrapper = document.createElement('div');
+    wrapper.innerHTML = [
+        `<div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">`,
+        `   <div class="toast-header">`,
+        `       <strong class="me-auto">Mensagemf</strong>`,
+        `       <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`,
+        `   </div>`,
+        `   <div class="toast-body" id="msgToast">${mensagem}</div>`,
+        '</div>'
+    ].join('');
+    document.getElementById("toastId").append(wrapper);
+    new bootstrap.Toast(document.getElementById('liveToast')).show();
+}
+
+
+// Lista para armazenar os toasts
+let toasts = [];
+
+// Função para adicionar um novo toast à lista
+function carregarToast(mensagem, tipo) {
+    let cor = "bg-info"
+    switch (tipo) {
+        case "sucesso":
+            cor = "bg-success";
+            break;
+        case "erro":
+            cor = "bg-danger";
+            break;
+        default:
+            cor = "bg-info";
+            break;
+    }
+    let wrapper = document.createElement('div');
+    let toastId = `liveToast-${Date.now()}`; // Adicionando um ID único para cada toast
+    wrapper.innerHTML = [
+        `<div id="${toastId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">`, // Removemos o autohide padrão para controlar manualmente o fechamento
+        `   <div class="toast-header">`,
+        `       <strong class="me-auto">Mensagem</strong>`,
+        `       <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`,
+        `   </div>`,
+        `   <div class="toast-body" id="msgToast">${mensagem}</div>`,
+        `   <div class="progress" style="height: 5px;">`, // Adicionamos a barra de progresso
+        `       <div id="progressBar-${toastId}" class="progress-bar ${cor} progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;"></div>`,
+        `   </div>`,
+        '</div>'
+    ].join('');
+    document.getElementById("toastId").append(wrapper);
+    toasts.push({
+        id: toastId,
+        remainingTime: tempo_ms_toast
+    });
+    exibirToasts();
+}
+
+/// Função para exibir todos os toasts presentes na lista
+function exibirToasts() {
+    toasts.forEach((toastObj) => {
+        const toastElement = document.getElementById(toastObj.id);
+        const progressBar = toastElement.querySelector(`#progressBar-${toastObj.id}`);
+        progressBar.classList.add('custom-progress-bar'); // Adicionando a classe personalizada à barra de progresso
+        const toast = new bootstrap.Toast(toastElement);
+        toast.show();
+
+        let remainingTime = toastObj.remainingTime; // Tempo restante do toast
+        let intervalId;
+        let paused = false; // Variável para controlar o estado de pausa da contagem
+
+        const updateProgressBar = () => {
+            const percentage = (remainingTime / tempo_ms_toast) * 100;
+            progressBar.style.width = `${percentage}%`;
+        };
+
+        const startCountdown = () => {
+            clearInterval(intervalId);
+            updateProgressBar();
+
+            intervalId = setInterval(() => {
+                if (!paused) {
+                    remainingTime -= 100;
+                    if (remainingTime <= 0) {
+                        clearInterval(intervalId);
+                        removerToast(toastObj.id); // Remover o toast da lista quando o tempo expirar
+                        toast.hide(); // Fechar o toast após o tempo expirar
+                    } else {
+                        updateProgressBar();
+                    }
+                }
+            }, 100);
+        };
+
+        const resetCountdown = () => {
+            remainingTime = tempo_ms_toast;
+            updateProgressBar();
+        };
+
+        const pauseCountdown = () => {
+            paused = true;
+        };
+
+        const resumeCountdown = () => {
+            paused = false;
+        };
+
+        toastElement.addEventListener('mouseenter', () => {
+            resetCountdown();
+            pauseCountdown(); // Pausar a contagem ao passar o mouse sobre o toast
+        });
+
+        toastElement.addEventListener('mouseleave', () => {
+            resumeCountdown(); // Retomar a contagem ao tirar o mouse do toast
+        });
+
+        toastElement.querySelector('.btn-close').addEventListener('click', () => {
+            removerToast(toastObj.id); // Remover o toast da lista quando o botão de fechar é clicado manualmente
+            toast.hide(); // Fechar o toast manualmente ao clicar no botão de fechar
+        });
+
+        startCountdown(); // Iniciar a contagem do tempo e a barra de progresso
+
+        // Adicionando um ouvinte para remover o toast da lista quando for fechado
+        toastElement.addEventListener('hidden.bs.toast', () => {
+            removerToast(toastObj.id);
+            clearInterval(intervalId); // Limpa o intervalo quando o toast é fechado
+        });
+    });
+}
+
+function removerToast(toastId) {
+    toasts = toasts.filter((toastObj) => toastObj.id !== toastId);
+}
+
+var tempo_ms_toast = 5000;

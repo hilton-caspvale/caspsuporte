@@ -66,7 +66,7 @@ public class ChamadosInputModel {
     @NotEmpty
     private List<EntidadesInputModel> caspEntidadesList;
     @NotEmpty
-    private List<SistemasInputModel> caspSistemasList;
+    private List<SistemasInputModel> sistemas;
     @NotEmpty
     private List<ProblemasInputModel> caspProblemasList; 
     private Integer iNivel;

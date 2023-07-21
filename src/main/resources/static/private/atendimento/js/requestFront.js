@@ -10,18 +10,22 @@ var MV_A_MODAL_CLIENTES = MV_ATENDIMENTO + 'conteudoModalClientes?abertura=true'
 function chamadoUsuarioSelecionado() {
     let user = document.getElementById('choices-usuarios');
     carregaHtml(MV_A_CHAMADO + '?user=' + user.value, 'root');
+    limparAlerta();
 }
 
 function chamadoUsuarioLogado() {
-    carregaHtml(MV_A_CHAMADO + '?user=' + login(), 'root');
+    document.getElementById('alertaGeral').innerHTML = '';
+    return carregaHtml(MV_A_CHAMADO + '?user=' + login(), 'root');
 }
 
 function chamadoUsuarioEditado(user) {
-    carregaHtml(MV_A_CHAMADO + '?user=' + user, 'root');
+    limparAlerta();
+    return carregaHtml(MV_A_CHAMADO + '?user=' + user, 'root');
 }
 
 function chamadoEdicao(event) {
     event.preventDefault();
+    limparAlerta();
     let currentTarget = $(event.currentTarget);
     let iChamado = currentTarget.attr('data-id');
     carregaHtml(MV_A_EDICAO_CHAMADO + '?iChamado=' + iChamado, 'root');
@@ -63,7 +67,7 @@ function modalCriarUsuarioAbertura() {
     $('#staticBackdropLabel').html('Adicionar Cliente');
 }
 
-function carregarToast(mensagem) {
+function carregarToast99(mensagem) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', MV_A_TOAST_GERAL);
     xhr.send();

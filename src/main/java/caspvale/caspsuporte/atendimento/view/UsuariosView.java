@@ -13,6 +13,7 @@ import caspvale.caspsuporte.atendimento.api.model.UsuariosModel;
 import caspvale.caspsuporte.atendimento.view.common.ViewObjects;
 import caspvale.caspsuporte.atendimento.common.Rotas;
 import caspvale.caspsuporte.atendimento.common.Permissoes;
+import caspvale.caspsuporte.domain.exception.NegocioException;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -77,7 +78,8 @@ public class UsuariosView {
             } else {
                 mv.setViewName(rotas.EDITAR_USUARIO_ABERTURA);
             }
-            mv.addObject("usuarioModel", (UsuariosModel) usuariosController.usuario(id).getBody());
+            UsuariosModel usuariosModel = (UsuariosModel) usuariosController.usuario(id).getBody();
+            mv.addObject("usuarioModel", usuariosModel);
         }
 
         mv.addObject("listaSistemas", (List<SistemasModel>) sistemasController.listar().getBody());

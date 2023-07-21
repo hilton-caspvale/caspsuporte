@@ -33,7 +33,6 @@ public class Permissoes {
 //    public boolean SOMENTE_ENTIDADES_DO_USUARIO = true;
 //    public boolean SOMENTE_AREAS_DO_USUARIO = true;
 //    public boolean SOMENTE_SISTEMAS_DO_USUARIO = true;
-
     @Autowired
     public UsuariosAssembler usuariosAssembler;
     @Autowired
@@ -156,6 +155,16 @@ public class Permissoes {
         ChamadosModel chamadoModel = chamadosAssembler.toModel(caspChamado);
         UsuariosModel usuarioModel = usuariosAssembler.toModel(caspUsuario);
         permissaoPorEntidade(chamadoModel, usuarioModel);
+    }
+
+    public boolean permiteEditarUsuario(String loginUsuarioEdicao) {
+        if (roleADMIN()) {
+            return true;
+        }
+        if (roleANALISTA()) {
+            return loginUsuarioEdicao.equals(login());
+        }
+        return false;
     }
 
 }

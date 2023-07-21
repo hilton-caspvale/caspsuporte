@@ -1,4 +1,3 @@
-
 package caspvale.caspsuporte.atendimento.common;
 
 import org.springframework.context.annotation.Configuration;
@@ -154,6 +153,10 @@ public class Rotas {
 
     public boolean roleADMIN() {
         return role().equals("ADMINISTRADOR");
+    }
+
+    public boolean permiteEditarUsuario(String loginUsuarioEdicao) {
+        return permissoes.permiteEditarUsuario(loginUsuarioEdicao);
     }
 
 }

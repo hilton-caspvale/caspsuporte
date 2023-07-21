@@ -15,17 +15,21 @@ function getChamado() {
     }
     let listaSistemas = document.getElementById("sistemas") || null;
     let sistemas = [];
-    for (i = 0; i < listaSistemas.length; i = i + 1) {
-        let sistema = {isistema: listaSistemas.options[i].value,
-            descricaoSistema: listaSistemas.options[i].text};
-        sistemas.push(sistema);
+    if (listaSistemas) {
+        for (i = 0; i < listaSistemas.length; i = i + 1) {
+            let sistema = {isistema: listaSistemas.options[i].value,
+                descricaoSistema: listaSistemas.options[i].text};
+            sistemas.push(sistema);
+        }
     }
     let listaProblemas = document.getElementById("problemas") || null;
     let problemas = [];
-    for (i = 0; i < listaProblemas.length; i = i + 1) {
-        let problema = {iproblema: listaProblemas.options[i].value,
-            descricaoProblema: listaProblemas.options[i].text};
-        problemas.push(problema);
+    if (listaProblemas) {
+        for (i = 0; i < listaProblemas.length; i = i + 1) {
+            let problema = {iproblema: listaProblemas.options[i].value,
+                descricaoProblema: listaProblemas.options[i].text};
+            problemas.push(problema);
+        }
     }
     let listaNiveis = document.getElementById("nivel") || null;
     let nivel = listaNiveis.options[listaNiveis.selectedIndex].value || null;
@@ -43,7 +47,7 @@ function getChamado() {
         emailSolicitante: document.getElementById('email').value || null,
         caspEntidadesList: entidades,
         caspAreasList: areas,
-        caspSistemasList: sistemas,
+        sistemas: sistemas,
         caspProblemasList: problemas,
         inivel: nivel,
         iorigemChamado: origem,
@@ -59,33 +63,41 @@ function getChamado() {
 
 function getEdicaoChamado(ichamado) {
     let form = document.querySelector('#formEdicaoChamado');
-    let listaEntidades = form.querySelector('#entidades');
+    let listaEntidades = form.querySelector('#entidades') || null;
     let entidades = [];
-    for (i = 0; i < listaEntidades.length; i = i + 1) {
-        let entidade = {ientidade: listaEntidades.options[i].value,
-            nomeEntidade: listaEntidades.options[i].text};
-        entidades.push(entidade);
+    if (listaEntidades) {
+        for (i = 0; i < listaEntidades.length; i = i + 1) {
+            let entidade = {ientidade: listaEntidades.options[i].value,
+                nomeEntidade: listaEntidades.options[i].text};
+            entidades.push(entidade);
+        }
     }
     let listaAreas = form.querySelector("#areas") || null;
     let areas = [];
-    for (i = 0; i < listaAreas.length; i = i + 1) {
-        let area = {iarea: listaAreas.options[i].value,
-            descricaoArea: listaAreas.options[i].text};
-        areas.push(area);
+    if (listaAreas) {
+        for (i = 0; i < listaAreas.length; i = i + 1) {
+            let area = {iarea: listaAreas.options[i].value,
+                descricaoArea: listaAreas.options[i].text};
+            areas.push(area);
+        }
     }
     let listaSistemas = form.querySelector("#sistemas") || null;
     let sistemas = [];
-    for (i = 0; i < listaSistemas.length; i = i + 1) {
-        let sistema = {isistema: listaSistemas.options[i].value,
-            descricaoSistema: listaSistemas.options[i].text};
-        sistemas.push(sistema);
+    if (listaSistemas) {
+        for (i = 0; i < listaSistemas.length; i = i + 1) {
+            let sistema = {isistema: listaSistemas.options[i].value,
+                descricaoSistema: listaSistemas.options[i].text};
+            sistemas.push(sistema);
+        }
     }
     let listaProblemas = form.querySelector("#problemas") || null;
     let problemas = [];
-    for (i = 0; i < listaProblemas.length; i = i + 1) {
-        let problema = {iproblema: listaProblemas.options[i].value,
-            descricaoProblema: listaProblemas.options[i].text};
-        problemas.push(problema);
+    if (listaProblemas) {
+        for (i = 0; i < listaProblemas.length; i = i + 1) {
+            let problema = {iproblema: listaProblemas.options[i].value,
+                descricaoProblema: listaProblemas.options[i].text};
+            problemas.push(problema);
+        }
     }
     let listaNiveis = form.querySelector("#nivel") || null;
     let nivel = listaNiveis.options[listaNiveis.selectedIndex].value || null;
@@ -101,7 +113,7 @@ function getEdicaoChamado(ichamado) {
         emailSolicitante: form.querySelector('#email').value || null,
         caspEntidadesList: entidades,
         caspAreasList: areas,
-        caspSistemasList: sistemas,
+        sistemas: sistemas,
         caspProblemasList: problemas,
         inivel: nivel,
         iorigemChamado: origem,

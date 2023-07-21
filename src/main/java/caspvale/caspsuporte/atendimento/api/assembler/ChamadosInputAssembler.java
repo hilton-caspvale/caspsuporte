@@ -12,28 +12,26 @@ import org.springframework.stereotype.Component;
  *
  * @author Hilton
  */
-@lombok.AllArgsConstructor
+//@lombok.AllArgsConstructor
 @Component
 public class ChamadosInputAssembler {
 
     private ModelMapper modelMapper;
 
-    /*public ChamadosInputAssembler() {
+    public ChamadosInputAssembler() {
         this.modelMapper = new ModelMapper();
 
         PropertyMap<ChamadosInputModel, ChamadosModel> customMapping = new PropertyMap<ChamadosInputModel, ChamadosModel>() {
             @Override
             protected void configure() {
-                map().setIUsuarioAtendimento(source.getIusuarioAtendimento());
-                map().setIUsuarioEncaminhamento(source.getIusuarioEncaminhamento());
-                map().setIUsuarioEncerramento(source.getIusuarioEncerramento());
+                map().setCaspSistemasList(source.getSistemas());
                 // Mapeia o campo "differentFieldName" da classe de origem para o campo "someField" da classe de destino
                 // Você pode adicionar mais regras de mapeamento personalizadas aqui
             }
         };
 
         modelMapper.addMappings(customMapping);
-    }*/
+    }
 
     public ChamadosInputModel toModel(ChamadosModel chamado) {
         return modelMapper.map(chamado, ChamadosInputModel.class);
