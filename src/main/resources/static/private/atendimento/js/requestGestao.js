@@ -10,6 +10,18 @@ var entidadesPath = contextPath + 'entidades/';
 var clientesPath = contextPath + 'clientes/';
 var usuariosPath = contextPath + 'usuarios/';
 
+function criarSistema(event) {
+    requestDef(sistemasPath + event.currentTarget.value, 'POST', getSistema())
+            .then(response => {
+                carregarToast("Sistema [" + response.descricaoSistema + "] cadastrado!", "sucesso");
+                atualizarTabela('table');
+                limparModal();
+            })
+            .catch(error => {
+                requestError(error, 'alertaModal');
+            });
+}
+
 function editarSistema(event) {
     requestDef(sistemasPath + event.currentTarget.value, 'PUT', getSistema())
             .then(response => {
@@ -22,21 +34,20 @@ function editarSistema(event) {
             });
 }
 
-function criarSistema(event) {
-    requestAtendimento(sistemasPath + event.currentTarget.value, 'POST', getSistema(), 'table');
-    limparModal();
+function deletarSistema(event) {
+    requestExcluirCadastro(sistemasPath + event.currentTarget.value);
 }
 
-function deletarSistema(event) {
-    requestDef(sistemasPath + event.currentTarget.value, 'DELETE', null)
+function criarProblema(event) {
+    requestDef(problemasPath + event.currentTarget.value, 'POST', getProblema())
             .then(response => {
-                carregarToast("Sistema excluído!");
+                carregarToast("Problema [" + response.descricaoSistema + "] cadastrado!", "sucesso");
                 atualizarTabela('table');
+                limparModal();
             })
             .catch(error => {
                 requestError(error, 'alertaModal');
             });
-    limparModal();
 }
 
 function editarProblema(event) {
@@ -51,112 +62,176 @@ function editarProblema(event) {
             });
 }
 
-function criarProblema(event) {
-    requestAtendimento(problemasPath + event.currentTarget.value, 'POST', getProblema(), 'table');
-    limparModal();
+function deletarProblema(event) {
+    requestExcluirCadastro(problemasPath + event.currentTarget.value);
 }
 
-function deletarProblema(event) {
-    requestDef(problemasPath + event.currentTarget.value, 'DELETE', null)
+function criarArea(event) {
+    requestDef(areasPath + event.currentTarget.value, 'POST', getArea())
             .then(response => {
-                carregarToast("Problema excluído!", "sucesso");
+                carregarToast("Área [" + response.descricaoArea + "] cadastrada!", "sucesso");
                 atualizarTabela('table');
                 limparModal();
             })
             .catch(error => {
                 requestError(error, 'alertaModal');
             });
-    limparModal();
 }
 
 function editarArea(event) {
-    requestAtendimento(areasPath + event.currentTarget.value, 'PUT', getArea(), 'table');
-    limparModal();
-}
-
-function criarArea(event) {
-    requestAtendimento(areasPath + event.currentTarget.value, 'POST', getArea(), 'table');
-    limparModal();
+    requestDef(areasPath + event.currentTarget.value, 'PUT', getArea())
+            .then(response => {
+                carregarToast("Área [" + response.descricaoArea + "] atualizada!", "sucesso");
+                atualizarTabela('table');
+                limparModal();
+            })
+            .catch(error => {
+                requestError(error, 'alertaModal');
+            });
 }
 
 function deletarArea(event) {
-    requestAtendimento(areasPath + event.currentTarget.value, 'DELETE', null, 'table');
-    limparModal();
-}
-
-function editarNivel(event) {
-    requestAtendimento(niveisPath + event.currentTarget.value, 'PUT', getNivel(), 'table');
-    limparModal();
+    requestExcluirCadastro(areasPath + event.currentTarget.value);
 }
 
 function criarNivel(event) {
-    requestAtendimento(niveisPath + event.currentTarget.value, 'POST', getNivel(), 'table');
-    limparModal();
+    requestDef(niveisPath + event.currentTarget.value, 'POST', getNivel())
+            .then(response => {
+                carregarToast("Nível [" + response.descricaoNivel + "] cadastrado!", "sucesso");
+                atualizarTabela('table');
+                limparModal();
+            })
+            .catch(error => {
+                requestError(error, 'alertaModal');
+            });
+}
+
+function editarNivel(event) {
+    requestDef(niveisPath + event.currentTarget.value, 'PUT', getNivel())
+            .then(response => {
+                carregarToast("Nível [" + response.descricaoNivel + "] atualizado!", "sucesso");
+                atualizarTabela('table');
+                limparModal();
+            })
+            .catch(error => {
+                requestError(error, 'alertaModal');
+            });
 }
 
 function deletarNivel(event) {
-    requestAtendimento(niveisPath + event.currentTarget.value, 'DELETE', null, 'table');
-    limparModal();
-}
-
-function editarOrigem(event) {
-    requestAtendimento(origensPath + event.currentTarget.value, 'PUT', getOrigem(), 'table');
-    limparModal();
-}
-
-function deletarOrigem(event) {
-    requestAtendimento(origensPath + event.currentTarget.value, 'DELETE', null, 'table');
-    limparModal();
+    requestExcluirCadastro(niveisPath + event.currentTarget.value);
 }
 
 function criarOrigem(event) {
-    requestAtendimento(origensPath + event.currentTarget.value, 'POST', getOrigem(), 'table');
-    limparModal();
+    requestDef(origensPath + event.currentTarget.value, 'POST', getOrigem())
+            .then(response => {
+                carregarToast("Origem [" + response.descricaoOrigem + "] cadastrada!", "sucesso");
+                atualizarTabela('table');
+                limparModal();
+            })
+            .catch(error => {
+                requestError(error, 'alertaModal');
+            });
 }
 
-function editarTipoArquivo(event) {
-    requestAtendimento(tiposArquivosPath + event.currentTarget.value, 'PUT', getTipoArquivo(), 'table');
-    limparModal();
+function editarOrigem(event) {
+    requestDef(origensPath + event.currentTarget.value, 'PUT', getOrigem())
+            .then(response => {
+                carregarToast("Origem [" + response.descricaoOrigem + "] atualizada!", "sucesso");
+                atualizarTabela('table');
+                limparModal();
+            })
+            .catch(error => {
+                requestError(error, 'alertaModal');
+            });
+}
+
+function deletarOrigem(event) {
+    requestExcluirCadastro(origensPath + event.currentTarget.value);
 }
 
 function criarTipoArquivo(event) {
-    requestAtendimento(tiposArquivosPath + event.currentTarget.value, 'POST', getTipoArquivo(), 'table');
-    limparModal();
+    requestDef(tiposArquivosPath + event.currentTarget.value, 'POST', getTipoArquivo())
+            .then(response => {
+                carregarToast("Tipo [" + response.descricaoTipoArquivo + "] cadastrado!", "sucesso");
+                atualizarTabela('table');
+                limparModal();
+            })
+            .catch(error => {
+                requestError(error, 'alertaModal');
+            });
+}
+
+function editarTipoArquivo(event) {
+    requestDef(tiposArquivosPath + event.currentTarget.value, 'PUT', getTipoArquivo())
+            .then(response => {
+                carregarToast("Tipo [" + response.descricaoTipoArquivo + "] atualizado!", "sucesso");
+                atualizarTabela('table');
+                limparModal();
+            })
+            .catch(error => {
+                requestError(error, 'alertaModal');
+            });
 }
 
 function deletarTipoArquivo(event) {
-    requestAtendimento(tiposArquivosPath + event.currentTarget.value, 'DELETE', null, 'table');
-    limparModal();
-}
-
-function editarTipoEntidade(event) {
-    requestAtendimento(tiposEntidadesPath + event.currentTarget.value, 'PUT', getTipoEntidade(), 'table');
-    limparModal();
+    requestExcluirCadastro(tiposArquivosPath + event.currentTarget.value);
 }
 
 function criarTipoEntidade(event) {
-    requestAtendimento(tiposEntidadesPath + event.currentTarget.value, 'POST', getTipoEntidade(), 'table');
-    limparModal();
+    requestDef(tiposEntidadesPath + event.currentTarget.value, 'POST', getTipoEntidade())
+            .then(response => {
+                carregarToast("Tipo [" + response.tipoDescricao + "] cadastrado!", "sucesso");
+                atualizarTabela('table');
+                limparModal();
+            })
+            .catch(error => {
+                requestError(error, 'alertaModal');
+            });
+}
+
+function editarTipoEntidade(event) {
+    requestDef(tiposEntidadesPath + event.currentTarget.value, 'PUT', getTipoEntidade())
+            .then(response => {
+                carregarToast("Tipo [" + response.tipoDescricao + "] atualizado!", "sucesso");
+                atualizarTabela('table');
+                limparModal();
+            })
+            .catch(error => {
+                requestError(error, 'alertaModal');
+            });
 }
 
 function deletarTipoEntidade(event) {
-    requestAtendimento(tiposEntidadesPath + event.currentTarget.value, 'DELETE', null, 'table');
-    limparModal();
-}
-
-function editarEntidade(event) {
-    requestAtendimento(entidadesPath + event.currentTarget.value, 'PUT', getEntidade(), 'table');
-    limparModal();
-}
-
-function deletarEntidade(event) {
-    requestAtendimento(entidadesPath + event.currentTarget.value, 'DELETE', null, 'table');
-    limparModal();
+    requestExcluirCadastro(tiposEntidadesPath + event.currentTarget.value);
 }
 
 function criarEntidade(event) {
-    requestAtendimento(entidadesPath + event.currentTarget.value, 'POST', getEntidade(), 'table');
-    limparModal();
+    requestDef(entidadesPath + event.currentTarget.value, 'POST', getEntidade())
+            .then(response => {
+                carregarToast("Entidade [" + response.nomeEntidade + "] cadastrada!", "sucesso");
+                atualizarTabela('table');
+                limparModal();
+            })
+            .catch(error => {
+                requestError(error, 'alertaModal');
+            });
+}
+
+function editarEntidade(event) {
+    requestDef(entidadesPath + event.currentTarget.value, 'PUT', getEntidade())
+            .then(response => {
+                carregarToast("Entidade [" + response.nomeEntidade + "] atualizada!", "sucesso");
+                atualizarTabela('table');
+                limparModal();
+            })
+            .catch(error => {
+                requestError(error, 'alertaModal');
+            });
+}
+
+function deletarEntidade(event) {
+    requestExcluirCadastro(entidadesPath + event.currentTarget.value);
 }
 
 function criarCliente(event) {

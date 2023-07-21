@@ -2,50 +2,50 @@ var contextPath = '/atendimento/';
 var usuariosPath = contextPath + 'usuarios/';
 var chamadosPatch = contextPath + 'chamados/';
 
-function requestAtendimento(uri, metodo, object, tabela) {
-    return fetch(getUrl() + uri, {
-        method: metodo,
-        headers: new Headers({
-            'Content-Type': 'application/json'
-        }),
-        body: object
-    })
-            .then(function (response) {
-                if (response.ok) {
-                    carregarToast("Dados gravados com sucesso!");
-                    if (tabela !== null) {
-                        $('#' + tabela).bootstrapTable('refresh');
-                    }
-                    if (response.status !== 204) {
-                        response.json().then(function (j) {
-                            console.log(j);
-                        });
-                    }
-                } else {
-                    response.json().then(function (json) {
-                        if (json.detail === undefined) {
-                            carregarToast(response.status + ' - Recurso não encontrado! ' + json.path);
-                        } else {
-                            let detalhe = '';
-                            if (json.objects === undefined) {
-                                alertaUnico(json.title, json.userMessage, 'alertaGeral');
-                                //carregarToast(json.title + "\n" + json.userMessage);
-                            } else {
-                                json.objects.forEach(ob => {
-                                    detalhe = detalhe + 'Campo <strong>' + ob.name + '</strong> ' + ob.userMessage + '<br>';
-                                });
-                                alertaCampos(json.userMessage, detalhe, 'alertaGeral');
-                            }
-                        }
-                        console.log(json);
-                    });
-                }
-            })
-            .catch(function (error) {
-                console.log('erro: ' + error);
-                carregarToast('Erro ao processar requisição!');
-            });
-}
+/*function requestAtendimento(uri, metodo, object, tabela) {
+ return fetch(getUrl() + uri, {
+ method: metodo,
+ headers: new Headers({
+ 'Content-Type': 'application/json'
+ }),
+ body: object
+ })
+ .then(function (response) {
+ if (response.ok) {
+ carregarToast("Dados gravados com sucesso!");
+ if (tabela !== null) {
+ $('#' + tabela).bootstrapTable('refresh');
+ }
+ if (response.status !== 204) {
+ response.json().then(function (j) {
+ console.log(j);
+ });
+ }
+ } else {
+ response.json().then(function (json) {
+ if (json.detail === undefined) {
+ carregarToast(response.status + ' - Recurso não encontrado! ' + json.path);
+ } else {
+ let detalhe = '';
+ if (json.objects === undefined) {
+ alertaUnico(json.title, json.userMessage, 'alertaGeral');
+ //carregarToast(json.title + "\n" + json.userMessage);
+ } else {
+ json.objects.forEach(ob => {
+ detalhe = detalhe + 'Campo <strong>' + ob.name + '</strong> ' + ob.userMessage + '<br>';
+ });
+ alertaCampos(json.userMessage, detalhe, 'alertaGeral');
+ }
+ }
+ console.log(json);
+ });
+ }
+ })
+ .catch(function (error) {
+ console.log('erro: ' + error);
+ carregarToast('Erro ao processar requisição!');
+ });
+ }*/
 
 function validarUsuario(formulario) {
     //let login = document.querySelector('#cadastroUsuarioModal input[id="nlogin"]');
@@ -399,44 +399,44 @@ function atualizarTotais() {
     };
 }
 
-function carregaHtmlPromise(uri) {
-    return new Promise((resolve, reject) => {
-        fetch(getUrl() + uri, {
-            method: 'GET',
-            headers: new Headers({
-                'Content-Type': 'text/html'
-            })
-        })
-                .then(response => {
-                    if (!response.ok) {
-                        response.json().then(function (json) {
-                            if (json.detail === undefined) {
-                                carregarToast(response.status + ' - Recurso não encontrado! ' + json.path);
-                            } else {
-                                carregarToast(json.userMessage);
-                            }
-                            reject(new Error('Requisição falhou'));
-                        });
-                    } else {
-                        resolve(response.text());
-                    }
-                })
-                .catch(function (error) {
-                    carregarToast('Erro ao processar requisição!' + error);
-                    reject(error);
-                });
-    });
-}
+/*function carregaHtmlPromise(uri) {
+ return new Promise((resolve, reject) => {
+ fetch(getUrl() + uri, {
+ method: 'GET',
+ headers: new Headers({
+ 'Content-Type': 'text/html'
+ })
+ })
+ .then(response => {
+ if (!response.ok) {
+ response.json().then(function (json) {
+ if (json.detail === undefined) {
+ carregarToast(response.status + ' - Recurso não encontrado! ' + json.path);
+ } else {
+ carregarToast(json.userMessage);
+ }
+ reject(new Error('Requisição falhou'));
+ });
+ } else {
+ resolve(response.text());
+ }
+ })
+ .catch(function (error) {
+ carregarToast('Erro ao processar requisição!' + error);
+ reject(error);
+ });
+ });
+ }*/
 
-function carregaHtml(uri, elemento) {
-    return carregaHtmlPromise(uri)
-            .then(html => {
-                $("#" + elemento).html(html);
-            })
-            .catch(error => {
-                alertaUnico("Erro ao carregar conteúdo da página", error);
-            });
-}
+/*function carregaHtml(uri, elemento) {
+ return carregaHtmlPromise(uri)
+ .then(html => {
+ $("#" + elemento).html(html);
+ })
+ .catch(error => {
+ alertaUnico("Erro ao carregar conteúdo da página", error);
+ });
+ }*/
 
 function promiseHtml(promisesEElementos, promiseAPI) {
     // Verifica se o primeiro parâmetro é um array
@@ -468,21 +468,21 @@ function promiseHtml(promisesEElementos, promiseAPI) {
     return resultPromise;
 }
 
-function inserirHtml9(elementos, reqapi) {
-    promiseHtml(elementos, reqapi)
-            .then(() => {
-                console.log('Inserção de conteúdo concluída.');
-            })
-            .catch(error => {
-                console.error('Ocorreu um erro:', error);
-            });
-}
+/*function inserirHtml9(elementos, reqapi) {
+ promiseHtml(elementos, reqapi)
+ .then(() => {
+ console.log('Inserção de conteúdo concluída.');
+ })
+ .catch(error => {
+ console.error('Ocorreu um erro:', error);
+ });
+ }**/
 
-function executePromisesSeq(promises) {
-    return promises.reduce((chain, promise) => {
-        return chain.then(() => promise());
-    }, Promise.resolve());
-}
+//function executePromisesSeq(promises) {
+//    return promises.reduce((chain, promise) => {
+//        return chain.then(() => promise);
+//    }, Promise.resolve());
+//}
 
 
 
@@ -516,9 +516,7 @@ function requestDef(url, metodo, object) {
                         return response.text();
                     }
                 } else {
-                    console.log('2');
                     if (contentType && contentType.includes('application/json')) {
-                        console.log('3');
                         return response.json()
                                 .then(json => {
                                     if (json.objects !== undefined) {
@@ -528,7 +526,6 @@ function requestDef(url, metodo, object) {
                                     }
                                 });
                     } else {
-                        console.log('4');
                         return response.text()
                                 .then(text => {
                                     throw {errorType: 'http-error', data: {status: response.status, body: text}};
@@ -537,7 +534,6 @@ function requestDef(url, metodo, object) {
                 }
             })
             .catch(error => {
-                console.log('5');
                 throw error;
             });
 }
@@ -563,14 +559,14 @@ function requestError(rejection, idLocal) {
     }
 }
 
-function requestAPI(url, metodo, object) {
-    return requestDef(url, metodo, object)
+function requestExcluirCadastro(url) {
+    requestDef(url, 'DELETE', null)
             .then(response => {
-                return response;
+                carregarToast("Regitro excluído!", "alerta");
+                atualizarTabela('table');
+                limparModal();
             })
             .catch(error => {
-                const data = handleFetchError(error);
-                alert(data);
-                return data;
+                requestError(error, 'alertaModal');
             });
 }

@@ -49,7 +49,7 @@ public class SistemasService {
     @Transactional
     public void deletar(Integer id) {
         buscarOuFalhar(id);
-        repository.deleteById(id);
+        //repository.deleteById(id);
     }
 
     public List<CaspSistemas> listar() {

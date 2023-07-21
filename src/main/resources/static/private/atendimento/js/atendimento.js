@@ -6,15 +6,14 @@ function getUriAtendimento() {
 }
 
 function moduloAtendimento() {
-    const promise1 = carregaHtmlPromise(getUriAtendimento());
-    const promise2 = carregaHtmlPromise(MV_A_MENU_ATENDIMENTO);
     const elementos = [
-        [promise1, '#root'],
-        [promise2, '#menuPrincipal']
+        [requestDef(getUriAtendimento(), 'GET', null), '#root'],
+        [requestDef(MV_A_MENU_ATENDIMENTO, 'GET', null), '#menuPrincipal']
     ];
-    promiseHtml(elementos);
+    promiseHtml(elementos).catch(error => {
+        requestError(error, 'alertaGeral');
+    });
 }
-
 
 function modalSelecionarUsuario() {
     carregaHtml(MV_A_MODAl_SELECIONAR_USUARIO, 'modalBody');

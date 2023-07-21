@@ -77,11 +77,11 @@
             </main>
         </section>
 
-       <!-- <footer>
-            <div class="d-flex flex-column flex-sm-row justify-content-end py-1 border-top fixed-bottom">
-                <p>&copy; 2022 CASPVALE, Todos os direitos reservados.</p>                
-            </div>
-        </footer>-->
+        <!-- <footer>
+             <div class="d-flex flex-column flex-sm-row justify-content-end py-1 border-top fixed-bottom">
+                 <p>&copy; 2022 CASPVALE, Todos os direitos reservados.</p>                
+             </div>
+         </footer>-->
         <script src="/public/js/jquery-3.6.0.min.js"></script>
         <script src="/public/js/bootstrap.bundle.min.js"></script>
         <script src="/public/js/choices.min.js"></script>
@@ -96,6 +96,9 @@
         <script src="/private/atendimento/js/getModelChamado.js"></script>
         <script src="/private/atendimento/js/requestFront.js"></script> 
         <script src="/private/atendimento/js/customTable.js" 
+                th:if="${role} == 'ANALISTA'? 'true' : (${role} == 'ADMINISTRADOR'? 'true' : false)">
+        </script>
+        <script src="/private/atendimento/js/requestFrontGestao.js" 
                 th:if="${role} == 'ANALISTA'? 'true' : (${role} == 'ADMINISTRADOR'? 'true' : false)">
         </script>
         <script src="/private/atendimento/js/customTableCliente.js" 

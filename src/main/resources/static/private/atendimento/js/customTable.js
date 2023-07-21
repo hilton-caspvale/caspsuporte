@@ -45,26 +45,21 @@ function situacaoChamado(value) {
 }
 
 function acoesTabelaChamado(value) {
-    let url = "'/mv/atendimento/chamado/"+value+"','root'";
-    return '<div class="btn-group btn-group-sm" role="group"><a class="btn btn-outline-success" role="button"title="Abrir" data-id=' + value + ' onclick="carregaHtml(' + url +')">' + value + '</a></div>';
+    return '<div class="btn-group btn-group-sm" role="group"><a class="btn btn-outline-success" role="button"title="Abrir" data-id=' + value + ' onclick="visualizarChamado(' + value + ')">' + value + '</a></div>';
 }
 
-function acoesTabela(uriModal, tituloModal, value) {
-    let parametroId = '?id=';
-    let uri = uriModal + parametroId + value;
-    return '<div class="btn-group btn-group-sm" role="group"><a role="button" class="btn btn-outline-secondary" data-id=' + value + ' onclick="carregaHtml(' + "'" + uri + '' + "'" + ', ' + "'" + 'modalBody' + "'" + ');mostraModal(' + "'" + '#modal' + "'" + ');$(' + "'" + '#staticBackdropLabel' + "'" + ').html(' + "'" + tituloModal + "'" + ')"><i class="fas fa-pencil-alt"></i></a></div>';
-}
+///*function acoesTabela(uriModal, tituloModal, value) {
+//    let parametroId = '?id=';
+//    let uri = uriModal + parametroId + value;
+//    return '<div class="btn-group btn-group-sm" role="group"><a role="button" class="btn btn-outline-secondary" data-id=' + value + ' onclick="carregaHtml(' + "'" + uri + '' + "'" + ', ' + "'" + 'modalBody' + "'" + ');mostraModal(' + "'" + '#modal' + "'" + ');$(' + "'" + '#staticBackdropLabel' + "'" + ').html(' + "'" + tituloModal + "'" + ')"><i class="fas fa-pencil-alt"></i></a></div>';
+//}*/
 
-function botaoAddTabela(uriModal, tituloModal) {
+function botaoAddTabela(evento) {
     return {
         btnAdd: {
             text: 'Novo',
             icon: 'bi bi-plus-lg',
-            event: function () {
-                carregaHtml(uriModal, 'modalBody');
-                mostraModal('#modal');
-                $('#staticBackdropLabel').html(tituloModal);
-            }
+            event: evento
         }
     };
 }
@@ -114,117 +109,126 @@ function areas(value) {
     return saida;
 }
 
+function botaoEditarItemTabela(dataId, onClick) {
+    return `<div class="btn-group btn-group-sm" role="group"><a role="button" class="btn btn-outline-secondary" ${dataId} ${onClick}><i class="fas fa-pencil-alt"></i></a></div>`;
+}
+
 function acoesTabelaSistemas(value) {
-    let uriModal = '/mv/atendimento/conteudoModalSistemas';
-    let tituloModal = 'Editar Sistema';
-    return acoesTabela(uriModal, tituloModal, value);
+    let dataId = ` data-id=${value} `;
+    let onClick = ` onclick="modalSistemas(${value})" `;
+    return botaoEditarItemTabela(dataId, onClick);
 }
 
 function botaoAddTabelaSistemas() {
-    let uriModal = '/mv/atendimento/conteudoModalSistemas';
-    let tituloModal = 'Adicionar Sistema';
-    return botaoAddTabela(uriModal, tituloModal);
-}
-
-function acoesTabelaProblemas(value) {
-    let uriModal = '/mv/atendimento/conteudoModalProblemas';
-    let tituloModal = 'Editar Problema';
-    return acoesTabela(uriModal, tituloModal, value);
-}
-
-function botaoAddTabelaProblemas() {
-    let uriModal = '/mv/atendimento/conteudoModalProblemas';
-    let tituloModal = 'Adicionar Problema';
-    return botaoAddTabela(uriModal, tituloModal);
+    const evento = function () {
+        modalSistemas();
+    };
+    return botaoAddTabela(evento);
 }
 
 function acoesTabelaAreas(value) {
-    let uriModal = '/mv/atendimento/conteudoModalAreas';
-    let tituloModal = 'Editar Área';
-    return acoesTabela(uriModal, tituloModal, value);
+    let dataId = ` data-id=${value} `;
+    let onClick = ` onclick="modalAreas(${value})" `;
+    return botaoEditarItemTabela(dataId, onClick);
 }
 
 function botaoAddTabelaAreas() {
-    let uriModal = '/mv/atendimento/conteudoModalAreas';
-    let tituloModal = 'Adicionar Área';
-    return botaoAddTabela(uriModal, tituloModal);
+    const evento = function () {
+        modalAreas();
+    };
+    return botaoAddTabela(evento);
+}
+
+function acoesTabelaProblemas(value) {
+    let dataId = ` data-id=${value} `;
+    let onClick = ` onclick="modalProblemas(${value})" `;
+    return botaoEditarItemTabela(dataId, onClick);
+}
+
+function botaoAddTabelaProblemas() {
+    const evento = function () {
+        modalProblemas();
+    };
+    return botaoAddTabela(evento);
 }
 
 function acoesTabelaNiveis(value) {
-    let uriModal = '/mv/atendimento/conteudoModalNiveis';
-    let tituloModal = 'Editar Nível';
-    return acoesTabela(uriModal, tituloModal, value);
+    let dataId = ` data-id=${value} `;
+    let onClick = ` onclick="modalNiveis(${value})" `;
+    return botaoEditarItemTabela(dataId, onClick);
 }
 
 function botaoAddTabelaNiveis() {
-    let uriModal = '/mv/atendimento/conteudoModalNiveis';
-    let tituloModal = 'Adicionar Nível';
-    return botaoAddTabela(uriModal, tituloModal);
+    const evento = function () {
+        modalNiveis();
+    };
+    return botaoAddTabela(evento);
 }
 
 function acoesTabelaOrigens(value) {
-    let uriModal = '/mv/atendimento/conteudoModalOrigens';
-    let tituloModal = 'Editar Origem';
-    return acoesTabela(uriModal, tituloModal, value);
+    let dataId = ` data-id=${value} `;
+    let onClick = ` onclick="modalOrigens(${value})" `;
+    return botaoEditarItemTabela(dataId, onClick);
 }
 
 function botaoAddTabelaOrigens() {
-    let uriModal = '/mv/atendimento/conteudoModalOrigens';
-    let tituloModal = 'Adicionar Origem';
-    return botaoAddTabela(uriModal, tituloModal);
+    const evento = function () {
+        modalOrigens();
+    };
+    return botaoAddTabela(evento);
 }
 
 function acoesTabelaTiposArquivos(value) {
-    let uriModal = '/mv/atendimento/conteudoModalTiposArquivos';
-    let tituloModal = 'Editar tipo de arquivo';
-    return acoesTabela(uriModal, tituloModal, value);
+    let dataId = ` data-id=${value} `;
+    let onClick = ` onclick="modalTipoArquivos(${value})" `;
+    return botaoEditarItemTabela(dataId, onClick);
 }
 
 function botaoAddTiposArquivos() {
-    let uriModal = '/mv/atendimento/conteudoModalTiposArquivos';
-    let tituloModal = 'Adicionar tipo de arquivo';
-    return botaoAddTabela(uriModal, tituloModal);
+    const evento = function () {
+        modalTipoArquivos();
+    };
+    return botaoAddTabela(evento);
 }
 
 function acoesTabelaTiposEntidades(value) {
-    let uriModal = '/mv/atendimento/conteudoModalTiposEntidades';
-    let tituloModal = 'Editar tipo da entidade';
-    return acoesTabela(uriModal, tituloModal, value);
+    let dataId = ` data-id=${value} `;
+    let onClick = ` onclick="modalTipoEntidades(${value})" `;
+    return botaoEditarItemTabela(dataId, onClick);
 }
 
 function botaoAddTiposEntidades() {
-    let uriModal = '/mv/atendimento/conteudoModalTiposEntidades';
-    let tituloModal = 'Adicionar tipo da entidade';
-    return botaoAddTabela(uriModal, tituloModal);
+    const evento = function () {
+        modalTipoEntidades();
+    };
+    return botaoAddTabela(evento);
 }
 
 function acoesTabelaEntidades(value) {
-    let uriModal = '/mv/atendimento/conteudoModalEntidades';
-    let tituloModal = 'Editar Entidade';
-    return acoesTabela(uriModal, tituloModal, value);
+    let dataId = ` data-id=${value} `;
+    let onClick = ` onclick="modalEntidades(${value})" `;
+    return botaoEditarItemTabela(dataId, onClick);
 }
 
 function botaoAddEntidades() {
-    let uriModal = '/mv/atendimento/conteudoModalEntidades';
-    let tituloModal = 'Adicionar Entidade';
-    return botaoAddTabela(uriModal, tituloModal);
+    const evento = function () {
+        modalEntidades();
+    };
+    return botaoAddTabela(evento);
 }
 
 function acoesTabelaClientes(value) {
-    let uriModalCadastro = '/mv/atendimento/conteudoModalClientes?id=' + value;
-    let uriModalSenha = '/mv/atendimento/trocarSenha?id=' + value;
-    let tituloModalCadastro = 'Editar Usuario';
-    let tituloModalSenha = 'Alterar Senha';
-    let botaoEditar = botaoEditarUsuario(value, uriModalCadastro, tituloModalCadastro);
-    let botaoAlteraSenha = botaoAlterarSenha(value, uriModalSenha, tituloModalSenha);
-    return '<div class="btn-group btn-group-sm" role="group">' + botaoEditar + botaoAlteraSenha + '</div>';
+    let botaoSenha = '<a role="button" class="btn btn-outline-secondary" data-id=' + value + ' onclick="modalTrocarSenha(' + value + ')"><i class="bi bi-key"></i></a>';
+    return '<div class="btn-group btn-group-sm" role="group"><a role="button" class="btn btn-outline-secondary" data-id=' + value + ' onclick="modalClientes(' + value + ')"><i class="fas fa-pencil-alt"></i></a>' + botaoSenha + '</div>';
 }
 
 function botaoAddTabelaClientes() {
-    let uriModal = '/mv/atendimento/conteudoModalClientes';
-    let tituloModal = 'Adicionar Cliente';
-    return botaoAddTabela(uriModal, tituloModal);
+    const evento = function () {
+        modalClientes();
+    };
+    return botaoAddTabela(evento);
 }
+
 
 function acoesTabelaUsuarios(value) {
     let uriModal = '/mv/atendimento/conteudoModalUsuarios';
@@ -304,7 +308,7 @@ function queryParamsUsuarios(params) {
     return params;
 }
 
-function atualizarTabela(idtabela) {
-    let $table = $('#' + idtabela);
-    $table.bootstrapTable('refresh');
-}
+/*function atualizarTabela(idtabela) {
+ let $table = $('#' + idtabela);
+ $table.bootstrapTable('refresh');
+ }*/

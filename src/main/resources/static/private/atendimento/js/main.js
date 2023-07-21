@@ -16,12 +16,14 @@ function fecharModal(nomeModal) {
 
 function limparModal() {
     document.getElementById('modalBody').innerHTML = '';
-    limparAlerta();
+    document.getElementById('alertaModal').innerHTML = '';
 }
 
-function limparAlerta() {
-    document.getElementById('alertaGeral').innerHTML = '';
+function limparAlertaModal() {
     document.getElementById('alertaModal').innerHTML = '';
+}
+function limparAlertaGeral() {
+    document.getElementById('alertaGeral').innerHTML = '';
 }
 
 function atualizarTabela(tabela) {
@@ -109,71 +111,71 @@ function choicesUsuarios() {
     });
 }
 
-function carregaHtmlvelho999(uri, elemento) {
-    return fetch(getUrl() + uri, {
-        method: 'GET',
-        headers: new Headers({
-            'Content-Type': 'text/html'
-        })
-    })
-            .then(response => {
-                if (!response.ok) {
-                    response.json().then(function (json) {
-                        if (json.detail === undefined) {
-                            carregarToast(response.status + ' - Recurso não encontrado! ' + json.path);
-                        } else {
-                            carregarToast(json.userMessage);
-                        }
-                    });
-                } else {
-                    return response.text();
-                }
-            })
-            .then(html => {
-                $("#" + elemento).html(html);
-            })
-            .catch(function (error) {
-                carregarToast('Erro ao processar requisição!' + error);
-            });
-}
+/*function carregaHtmlvelho999(uri, elemento) {
+ return fetch(getUrl() + uri, {
+ method: 'GET',
+ headers: new Headers({
+ 'Content-Type': 'text/html'
+ })
+ })
+ .then(response => {
+ if (!response.ok) {
+ response.json().then(function (json) {
+ if (json.detail === undefined) {
+ carregarToast(response.status + ' - Recurso não encontrado! ' + json.path);
+ } else {
+ carregarToast(json.userMessage);
+ }
+ });
+ } else {
+ return response.text();
+ }
+ })
+ .then(html => {
+ $("#" + elemento).html(html);
+ })
+ .catch(function (error) {
+ carregarToast('Erro ao processar requisição!' + error);
+ });
+ }*/
 
-function redirectHtml(uri, metodo, elemento, object) {
-    let conteudo;
-    let header = new Headers({'Content-Type': 'text/html'});
-    if (object === null) {
-        metodo = 'GET';
-        conteudo = {
-            method: metodo,
-            headers: header
-        };
-    } else {
-        conteudo = {
-            method: metodo,
-            headers: header,
-            body: object
-        };
-    }
-    fetch(getUrl() + uri, conteudo)
-            .then(response => {
-                if (!response.ok) {
-                    response.json().then(function (json) {
-                        if (json.detail === undefined) {
-                            carregarToast(response.status + ' - Recurso não encontrado! ' + json.path);
-                        } else {
-                            carregarToast(json.userMessage);
-                        }
-                    });
-                } else {
-                    return response.text();
-                }
-            })
-            .then(html => {
-                $("#" + elemento).html(html);
-            })
-            .catch(function (error) {
-                carregarToast('Erro ao processar requisição!' + error);
-            });
-}
+/*function redirectHtml(uri, metodo, elemento, object) {
+ let conteudo;
+ let header = new Headers({'Content-Type': 'text/html'});
+ if (object === null) {
+ metodo = 'GET';
+ conteudo = {
+ method: metodo,
+ headers: header
+ };
+ } else {
+ conteudo = {
+ method: metodo,
+ headers: header,
+ body: object
+ };
+ }
+ fetch(getUrl() + uri, conteudo)
+ .then(response => {
+ if (!response.ok) {
+ response.json().then(function (json) {
+ if (json.detail === undefined) {
+ carregarToast(response.status + ' - Recurso não encontrado! ' + json.path);
+ } else {
+ carregarToast(json.userMessage);
+ }
+ });
+ } else {
+ return response.text();
+ }
+ })
+ .then(html => {
+ $("#" + elemento).html(html);
+ })
+ .catch(function (error) {
+ carregarToast('Erro ao processar requisição!' + error);
+ });
+ }*/
 
 function trocarSenha() {
     let senha = document.getElementById('senha');
@@ -273,34 +275,38 @@ function alertaSucesso(detalhe, idLocal) {
     document.getElementById(idLocal).append(wrapper);
 }
 
-function carregarToastOK(mensagem) {
-    let wrapper = document.createElement('div');
-    wrapper.innerHTML = [
-        `<div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">`,
-        `   <div class="toast-header">`,
-        `       <strong class="me-auto">Mensagemf</strong>`,
-        `       <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`,
-        `   </div>`,
-        `   <div class="toast-body" id="msgToast">${mensagem}</div>`,
-        '</div>'
-    ].join('');
-    document.getElementById("toastId").append(wrapper);
-    new bootstrap.Toast(document.getElementById('liveToast')).show();
-}
+/*function carregarToastOK(mensagem) {
+ let wrapper = document.createElement('div');
+ wrapper.innerHTML = [
+ `<div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">`,
+ `   <div class="toast-header">`,
+ `       <strong class="me-auto">Mensagemf</strong>`,
+ `       <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`,
+ `   </div>`,
+ `   <div class="toast-body" id="msgToast">${mensagem}</div>`,
+ '</div>'
+ ].join('');
+ document.getElementById("toastId").append(wrapper);
+ new bootstrap.Toast(document.getElementById('liveToast')).show();
+ }*/
 
 
 // Lista para armazenar os toasts
 let toasts = [];
+var tempo_ms_toast = 5000;
 
 // Função para adicionar um novo toast à lista
 function carregarToast(mensagem, tipo) {
-    let cor = "bg-info"
+    let cor = "bg-info";
     switch (tipo) {
         case "sucesso":
             cor = "bg-success";
             break;
         case "erro":
             cor = "bg-danger";
+            break;
+        case "alerta":
+            cor = "bg-warning";
             break;
         default:
             cor = "bg-info";
@@ -404,5 +410,3 @@ function exibirToasts() {
 function removerToast(toastId) {
     toasts = toasts.filter((toastObj) => toastObj.id !== toastId);
 }
-
-var tempo_ms_toast = 5000;
