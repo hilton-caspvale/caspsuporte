@@ -1,16 +1,20 @@
-function getUrl() {
-    return 'http://localhost:8081';
-}
-
 function usuarioLogado() {
     return document.getElementById('usuarioLogado').value;
 }
 
-function mostraModal(nomeModal) {
+function mostraModalResponse(titulo, response) {
+    $("#modalBody").html(response);
+    $('#staticBackdropLabel').html(titulo);
+    $('#modal').modal('show');
+    limparAlertaModal();
+}
+
+function mostraModal99(nomeModal) {
     $(nomeModal).modal('show');
 }
 
 function fecharModal(nomeModal) {
+    limparAlertaModal();
     $(nomeModal).modal('hide');
 }
 
@@ -111,72 +115,6 @@ function choicesUsuarios() {
     });
 }
 
-/*function carregaHtmlvelho999(uri, elemento) {
- return fetch(getUrl() + uri, {
- method: 'GET',
- headers: new Headers({
- 'Content-Type': 'text/html'
- })
- })
- .then(response => {
- if (!response.ok) {
- response.json().then(function (json) {
- if (json.detail === undefined) {
- carregarToast(response.status + ' - Recurso não encontrado! ' + json.path);
- } else {
- carregarToast(json.userMessage);
- }
- });
- } else {
- return response.text();
- }
- })
- .then(html => {
- $("#" + elemento).html(html);
- })
- .catch(function (error) {
- carregarToast('Erro ao processar requisição!' + error);
- });
- }*/
-
-/*function redirectHtml(uri, metodo, elemento, object) {
- let conteudo;
- let header = new Headers({'Content-Type': 'text/html'});
- if (object === null) {
- metodo = 'GET';
- conteudo = {
- method: metodo,
- headers: header
- };
- } else {
- conteudo = {
- method: metodo,
- headers: header,
- body: object
- };
- }
- fetch(getUrl() + uri, conteudo)
- .then(response => {
- if (!response.ok) {
- response.json().then(function (json) {
- if (json.detail === undefined) {
- carregarToast(response.status + ' - Recurso não encontrado! ' + json.path);
- } else {
- carregarToast(json.userMessage);
- }
- });
- } else {
- return response.text();
- }
- })
- .then(html => {
- $("#" + elemento).html(html);
- })
- .catch(function (error) {
- carregarToast('Erro ao processar requisição!' + error);
- });
- }*/
-
 function trocarSenha() {
     let senha = document.getElementById('senha');
     let confirmacao = document.getElementById('confirmacao');
@@ -274,22 +212,6 @@ function alertaSucesso(detalhe, idLocal) {
     ].join('');
     document.getElementById(idLocal).append(wrapper);
 }
-
-/*function carregarToastOK(mensagem) {
- let wrapper = document.createElement('div');
- wrapper.innerHTML = [
- `<div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">`,
- `   <div class="toast-header">`,
- `       <strong class="me-auto">Mensagemf</strong>`,
- `       <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`,
- `   </div>`,
- `   <div class="toast-body" id="msgToast">${mensagem}</div>`,
- '</div>'
- ].join('');
- document.getElementById("toastId").append(wrapper);
- new bootstrap.Toast(document.getElementById('liveToast')).show();
- }*/
-
 
 // Lista para armazenar os toasts
 let toasts = [];

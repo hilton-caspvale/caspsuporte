@@ -1,52 +1,3 @@
-var contextPath = '/atendimento/';
-var usuariosPath = contextPath + 'usuarios/';
-var chamadosPatch = contextPath + 'chamados/';
-
-/*function requestAtendimento(uri, metodo, object, tabela) {
- return fetch(getUrl() + uri, {
- method: metodo,
- headers: new Headers({
- 'Content-Type': 'application/json'
- }),
- body: object
- })
- .then(function (response) {
- if (response.ok) {
- carregarToast("Dados gravados com sucesso!");
- if (tabela !== null) {
- $('#' + tabela).bootstrapTable('refresh');
- }
- if (response.status !== 204) {
- response.json().then(function (j) {
- console.log(j);
- });
- }
- } else {
- response.json().then(function (json) {
- if (json.detail === undefined) {
- carregarToast(response.status + ' - Recurso não encontrado! ' + json.path);
- } else {
- let detalhe = '';
- if (json.objects === undefined) {
- alertaUnico(json.title, json.userMessage, 'alertaGeral');
- //carregarToast(json.title + "\n" + json.userMessage);
- } else {
- json.objects.forEach(ob => {
- detalhe = detalhe + 'Campo <strong>' + ob.name + '</strong> ' + ob.userMessage + '<br>';
- });
- alertaCampos(json.userMessage, detalhe, 'alertaGeral');
- }
- }
- console.log(json);
- });
- }
- })
- .catch(function (error) {
- console.log('erro: ' + error);
- carregarToast('Erro ao processar requisição!');
- });
- }*/
-
 function validarUsuario(formulario) {
     //let login = document.querySelector('#cadastroUsuarioModal input[id="nlogin"]');
     let form = document.querySelector(formulario);
@@ -92,7 +43,18 @@ function validarUsuario(formulario) {
 }
 
 function trocarsenha(event) {
-    requestAtendimento(usuariosPath + event.currentTarget.value + '/trocar-senha', 'PATCH', document.getElementById('senha').value, null);
+    requestDef(usuariosPath + event.currentTarget.value + '/trocar-senha', 'PATCH', document.getElementById('senha').value)
+            .then(response => {
+                carregarToast(response, "sucesso");
+                atualizarTabela('table');
+                limparModal();
+            })
+            .catch(error => {
+                console.log('nao foi');
+                console.log(error);
+                requestError(error, 'alertaModal');
+                console.log('fim nao foi');
+            });
     limparModal();
 }
 
@@ -399,45 +361,6 @@ function atualizarTotais() {
     };
 }
 
-/*function carregaHtmlPromise(uri) {
- return new Promise((resolve, reject) => {
- fetch(getUrl() + uri, {
- method: 'GET',
- headers: new Headers({
- 'Content-Type': 'text/html'
- })
- })
- .then(response => {
- if (!response.ok) {
- response.json().then(function (json) {
- if (json.detail === undefined) {
- carregarToast(response.status + ' - Recurso não encontrado! ' + json.path);
- } else {
- carregarToast(json.userMessage);
- }
- reject(new Error('Requisição falhou'));
- });
- } else {
- resolve(response.text());
- }
- })
- .catch(function (error) {
- carregarToast('Erro ao processar requisição!' + error);
- reject(error);
- });
- });
- }*/
-
-/*function carregaHtml(uri, elemento) {
- return carregaHtmlPromise(uri)
- .then(html => {
- $("#" + elemento).html(html);
- })
- .catch(error => {
- alertaUnico("Erro ao carregar conteúdo da página", error);
- });
- }*/
-
 function promiseHtml(promisesEElementos, promiseAPI) {
     // Verifica se o primeiro parâmetro é um array
     if (!Array.isArray(promisesEElementos)) {
@@ -468,26 +391,6 @@ function promiseHtml(promisesEElementos, promiseAPI) {
     return resultPromise;
 }
 
-/*function inserirHtml9(elementos, reqapi) {
- promiseHtml(elementos, reqapi)
- .then(() => {
- console.log('Inserção de conteúdo concluída.');
- })
- .catch(error => {
- console.error('Ocorreu um erro:', error);
- });
- }**/
-
-//function executePromisesSeq(promises) {
-//    return promises.reduce((chain, promise) => {
-//        return chain.then(() => promise);
-//    }, Promise.resolve());
-//}
-
-
-
-/* */
-
 function requestDef(url, metodo, object) {
     let header = new Headers({'Content-Type': 'application/json'});
 
@@ -501,11 +404,12 @@ function requestDef(url, metodo, object) {
         headers: header,
         body: object
     };
-
     return fetch(url, conteudo)
             .then(response => {
                 const contentType = response.headers.get('content-type');
+                console.log('response.status? ' + response.status);
                 if (response.ok) {
+                    console.log(1);
                     if (response.status === 204) {
                         return "";
                     } else if (contentType && contentType.includes('application/json')) {
@@ -534,6 +438,7 @@ function requestDef(url, metodo, object) {
                 }
             })
             .catch(error => {
+                console.log(2);
                 throw error;
             });
 }

@@ -10,15 +10,14 @@ function moduloAtendimento() {
         [requestDef(getUriAtendimento(), 'GET', null), '#root'],
         [requestDef(MV_A_MENU_ATENDIMENTO, 'GET', null), '#menuPrincipal']
     ];
-    promiseHtml(elementos).catch(error => {
-        requestError(error, 'alertaGeral');
-    });
+    promiseHtml(elementos)
+            .catch(error => {
+                requestError(error, 'alertaGeral');
+            });
 }
 
 function modalSelecionarUsuario() {
-    carregaHtml(MV_A_MODAl_SELECIONAR_USUARIO, 'modalBody');
-    mostraModal('#modal');
-    $('#staticBackdropLabel').html('Selecionar usuário');
+    requestMVModal(MV_A_MODAl_SELECIONAR_USUARIO, null, 'Buscar Usuário');
 }
 
 

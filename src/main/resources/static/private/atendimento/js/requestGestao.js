@@ -1,15 +1,3 @@
-var contextPath = '/atendimento/';
-var areasPath = contextPath + 'areas/';
-var sistemasPath = contextPath + 'sistemas/';
-var problemasPath = contextPath + 'problemas/';
-var niveisPath = contextPath + 'niveis/';
-var origensPath = contextPath + 'origens/';
-var tiposArquivosPath = contextPath + 'tipos-arquivos/';
-var tiposEntidadesPath = contextPath + 'tipos-entidades/';
-var entidadesPath = contextPath + 'entidades/';
-var clientesPath = contextPath + 'clientes/';
-var usuariosPath = contextPath + 'usuarios/';
-
 function criarSistema(event) {
     requestDef(sistemasPath + event.currentTarget.value, 'POST', getSistema())
             .then(response => {
@@ -235,8 +223,16 @@ function deletarEntidade(event) {
 }
 
 function criarCliente(event) {
-    requestAtendimento(clientesPath + event.currentTarget.value, 'POST', getCliente('#cadastroUsuarioModal'), 'table');
-    limparModal();
+    requestDef(clientesPath + event.currentTarget.value, 'POST', getCliente('#cadastroUsuarioModal'))
+            .then(response => {
+                carregarToast("Cliente [" + response.nlogin + "] cadastrado!", "sucesso");
+                limparAlertaModal();
+                fecharModal('#modal');
+                atualizarTabela('table');
+            })
+            .catch(error => {
+                requestError(error, 'alertaModal');
+            });
 }
 
 function editarCliente(event) {
@@ -251,42 +247,66 @@ function editarCliente(event) {
 }
 
 function criarUsuario(event) {
-    requestAtendimento(usuariosPath + event.currentTarget.value, 'POST', getUsuario('#cadastroUsuarioModal'), 'table');
-    limparModal();
+    requestDef(usuariosPath + event.currentTarget.value, 'POST', getUsuario('#cadastroUsuarioModal'))
+            .then(response => {
+                carregarToast("Usuário [" + response.nlogin + "] cadastrado!", "sucesso");
+                limparAlertaModal();
+                fecharModal('#modal');
+                atualizarTabela('table');
+            })
+            .catch(error => {
+                requestError(error, 'alertaModal');
+            });
 }
 
 function editarUsuario(event) {
-    requestAtendimento(usuariosPath + event.currentTarget.value, 'PUT', getUsuario('#cadastroUsuarioModal'), 'table');
-    limparModal();
+    requestDef(usuariosPath + event.currentTarget.value, 'PUT', getUsuario('#cadastroUsuarioModal'))
+            .then(response => {
+                carregarToast("Usuário [" + response.nlogin + "] atualizado!", "sucesso");
+                limparAlertaModal();
+                fecharModal('#modal');
+            })
+            .catch(error => {
+                requestError(error, 'alertaModal');
+            });
 }
 
 function editarUsuarioAbertura(event) {
     event.preventDefault();
-    let p1;
+    limparAlertaModal();
     let form = document.querySelector('#edicaoUsuarioModalAbertura');
     let login = form.querySelector('#nlogin').value;
     let tipo = form.querySelector('#itipoUsuario').value;
+    let usuario = getUsuario('#edicaoUsuarioModalAbertura');
+    let uri = usuariosPath + event.currentTarget.value;
     if (tipo === '3') {
-        p1 = () => requestAtendimento(clientesPath + event.currentTarget.value, 'PUT', getCliente('#edicaoUsuarioModalAbertura'), null);
-    } else {
-        p1 = () => requestAtendimento(usuariosPath + event.currentTarget.value, 'PUT', getUsuario('#edicaoUsuarioModalAbertura'), null);
+        usuario = getCliente('#edicaoUsuarioModalAbertura');
+        uri = clientesPath + event.currentTarget.value;
     }
-    const p2 = () => carregaHtml(MV_A_CHAMADO + '?user=' + login, 'root');
-    const promises = [p1, p2];
-    executePromisesSeq(promises)
-            .then(() => {
+
+    requestDef(uri, 'PUT', usuario)
+            .then(response => {
+                carregarToast("Usuário [" + response.nlogin + "] atualizado!", "sucesso");
+                limparAlertaModal();
+                fecharModal('#modal');
+                requestMV(MV_A_CHAMADO + '?user=' + login);
             })
             .catch(error => {
-                alertaUnico("Erro ao processar requisição", error);
+                requestError(error, 'alertaModal');
             });
 }
 
 function criarClienteAbertura(event) {
-    requestAtendimento(clientesPath + event.currentTarget.value, 'POST', getCliente('#cadastroUsuarioModalAbertura'), null);
-    let form = document.querySelector('#cadastroUsuarioModalAbertura');
-    let novoLogin = form.querySelector('#nlogin').value;
-    chamadoUsuarioEditado(novoLogin);
-    limparModal();
+    requestDef(clientesPath + event.currentTarget.value, 'POST', getCliente('#cadastroUsuarioModalAbertura'))
+            .then(response => {
+                carregarToast("Usuário [" + response.nlogin + "] cadastrado!", "sucesso");
+                limparAlertaModal();
+                fecharModal('#modal');
+                requestMV(MV_A_CHAMADO + '?user=' + response.nlogin);
+            })
+            .catch(error => {
+                requestError(error, 'alertaModal');
+            });
 }
 
 

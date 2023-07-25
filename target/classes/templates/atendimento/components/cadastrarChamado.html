@@ -23,7 +23,7 @@
                                     <button type="button" class="btn btn-outline-secondary" onclick="modalSelecionarUsuario()">
                                         Selecionar outro usuário <i class="bi bi-search"></i></button>
                                     <button type="button" class="btn btn-outline-success"
-                                            onclick="modalEditarUsuario('iusuarioAbertura')">Editar <i class="bi bi-pencil-square"></i></button>
+                                            onclick="modalEditarUsuarioAbertura('iusuarioAbertura')">Editar <i class="bi bi-pencil-square"></i></button>
                                     <button type="button" class="btn btn-outline-success"
                                             onclick="modalCriarUsuarioAbertura()"><i class="bi bi-person-plus-fill"></i></button>                                    
                                 </div>
@@ -103,6 +103,18 @@
                                                 contenteditable="false"/>
                                     </select>                                    
                                     <label for="entidades">Entidade</label>                                                
+                                </div>
+                                <div th:if="${entidadesDoUsuario.isEmpty}"
+                                     class="form-floating">                                  
+                                    <select class="form-control choicesmultiple link-success"                                             
+                                            multiple=""     
+                                            placeholder="Entidade"
+                                            th:field="*{caspEntidadesList}"
+                                            id="entidades" required="true">
+                                        <option th:each="entidade : ${entidadesDoUsuario}"                                                         
+                                                th:value="${entidade}"                                                                   
+                                                contenteditable="false"/>
+                                    </select>                                                                   
                                 </div>
                             </div>
 

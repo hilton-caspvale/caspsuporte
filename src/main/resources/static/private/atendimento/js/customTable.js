@@ -48,11 +48,9 @@ function acoesTabelaChamado(value) {
     return '<div class="btn-group btn-group-sm" role="group"><a class="btn btn-outline-success" role="button"title="Abrir" data-id=' + value + ' onclick="visualizarChamado(' + value + ')">' + value + '</a></div>';
 }
 
-///*function acoesTabela(uriModal, tituloModal, value) {
-//    let parametroId = '?id=';
-//    let uri = uriModal + parametroId + value;
-//    return '<div class="btn-group btn-group-sm" role="group"><a role="button" class="btn btn-outline-secondary" data-id=' + value + ' onclick="carregaHtml(' + "'" + uri + '' + "'" + ', ' + "'" + 'modalBody' + "'" + ');mostraModal(' + "'" + '#modal' + "'" + ');$(' + "'" + '#staticBackdropLabel' + "'" + ').html(' + "'" + tituloModal + "'" + ')"><i class="fas fa-pencil-alt"></i></a></div>';
-//}*/
+function botaoEditarItemTabela(dataId, onClick) {
+    return `<div class="btn-group btn-group-sm" role="group"><a role="button" class="btn btn-outline-secondary" ${dataId} ${onClick}><i class="fas fa-pencil-alt"></i></a></div>`;
+}
 
 function botaoAddTabela(evento) {
     return {
@@ -107,10 +105,6 @@ function areas(value) {
         saida.push('<span class="badge ' + bgArea(el.descricaoArea) + ' " style="padding: 7px;margin-right: 3px;margin-top: 3px;">' + el.descricaoArea + '</span>');
     });
     return saida;
-}
-
-function botaoEditarItemTabela(dataId, onClick) {
-    return `<div class="btn-group btn-group-sm" role="group"><a role="button" class="btn btn-outline-secondary" ${dataId} ${onClick}><i class="fas fa-pencil-alt"></i></a></div>`;
 }
 
 function acoesTabelaSistemas(value) {
@@ -307,8 +301,3 @@ function queryParamsUsuarios(params) {
     params.sistemas = sistema.options[sistema.selectedIndex].value;
     return params;
 }
-
-/*function atualizarTabela(idtabela) {
- let $table = $('#' + idtabela);
- $table.bootstrapTable('refresh');
- }*/

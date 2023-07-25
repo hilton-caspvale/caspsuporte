@@ -70,6 +70,9 @@ public class UsuariosView {
         rotas.viewsDaRota();
         ModelAndView mv = new ModelAndView();
         if (id == null) {
+            if (abertura != null) {
+                throw new NegocioException("Na abertura só é permitido cadastro de cliente");
+            }
             mv.setViewName(rotas.CADASTRAR_USUARIO);
             mv.addObject("usuarioModel", new UsuariosModel());
         } else {
