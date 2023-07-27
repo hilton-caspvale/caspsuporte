@@ -91,7 +91,7 @@
                                             <li th:if="*{caspAreasList.size} > 0"
                                                 th:each="area : *{caspAreasList}">
                                                 <span th:class="'badge text-wrap text-withe casp-span '
-                                                      +${T(caspvale.caspsuporte.atendimento.view.common.StringToCSS).mapDescricaoAreaToCSSClass(area.descricaoArea)}"
+                                                      +${T(caspvale.caspsuporte.modulos.atendimento.view.common.StringToCSS).mapDescricaoAreaToCSSClass(area.descricaoArea)}"
                                                       th:text="${area.descricaoArea}"/>
                                             </li>
                                             <li th:if="*{caspAreasList.size} == 0">

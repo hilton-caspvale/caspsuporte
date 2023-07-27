@@ -16,7 +16,6 @@
                         <input type="hidden" form="formChamado" th:field="*{iChamado}" id="iChamado"/>
                         <input type="hidden" form="formChamado" th:field="*{iSituacao}" id="iSituacao"/>
                         <input type="hidden" form="formChamado" th:field="*{iusuarioAbertura}" id="iusuarioAbertura"/>
-
                         <div class="row" th:if="*{iChamado == null}">
                             <div class="col-md mb-3" th:if="${role}=='ANALISTA'? true : (${role}=='ADMINISTRADOR'? true : false)">
                                 <div class="btn-group" role="group" aria-label="Basic outlined example">
@@ -84,7 +83,8 @@
                                             multiple=""     
                                             placeholder="Entidade"
                                             th:field="*{caspEntidadesList}"
-                                            id="entidades" required="true">
+                                            id="entidades" required="true"
+                                            onmouseover="alert(1)">
                                         <option th:each="entidade : ${entidadesDoUsuario}"                                                         
                                                 th:value="${entidade}"                                                         
                                                 th:text="${entidade.nomeEntidade}"                                                        
@@ -176,26 +176,26 @@
                                 </div>
                             </div>
                             <div class="col-md mb-3">
-                                <div th:if="${problemas.size} == 1"
+                                <div th:if="${listaProblemas.size} == 1"
                                      class="form-floating">     
                                     <select class="form-control link-success"
                                             aria-label="Problema"
-                                            th:field="*{caspProblemasList}"
+                                            th:field="*{problemas}"
                                             id="problemas">
-                                        <option th:each="problema : ${problemas}" 
+                                        <option th:each="problema : ${listaProblemas}" 
                                                 th:value="${problema}" 
                                                 th:text="${problema.descricaoProblema}"
                                                 contenteditable="false"/>
                                     </select>
                                     <label for="problemas">Sistema</label>
                                 </div>
-                                <div th:if="${problemas.size} > 1">
+                                <div th:if="${listaProblemas.size} > 1">
                                     <select class="form-control choicesmultiple link-success"                                             
                                             multiple=""   
-                                            th:field="*{caspProblemasList}"
+                                            th:field="*{problemas}"
                                             id="problemas"
                                             placeholder="Problemas">
-                                        <option th:each="problema : ${problemas}"                                                         
+                                        <option th:each="problema : ${listaProblemas}"                                                         
                                                 th:value="${problema}"                                                         
                                                 th:text="${problema.descricaoProblema}"                                                        
                                                 contenteditable="false"/>
@@ -271,7 +271,9 @@
                                                                        class="row col-md-6 form-control"                                                     
                                                                        form="formAnexo"
                                                                        name="file"
-                                                                       multiple="multiple"/>
+                                                                       multiple="multiple"
+                                                                       th:attr="data-tamanho-maximo=${tamanhoMaximo}, accept=${extensoes}"
+                                                                       onchange="checkFileSize(event, 'alertaGeral')"/>
                                                             </li>
                                                         </ul>
                                                     </div>

@@ -41,7 +41,6 @@ function login() {
 function adicionarClass(elemento, classe) {
     var classes = elemento.className.split(' ');
     var getIndex = classes.indexOf(classe);
-
     if (getIndex === -1) {
         classes.push(classe);
         elemento.className = classes.join(' ');
@@ -51,7 +50,6 @@ function adicionarClass(elemento, classe) {
 function deletarClass(elemento, classe) {
     var classes = elemento.className.split(' ');
     var getIndex = classes.indexOf(classe);
-
     if (getIndex > -1) {
         classes.splice(getIndex, 1);
     }
@@ -62,7 +60,6 @@ function addClass(id, classe) {
     var elemento = document.getElementById(id);
     var classes = elemento.className.split(' ');
     var getIndex = classes.indexOf(classe);
-
     if (getIndex === -1) {
         classes.push(classe);
         elemento.className = classes.join(' ');
@@ -73,7 +70,6 @@ function delClass(id, classe) {
     var elemento = document.getElementById(id);
     var classes = elemento.className.split(' ');
     var getIndex = classes.indexOf(classe);
-
     if (getIndex > -1) {
         classes.splice(getIndex, 1);
     }
@@ -88,7 +84,6 @@ function carregarChoices() {
             searchResultLimit: 5,
             renderChoiceLimit: 999
         });
-
     });
     document.querySelectorAll('.choicessingle').forEach(function (element) {
         new Choices(element, {
@@ -97,7 +92,6 @@ function carregarChoices() {
             searchResultLimit: 5,
             renderChoiceLimit: 999
         });
-
     });
 }
 
@@ -111,7 +105,6 @@ function choicesUsuarios() {
             searchResultLimit: 10,
             renderChoiceLimit: 999
         });
-
     });
 }
 
@@ -168,7 +161,7 @@ function alertaCampos(mensagem, detalhe, idLocal) {
         `       <div>${mensagem}</div>`,
         `       <hr>`,
         `       <div>${detalhe}</div>`,
-        '       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="limparAlerta()"></button>',
+        '       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
         '   </div>',
         '</div>',
         '</div>',
@@ -187,7 +180,7 @@ function alertaUnico(titulo, detalhe, idLocal) {
         `       <div>${titulo}</div>`,
         `       <hr>`,
         `       <div>${detalhe}</div>`,
-        '       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="limparAlerta()"></button>',
+        '       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
         '   </div>',
         '</div>',
         '</div>',
@@ -204,7 +197,7 @@ function alertaSucesso(detalhe, idLocal) {
         `<div class="col-md-auto" onclick="this.style.display = 'none'">`,
         `   <div class="alert alert-success alert-dismissible" role="alert">`,
         `       <div>${detalhe}</div>`,
-        '       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="limparAlerta()"></button>',
+        '       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
         '   </div>',
         '</div>',
         '</div>',
@@ -216,9 +209,11 @@ function alertaSucesso(detalhe, idLocal) {
 // Lista para armazenar os toasts
 let toasts = [];
 var tempo_ms_toast = 5000;
-
-// Função para adicionar um novo toast à lista
-function carregarToast(mensagem, tipo) {
+function carregarToast(mensagem, tipo, titulo) {
+    let ti = "Mensagem";
+    if (titulo) {
+        ti = titulo;
+    }
     let cor = "bg-info";
     switch (tipo) {
         case "sucesso":
@@ -239,10 +234,52 @@ function carregarToast(mensagem, tipo) {
     wrapper.innerHTML = [
         `<div id="${toastId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">`, // Removemos o autohide padrão para controlar manualmente o fechamento
         `   <div class="toast-header">`,
-        `       <strong class="me-auto">Mensagem</strong>`,
+        `       <strong class="me-auto">${mensagem}</strong>`,
         `       <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`,
         `   </div>`,
-        `   <div class="toast-body" id="msgToast">${mensagem}</div>`,
+        `   <div class="progress" style="height: 5px;">`, // Adicionamos a barra de progresso
+        `       <div id="progressBar-${toastId}" class="progress-bar ${cor} progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;"></div>`,
+        `   </div>`,
+        '</div>'
+    ].join('');
+    document.getElementById("toastId").append(wrapper);
+    toasts.push({
+        id: toastId,
+        remainingTime: tempo_ms_toast
+    });
+    exibirToasts();
+}
+
+// Função para adicionar um novo toast à lista
+function carregarToast99(mensagem, tipo, titulo) {
+    let ti = "Mensagem";
+    if (titulo) {
+        ti = titulo;
+    }
+    let cor = "bg-info";
+    switch (tipo) {
+        case "sucesso":
+            cor = "bg-success";
+            break;
+        case "erro":
+            cor = "bg-danger";
+            break;
+        case "alerta":
+            cor = "bg-warning";
+            break;
+        default:
+            cor = "bg-info";
+            break;
+    }
+    let wrapper = document.createElement('div');
+    let toastId = `liveToast-${Date.now()}`; // Adicionando um ID único para cada toast
+    wrapper.innerHTML = [
+        `<div id="${toastId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">`, // Removemos o autohide padrão para controlar manualmente o fechamento
+        `   <div class="toast-header">`,
+        `       <strong class="me-auto">${ti}</strong>`,
+        `       <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`,
+        `   </div>`,
+        `   <div class="toast-body" id="msgToast"><strong>${mensagem}<strong></div>`,
         `   <div class="progress" style="height: 5px;">`, // Adicionamos a barra de progresso
         `       <div id="progressBar-${toastId}" class="progress-bar ${cor} progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;"></div>`,
         `   </div>`,
@@ -264,7 +301,6 @@ function exibirToasts() {
         progressBar.classList.add('custom-progress-bar'); // Adicionando a classe personalizada à barra de progresso
         const toast = new bootstrap.Toast(toastElement);
         toast.show();
-
         let remainingTime = toastObj.remainingTime; // Tempo restante do toast
         let intervalId;
         let paused = false; // Variável para controlar o estado de pausa da contagem
@@ -273,11 +309,9 @@ function exibirToasts() {
             const percentage = (remainingTime / tempo_ms_toast) * 100;
             progressBar.style.width = `${percentage}%`;
         };
-
         const startCountdown = () => {
             clearInterval(intervalId);
             updateProgressBar();
-
             intervalId = setInterval(() => {
                 if (!paused) {
                     remainingTime -= 100;
@@ -291,34 +325,27 @@ function exibirToasts() {
                 }
             }, 100);
         };
-
         const resetCountdown = () => {
             remainingTime = tempo_ms_toast;
             updateProgressBar();
         };
-
         const pauseCountdown = () => {
             paused = true;
         };
-
         const resumeCountdown = () => {
             paused = false;
         };
-
         toastElement.addEventListener('mouseenter', () => {
             resetCountdown();
             pauseCountdown(); // Pausar a contagem ao passar o mouse sobre o toast
         });
-
         toastElement.addEventListener('mouseleave', () => {
             resumeCountdown(); // Retomar a contagem ao tirar o mouse do toast
         });
-
         toastElement.querySelector('.btn-close').addEventListener('click', () => {
             removerToast(toastObj.id); // Remover o toast da lista quando o botão de fechar é clicado manualmente
             toast.hide(); // Fechar o toast manualmente ao clicar no botão de fechar
         });
-
         startCountdown(); // Iniciar a contagem do tempo e a barra de progresso
 
         // Adicionando um ouvinte para remover o toast da lista quando for fechado
@@ -332,3 +359,22 @@ function exibirToasts() {
 function removerToast(toastId) {
     toasts = toasts.filter((toastObj) => toastObj.id !== toastId);
 }
+
+function checkFileSize(event, alertId) {
+    const tamanhoMaximoString = event.target.getAttribute('data-tamanho-maximo');
+    const tamanhoMaximo = parseInt(tamanhoMaximoString.slice(0, -2), 10); // Remove o "MB" e converte para número
+
+    const files = event.target.files;
+    for (const file of files) {
+        const fileSize = file.size;
+        if (fileSize > tamanhoMaximo * 1024 * 1024) {
+            let titulo = "Anexo não permitido";
+            let detalhe = `O arquivo ${file.name} excede o tamanho máximo de ${tamanhoMaximoString}.`;
+            alertaUnico(titulo, detalhe, alertId);
+            event.target.value = ''; // Limpa a seleção do arquivo
+            break;
+        }
+    }
+}
+
+

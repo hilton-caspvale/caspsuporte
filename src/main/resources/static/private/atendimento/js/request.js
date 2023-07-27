@@ -15,7 +15,6 @@ function validarUsuario(formulario) {
         fetch(uri)
                 .then(response => response.json())
                 .then(data => {
-                    console.log('detail: ' + data.detail);
                     if (data.status === 404) {
                         if (data.detail === 'Usuário não localizado!') {
                             texto = "";
@@ -36,7 +35,6 @@ function validarUsuario(formulario) {
                     }
                 })
                 .catch(function (error) {
-                    console.log('Erro catch: ' + error.message);
                     carregarToast('Erro ao processar requisição! - ' + error.message);
                 });
     }
@@ -50,10 +48,7 @@ function trocarsenha(event) {
                 limparModal();
             })
             .catch(error => {
-                console.log('nao foi');
-                console.log(error);
                 requestError(error, 'alertaModal');
-                console.log('fim nao foi');
             });
     limparModal();
 }
@@ -91,7 +86,7 @@ function gravarChamado(event) {
                     response.json().then(function (json) {
                         let file = document.getElementById('file');
                         if (file.value) {
-                            patchEnviarAnexoNaAbertura(event, json.ichamado);
+                            patchEnviarAnexo(event, json.ichamado);
                         }
                         carregarToast("Chamado " + json.ichamado + msg_complemento);
                         visualizarChamado(json.ichamado);
@@ -156,40 +151,19 @@ function movimentarChamado(event, acao, comentarioId, dataagendamentoinput) {
         patchUrl += '&usuario-encaminhar=' + usuarioEncaminhar;
     }
 
-    fetch(patchUrl, {
-        method: "PATCH",
-        body: comentario
-    })
-            .then(function (response) {
-                if (response.ok) {
-                    response.text().then(function (text) {
-                        carregarToast(text);
-                        visualizarChamado(iChamado);
-                    });
+    requestDef(patchUrl, 'PATCH', comentario)
+            .then(response => {
+                let titulo = "Chamado " + response.ichamado + " atualizado!";
+                let msg = response.situacaoChamado;
+                if (acao === "comentario") {
+                    carregarToast("Comentário adicionado", 'sucesso', "");
                 } else {
-                    response.json().then(function (json) {
-                        if (json.status === 500) {
-                            carregarToast(json.userMessage);
-                        } else {
-                            if (json.detail === undefined) {
-                                carregarToast(response.status + ' - Recurso não encontrado! ' + json.path);
-                            } else {
-                                let detalhe = '';
-                                if (json.objects === undefined) {
-                                    alertaUnico(json.title, json.userMessage, 'alertaGeral');
-                                } else {
-                                    json.objects.forEach(ob => {
-                                        detalhe = detalhe + 'Campo <strong>' + ob.name + '</strong> ' + ob.userMessage + '<br>';
-                                    });
-                                    alertaCampos(json.userMessage, detalhe, 'alertaGeral');
-                                }
-                            }
-                        }
-                    });
+                    carregarToast(msg, 'sucesso', titulo);
                 }
+                visualizarChamado(iChamado);
             })
-            .catch(function (error) {
-                carregarToast('Erro ao processar requisição!');
+            .catch(error => {
+                requestError(error, 'alertaGeral');
             });
 }
 
@@ -201,101 +175,70 @@ function setarIAnexo(event) {
     document.getElementById("btExcluir").setAttribute("data-anexo", idAnexo);
     document.getElementById("btExcluir").setAttribute("data-id", iChamado);
 }
-
 function deletarComentario(event) {
     event.preventDefault();
     let currentTarget = $(event.currentTarget);
     let idAnexo = currentTarget.attr('data-anexo');
     let iChamado = currentTarget.attr('data-id');
-    fetch(getUrl() + chamadosPatch + iChamado + "/anexos/" + idAnexo, {
-        method: "DELETE"
-    })
-            .then(function (response) {
-                if (response.ok) {
-                    response.text().then(function (text) {
-                        carregarToast(text);
-                        visualizarChamado(iChamado);
-                    });
-                } else {
-                    response.json().then(function (json) {
-                        if (json.status === 500) {
-                            carregarToast(json.userMessage);
-                        } else {
-                            if (json.detail === undefined) {
-                                carregarToast(response.status + ' - Recurso não encontrado! ' + json.path);
-                            } else {
-                                let detalhe = '';
-                                if (json.objects === undefined) {
-                                    alertaUnico(json.title, json.userMessage, 'alertaGeral');
-                                } else {
-                                    json.objects.forEach(ob => {
-                                        detalhe = detalhe + 'Campo <strong>' + ob.name + '</strong> ' + ob.userMessage + '<br>';
-                                    });
-                                    alertaCampos(json.userMessage, detalhe, 'alertaGeral');
-                                }
-                            }
-                        }
-                    });
-                }
+
+    requestDef(getUrl() + chamadosPatch + iChamado + "/anexos/" + idAnexo, 'DELETE', null)
+            .then(response => {
+                let titulo = "Registro excluído!";
+                carregarToast(titulo, 'alerta', titulo);
+                visualizarChamado(iChamado);
             })
-            .catch(function (error) {
-                carregarToast('Erro ao processar requisição! ' + error);
+            .catch(error => {
+                requestError(error, 'alertaGeral');
             });
 }
 
-function patchEnviarAnexo(event) {
-    event.preventDefault();
-    let form = $('#formAnexo')[0];
-    const idChamado = document.getElementById('ichamado').value;
-    const comentarioAnexo = document.getElementById('comentarioAnexo').value;
-    var data = new FormData(form);
-    data.append("iChamado", idChamado);
-    data.append("comentarioAnexo", comentarioAnexo);
-    $.ajax({
-        url: chamadosPatch + idChamado + "/anexar",
-        enctype: 'multipart/form-data',
-        type: 'PATCH',
-        data: data,
-        processData: false,
-        contentType: false,
-        cache: false,
-        timeout: 600000,
-        error: function (msg) {
-            carregarToast(msg.responseJSON.detail);
-            return msg;
-        },
-        success: function (html) {
-            visualizarChamado(idChamado);
-            carregarToast(html);
-        }
-    });
-}
-
-function patchEnviarAnexoNaAbertura(event, idChamado) {
+function patchEnviarAnexo(event, idChamado) {
     event.preventDefault();
     let form = $('#formAnexo')[0];
     let comentarioAnexo = '';
+    if (!idChamado) {
+        idChamado = document.getElementById('ichamado').value;
+        comentarioAnexo = document.getElementById('comentarioAnexo').value;
+    }
     var data = new FormData(form);
     data.append("iChamado", idChamado);
     data.append("comentarioAnexo", comentarioAnexo);
-    $.ajax({
-        url: chamadosPatch + idChamado + "/anexar",
+
+    let header = new Headers({
         enctype: 'multipart/form-data',
-        type: 'PATCH',
         data: data,
         processData: false,
         contentType: false,
         cache: false,
-        timeout: 600000,
-        error: function (msg) {
-            carregarToast(msg.responseJSON.detail);
-            return msg;
-        },
-        success: function (html) {
-//            visualizarChamado(idChamado);
-//            carregarToast(html);
-        }
+        timeout: 600000
     });
+
+    const conteudo = {
+        method: 'PATCH',
+        headers: header,
+        body: data
+    };
+
+    fetch(chamadosPatch + idChamado + "/anexar", conteudo)
+            .then(response => {
+                if (response.ok) {
+                    response.text().then(text => {
+                        carregarToast(text, 'sucesso', text);
+                        visualizarChamado(idChamado);
+                    });
+                } else {
+                    response.json()
+                            .then(json => {
+                                carregarToast(json.userMessage, 'erro', json.userMessage);
+                            })
+                            .catch(er => {
+                                throw {errorType: 'other', data: {status: response.status, body: er}};
+                            });
+                }
+            })
+            .catch(error => {
+                requestError(error, 'alertaGeral');
+            });
 }
 
 function encerrarChamado(event) {
@@ -308,57 +251,28 @@ function encerrarChamado(event) {
         descricaoSolucao: document.getElementById('descricaoSolucaoModal').value
     };
     let boddy = JSON.stringify(conteudo);
-    fetch(uri, {
-        method: "PATCH",
-        headers: new Headers({
-            'Content-Type': 'application/json'
-        }),
-        body: boddy
-    })
-            .then(function (response) {
-                console.log("response.ok: " + response.ok);
-                if (response.ok) {
-                    response.text().then(function (text) {
-                        carregarToast(text);
-                        visualizarChamado(idChamado);
-                    });
-                } else {
-                    response.json().then(function (json) {
-                        if (json.status === 500) {
-                            carregarToast(json.userMessage);
-                        } else {
-                            if (json.detail === undefined) {
-                                carregarToast(response.status + ' - Recurso não encontrado! ' + json.path);
-                            } else {
-                                let detalhe = '';
-                                if (json.objects === undefined) {
-                                    alertaUnico(json.title, json.userMessage, 'alertaGeral');
-                                } else {
-                                    json.objects.forEach(ob => {
-                                        detalhe = detalhe + 'Campo <strong>' + ob.name + '</strong> ' + ob.userMessage + '<br>';
-                                    });
-                                    alertaCampos(json.userMessage, detalhe, 'alertaGeral');
-                                }
-                            }
-                        }
-                    });
-                }
+
+    requestDef(uri, 'PATCH', boddy)
+            .then(response => {
+                let titulo = "Chamado " + response.ichamado + " ENCERRADO!";
+                carregarToast(titulo, 'sucesso', titulo);
+                visualizarChamado(idChamado);
             })
-            .catch(function (error) {
-                carregarToast('Erro ao processar requisição!');
+            .catch(error => {
+                requestError(error, 'alertaGeral');
             });
 }
 
 function atualizarTotais() {
-    const xhttp1 = new XMLHttpRequest();
-    xhttp1.open("GET", chamadosPatch + 'quantidade');
-    xhttp1.send();
-    xhttp1.onload = function () {
-        let obj = JSON.parse(this.responseText);
-        document.getElementById('spanPendente').innerHTML = obj.totalAguardando;
-        document.getElementById('spanEmAnalise').innerHTML = obj.totalEmAtendimento;
-        document.getElementById('spanFinalizados').innerHTML = obj.totalEncerrado;
-    };
+    requestDef(chamadosPatch + 'quantidade', 'GET', null)
+            .then(response => {
+                document.getElementById('spanPendente').innerHTML = response.totalAguardando;
+                document.getElementById('spanEmAnalise').innerHTML = response.totalEmAtendimento;
+                document.getElementById('spanFinalizados').innerHTML = response.totalEncerrado;
+            })
+            .catch(error => {
+                requestError(error, 'alertaGeral');
+            });
 }
 
 function promiseHtml(promisesEElementos, promiseAPI) {
@@ -407,9 +321,7 @@ function requestDef(url, metodo, object) {
     return fetch(url, conteudo)
             .then(response => {
                 const contentType = response.headers.get('content-type');
-                console.log('response.status? ' + response.status);
                 if (response.ok) {
-                    console.log(1);
                     if (response.status === 204) {
                         return "";
                     } else if (contentType && contentType.includes('application/json')) {
@@ -438,7 +350,6 @@ function requestDef(url, metodo, object) {
                 }
             })
             .catch(error => {
-                console.log(2);
                 throw error;
             });
 }

@@ -51,3 +51,25 @@ function visualizarChamado(ichamado) {
                 requestError(error, 'alertaGeral');
             });
 }
+
+/*function problemasDosSistemas() {
+ ////<script>
+ document.getElementById("sistemas").addEventListener("change", function () {
+ let url = MV_A_PROBLEMA + "/problemasDosSistemas";
+ const selectedOptions = document.getElementById("sistemas").selectedOptions;
+ const dataObjects = Array.from(selectedOptions, option => {
+ return {
+ isistema: option.value,
+ descricaoSistema: option.textContent.trim()
+ };
+ });
+ requestDef(url, 'POST', JSON.stringify(dataObjects))
+ .then(response => {
+ $("#problemasSistemas").html(response);
+ })
+ .catch(error => {
+ requestError(error, 'alertaGeral');
+ });
+ });
+ ////</script>
+ }*/

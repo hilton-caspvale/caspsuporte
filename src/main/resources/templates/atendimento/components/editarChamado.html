@@ -264,7 +264,9 @@
                                                                        class="row col-md-6 form-control"                                                     
                                                                        form="formAnexo"
                                                                        name="file"
-                                                                       multiple="multiple"/>
+                                                                       multiple="multiple"
+                                                                       th:attr="data-tamanho-maximo=${tamanhoMaximo}, accept=${extensoes}"
+                                                                       onchange="checkFileSize(event, 'alertaGeral')"/>
                                                             </li>
                                                         </ul>
                                                     </div>

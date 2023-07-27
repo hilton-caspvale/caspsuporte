@@ -4,9 +4,9 @@
  */
 package caspvale.caspsuporte.api.exceptionHandler;
 
-import caspvale.caspsuporte.domain.exception.EntidadeEmUsoException;
-import caspvale.caspsuporte.domain.exception.EntidadeNaoEncontradaException;
-import caspvale.caspsuporte.domain.exception.NegocioException;
+import caspvale.caspsuporte.modulos.atendimento.exception.EntidadeEmUsoException;
+import caspvale.caspsuporte.modulos.atendimento.exception.EntidadeNaoEncontradaException;
+import caspvale.caspsuporte.modulos.atendimento.exception.NegocioException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,7 +42,7 @@ import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 
-import caspvale.caspsuporte.domain.exception.NegocioException;
+import caspvale.caspsuporte.modulos.atendimento.exception.NegocioException;
 import org.springframework.dao.DataIntegrityViolationException;
 
 @ControllerAdvice

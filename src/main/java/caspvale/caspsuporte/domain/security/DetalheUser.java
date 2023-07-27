@@ -8,7 +8,7 @@ package caspvale.caspsuporte.domain.security;
  *
  * @author Hilton
  */
-import caspvale.caspsuporte.atendimento.domain.model.CaspUsuarios;
+import caspvale.caspsuporte.modulos.atendimento.domain.model.CaspUsuarios;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;

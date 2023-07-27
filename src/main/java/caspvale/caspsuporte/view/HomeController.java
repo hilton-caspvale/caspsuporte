@@ -1,6 +1,6 @@
 package caspvale.caspsuporte.view;
 
-import caspvale.caspsuporte.atendimento.common.Permissoes;
+import caspvale.caspsuporte.modulos.atendimento.common.Permissoes;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -493,7 +493,9 @@
                                form="formAnexo"
                                name="file"
                                multiple=""
-                               id="file"/>  
+                               id="file"
+                               th:attr="data-tamanho-maximo=${tamanhoMaximo}, accept=${extensoes}"
+                               onchange="checkFileSize(event, 'alertaModal')"/>  
                     </div>
                     <textarea class="form-control text-wrap" 
                               placeholder="Comentário (opcional)" form="formAnexo"
@@ -507,6 +509,7 @@
                         Confirmar
                     </button>
                 </div>
+                <div id="alertaModal"></div>
             </div>
         </div>
     </div>

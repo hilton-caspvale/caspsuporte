@@ -1,7 +1,7 @@
 package caspvale.caspsuporte.domain.security;
 
-import caspvale.caspsuporte.atendimento.domain.model.CaspUsuarios;
-import caspvale.caspsuporte.atendimento.domain.repository.UsuariosRepository;
+import caspvale.caspsuporte.modulos.atendimento.domain.model.CaspUsuarios;
+import caspvale.caspsuporte.modulos.atendimento.domain.repository.UsuariosRepository;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
