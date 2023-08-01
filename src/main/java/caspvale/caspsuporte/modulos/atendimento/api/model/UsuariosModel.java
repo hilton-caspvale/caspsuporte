@@ -3,6 +3,7 @@ package caspvale.caspsuporte.modulos.atendimento.api.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 
@@ -21,15 +22,11 @@ public class UsuariosModel {
     private static final long serialVersionUID = 1L;
     @EqualsAndHashCode.Include
     private Integer iUsuario;
-    @NotBlank
-    @NotNull
+    @NotEmpty
     private String nlogin;
-    @NotBlank
-    @NotNull
+    @NotEmpty
     private String nomeUsuario;
     private String contatoUsuario;
-    @NotBlank
-    @NotNull
     private String emailUsuario;
     private String situacaoUsuario;
     private List<AreasInputModel> caspAreasList;

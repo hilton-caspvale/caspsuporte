@@ -45,7 +45,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/atendimento/chamados")
 public class ChamadosController {
     
-    private static final Logger logger = LoggerFactory.getLogger(ChamadosController.class);
+    //private static final Logger logger = LoggerFactory.getLogger(ChamadosController.class);
 
     private final ChamadosAssembler chamadosAssembler;
     private final ChamadosInputAssembler chamadosInputAssembler;
@@ -105,7 +105,7 @@ public class ChamadosController {
         CaspUsuarios caspUsuarioLogado = permissoes.caspUsuarioLogado();
         CaspChamados caspChamado = chamadosService.chamadoLocalizadoPermitidoParaUsuario(id, caspUsuarioLogado);
         ChamadosModel chamadoLocalizado = chamadosAssembler.toModel(caspChamado);
-        logger.info("maxFileSize applied: {}", 9999);
+        //logger.info("maxFileSize applied: {}", 9999);
         return ResponseEntity.ok(chamadoLocalizado);
     }
 
@@ -134,7 +134,7 @@ public class ChamadosController {
             @RequestBody(required = false) String comentario,
             @RequestParam(value = "acao", required = true) String acao,
             @RequestParam(value = "agenda", required = false) String agenda,
-            @RequestParam(value = "usuario-encaminhar", required = false) Integer usuarioEncaminhar) {
+            @RequestParam(value = "usuario-encaminhar", required = false) Integer usuarioEncaminhar) {        
         CaspUsuarios caspUsuarioLogado = permissoes.caspUsuarioLogado();
         CaspChamados caspChamado = chamadosService.chamadoLocalizadoPermitidoParaUsuario(id, caspUsuarioLogado);
         ChamadosModel chamadoAtualizado = chamadosAssembler.toModel(chamadosService.movimentarChamado(caspChamado, acao, comentario, caspUsuarioLogado, agenda, usuarioEncaminhar));

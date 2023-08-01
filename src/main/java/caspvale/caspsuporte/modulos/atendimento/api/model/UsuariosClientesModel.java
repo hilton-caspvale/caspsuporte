@@ -3,6 +3,7 @@ package caspvale.caspsuporte.modulos.atendimento.api.model;
 
 import java.util.List;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 
@@ -20,11 +21,9 @@ public class UsuariosClientesModel {
     private static final long serialVersionUID = 1L;
     @EqualsAndHashCode.Include
     private Integer iUsuario;
-    @NotBlank
-    @NotNull
+    @NotEmpty
     private String nlogin;
-    @NotBlank
-    @NotNull
+    @NotEmpty
     private String nomeUsuario;
     private String contatoUsuario;
     private String emailUsuario;

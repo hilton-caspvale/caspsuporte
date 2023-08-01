@@ -74,6 +74,10 @@ public class Permissoes {
         return role().equals("ADMINISTRADOR");
     }
 
+    public boolean roleAnalistaAdmin() {
+        return roleANALISTA() || roleADMIN();
+    }
+
     public void exclusivoAnalista() {
         if (!roleANALISTA()) {
             throw new UsuarioRestritoException();

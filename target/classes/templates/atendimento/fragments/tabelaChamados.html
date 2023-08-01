@@ -2,7 +2,7 @@
     <div id="toolbar">
         <div class="btn-group" role="group" aria-label="Painel Atendimento">
             <input type="radio" class="btn-check" name="btnradio" id="button1" autocomplete="off" checked=""/>
-            <label class="btn btn-outline-success bg-gradient" for="button1">Pendentes
+            <label class="btn btn-outline-success" for="button1">Pendentes
                 <span id="spanPendente" class="badge cor-g text-wrap text-dark">0</span>
             </label>
             <input type="radio" class="btn-check" name="btnradio" id="button2" autocomplete="off"/>
@@ -24,7 +24,7 @@
         data-search-accent-neutralise="true"                           
         data-pagination="true"
         data-buttons-prefix="btn-md btn"
-        data-buttons-class="success"
+        data-buttons-class="success bg-gradient"
         data-buttons="novoChamadoTabela"
         data-show-button-text="false"
         data-show-pagination-switch="false" 
@@ -41,11 +41,11 @@
         <thead>
             <tr><!--class="badge bg-light text-dark" atendimentos/tipoTabela?tipo=aguardando-->
                 <th data-field="ichamado" data-sortable="true" data-formatter="acoesTabelaChamado">Nº</th>
-                <th data-field="caspEntidadesList" data-sortable="true" data-halign="left" data-align="left" data-formatter="entidades">Entidade</th>
+                <th data-field="caspEntidadesList" data-sortable="true" data-halign="left" data-align="left" data-formatter="entidades" class="col-md-3">Entidade</th>
                 <th data-field="caspAreasList" data-sortable="true" data-halign="left" data-align="center" data-formatter="areas">Área</th>
                 <th data-field="dataAbertura" data-sortable="true" data-formatter="spanTabela">Abertura</th>
                 <th data-field="iusuarioAbertura.nome" data-sortable="true" data-formatter="spanTabela">Usuário</th>
-                <th data-field="resumoChamado" data-sortable="true" data-formatter="spanTabela">Resumo</th>
+                <th data-field="resumoChamado" data-sortable="true" data-formatter="textoNormalTabela" class="col-md-4 small">Resumo</th>
                 <th data-field="isituacao" data-sortable="true" data-align="center" data-formatter="situacaoChamado">Situação</th>
             </tr>
         </thead>

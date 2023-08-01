@@ -144,15 +144,18 @@ public class Rotas {
     }
 
     public boolean roleCLIENTE() {
-        return role().equals("CLIENTE");
+        return permissoes.roleCLIENTE();
     }
 
     public boolean roleANALISTA() {
-        return role().equals("ANALISTA");
+        return permissoes.roleANALISTA();
     }
 
     public boolean roleADMIN() {
-        return role().equals("ADMINISTRADOR");
+        return permissoes.roleADMIN();
+    }
+    public boolean roleAnalistaAdmin(){
+        return permissoes.roleAnalistaAdmin();
     }
 
     public boolean permiteEditarUsuario(String loginUsuarioEdicao) {

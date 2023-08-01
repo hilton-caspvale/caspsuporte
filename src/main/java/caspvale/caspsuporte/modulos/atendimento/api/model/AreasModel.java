@@ -1,6 +1,7 @@
 package caspvale.caspsuporte.modulos.atendimento.api.model;
 
 import java.util.List;
+import javax.validation.constraints.NotEmpty;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -17,6 +18,7 @@ public class AreasModel {
     private static final long serialVersionUID = 1L;
     @EqualsAndHashCode.Include
     private Integer iArea;
+    @NotEmpty
     private String descricaoArea;
     private String situacaoArea;
     private String emailArea;

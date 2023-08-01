@@ -12,6 +12,10 @@ function textoNormalTabela(value) {
     return value;//'<p style="font-size: 12px">'+value+'</p>';
 }
 
+function spanTabelaResumo(value) {
+    return '<span class="badge text-dark">' + value + '</span>';
+}
+
 function spanTabela(value) {
     return '<span class="badge text-dark">' + value + '</span>';
 }
@@ -224,37 +228,27 @@ function botaoAddTabelaClientes() {
 }
 
 
-function acoesTabelaUsuarios(value) {
-    let uriModal = '/mv/atendimento/conteudoModalUsuarios';
-    let tituloModal = 'Editar Usuario';
-    return acoesTabela(uriModal, tituloModal, value);
-}
-
-//
-
 function acoesTabelaAdminUsuarios(value) {
-    let uriModalCadastro = '/mv/atendimento/conteudoModalUsuarios?id=' + value;
-    let uriModalSenha = '/mv/atendimento/trocarSenha?id=' + value;
-    let tituloModalCadastro = 'Editar Usuario';
-    let tituloModalSenha = 'Alterar Senha';
-    let botaoEditar = botaoEditarUsuario(value, uriModalCadastro, tituloModalCadastro);
-    let botaoAlteraSenha = botaoAlterarSenha(value, uriModalSenha, tituloModalSenha);
-    return '<div class="btn-group btn-group-sm" role="group">' + botaoEditar + botaoAlteraSenha + '</div>';
+    let botaoSenha = '<a role="button" class="btn btn-outline-secondary" data-id=' + value + ' onclick="modalTrocarSenha(' + value + ')"><i class="bi bi-key"></i></a>';
+    return '<div class="btn-group btn-group-sm" role="group"><a role="button" class="btn btn-outline-secondary" data-id=' + value + ' onclick="modalUsuarios(' + value + ')"><i class="fas fa-pencil-alt"></i></a>' + botaoSenha + '</div>';
 }
 
-function botaoEditarUsuario(value, uriModalCadastro, tituloModalCadastro) {
-    return '<a role="button" class="btn btn-outline-secondary" data-id=' + value + ' onclick="carregaHtml(' + "'" + uriModalCadastro + '' + "'" + ', ' + "'" + 'modalBody' + "'" + ');mostraModal(' + "'" + '#modal' + "'" + ');$(' + "'" + '#staticBackdropLabel' + "'" + ').html(' + "'" + tituloModalCadastro + "'" + ')"><i class="fas fa-pencil-alt"></i></a>';
+function botaoEditarUsuario() {    
+    const evento = function () {
+        modalUsuarios();
+    };
+    return botaoAddTabela(evento);
 }
 
 function botaoAlterarSenha(value, uriModalSenha, tituloModalSenha) {
     return '<a role="button" class="btn btn-outline-secondary" data-id=' + value + ' onclick="carregaHtml(' + "'" + uriModalSenha + '' + "'" + ', ' + "'" + 'modalBody' + "'" + ');mostraModal(' + "'" + '#modal' + "'" + ');$(' + "'" + '#staticBackdropLabel' + "'" + ').html(' + "'" + tituloModalSenha + "'" + ')"><i class="bi bi-key"></i></a>';
 }
-//
 
 function botaoAddTabelaUsuarios() {
-    let uriModal = '/mv/atendimento/conteudoModalUsuarios';
-    let tituloModal = 'Adicionar Usuario';
-    return botaoAddTabela(uriModal, tituloModal);
+    const evento = function () {
+        modalUsuarios();
+    };
+    return botaoAddTabela(evento);
 }
 
 function pesquisarUsuarios(data, text) {

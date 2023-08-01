@@ -1,64 +1,57 @@
 <div th:fragment="tabelaClientes">
-    <style>
-        /* .page-item.active .page-link {
-            background-color: #1abc9c;
-            border: none;
-        }*/
-    </style>
-
-    <div class="toolbar">
-        <div class="row">            
-            <div class="col-sm-4">
-                <div class="form-floating">
-                    <select class="form-select form-select-sm" id="ientidade" onchange="atualizarTabela('table')">
-                        <option th:each="entidade : ${listaEntidades}" 
-                                th:value="${entidade}" 
-                                th:text="${entidade.nomeEntidade}"
-                                contenteditable="false"/>
-                    </select>
-                    <label for="ientidade">Entidade</label>
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="form-floating">
-                    <select class="form-select form-select-sm" id="iarea" aria-label="Area" onchange="atualizarTabela('table')">
-                        <option th:each="area : ${listaAreas}" 
-                                th:value="${area}" 
-                                th:text="${area.descricaoArea}"
-                                contenteditable="false"/>
-                    </select>
-                    <label for="iarea">Área</label>
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="form-floating">
-                    <select class="form-select form-select-sm" id="isistema" aria-label="Sistema" onchange="atualizarTabela('table')">
-                        <option th:each="sistema : ${listaSistemas}" 
-                                th:value="${sistema}" 
-                                th:text="${sistema.descricaoSistema}"
-                                contenteditable="false"/>
-                    </select>
-                    <label for="isistema">Sistema</label>
-                </div>
-            </div>
-            <div class="col-sm-2">
-                <div class="form-floating">
-                    <select class="form-select form-select-sm" id="exibir" onchange="atualizarTabela('table')">
-                        <option th:each="opcao : ${exibir}" 
-                                th:value="${opcao}" 
-                                th:text="${opcao}"
-                                contenteditable="false"/>
-                    </select>
-                    <label for="exibir">Exibir</label>
-                </div>
+    <div class="row">            
+        <div class="col-sm-4">
+            <div class="form-floating">
+                <select class="form-select form-select-sm" id="ientidade" onchange="atualizarTabela('table')">
+                    <option th:each="entidade : ${listaEntidades}" 
+                            th:value="${entidade}" 
+                            th:text="${entidade.nomeEntidade}"
+                            contenteditable="false"/>
+                </select>
+                <label for="ientidade">Entidade</label>
             </div>
         </div>
+        <div class="col-sm-3">
+            <div class="form-floating">
+                <select class="form-select form-select-sm" id="iarea" aria-label="Area" onchange="atualizarTabela('table')">
+                    <option th:each="area : ${listaAreas}" 
+                            th:value="${area}" 
+                            th:text="${area.descricaoArea}"
+                            contenteditable="false"/>
+                </select>
+                <label for="iarea">Área</label>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-floating">
+                <select class="form-select form-select-sm" id="isistema" aria-label="Sistema" onchange="atualizarTabela('table')">
+                    <option th:each="sistema : ${listaSistemas}" 
+                            th:value="${sistema}" 
+                            th:text="${sistema.descricaoSistema}"
+                            contenteditable="false"/>
+                </select>
+                <label for="isistema">Sistema</label>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-floating">
+                <select class="form-select form-select-sm" id="exibir" onchange="atualizarTabela('table')">
+                    <option th:each="opcao : ${exibir}" 
+                            th:value="${opcao}" 
+                            th:text="${opcao}"
+                            contenteditable="false"/>
+                </select>
+                <label for="exibir">Exibir</label>
+            </div>
+        </div>
+    </div>
+    <div id="toolbar">
+        <div th:replace="atendimento/fragments/navegacao :: navegar-cliente"></div>
     </div>
     <div class="tab-content">
         <div class="table-responsive">
             <table id="table"
-                   data-toolbar=".toolbar"
-                   data-toolbar-align="top"
+                   data-toolbar="#toolbar"
                    data-toggle="table"
                    data-search="true"     
                    data-search-accent-neutralise="true"                           

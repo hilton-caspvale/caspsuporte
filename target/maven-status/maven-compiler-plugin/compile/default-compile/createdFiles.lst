@@ -56,6 +56,7 @@ caspvale\caspsuporte\modulos\atendimento\view\EntidadesView.class
 caspvale\caspsuporte\modulos\atendimento\domain\model\CaspOrigens.class
 caspvale\caspsuporte\modulos\atendimento\api\model\TiposArquivosInputModel.class
 caspvale\caspsuporte\modulos\atendimento\api\assembler\OrigensAssembler.class
+caspvale\caspsuporte\modulos\atendimento\common\OperacoesTexto.class
 caspvale\caspsuporte\modulos\atendimento\domain\service\OrigensService.class
 caspvale\caspsuporte\modulos\atendimento\exception\AnexoNaoEncontradoException.class
 caspvale\caspsuporte\modulos\atendimento\domain\repository\PontoConfigRepository.class

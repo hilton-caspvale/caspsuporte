@@ -93,6 +93,7 @@ function modalSistemas(id) {
 }
 
 function modalAreas(id) {
+    console.log(MV_A_MODAL_AREA);
     requestMVModal(MV_A_MODAL_AREA, id, "Área");
 }
 

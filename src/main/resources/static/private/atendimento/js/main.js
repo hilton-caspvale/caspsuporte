@@ -21,6 +21,7 @@ function fecharModal(nomeModal) {
 function limparModal() {
     document.getElementById('modalBody').innerHTML = '';
     document.getElementById('alertaModal').innerHTML = '';
+    fecharModal('#modal');
 }
 
 function limparAlertaModal() {
@@ -238,7 +239,7 @@ function carregarToast(mensagem, tipo, titulo) {
         `       <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`,
         `   </div>`,
         `   <div class="progress" style="height: 5px;">`, // Adicionamos a barra de progresso
-        `       <div id="progressBar-${toastId}" class="progress-bar ${cor} progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;"></div>`,
+        `       <div id="progressBar-${toastId}" class="progress-bar ${cor} custom-progress-bar progress-bar-striped" role="progressbar" style="width: 100%;"></div>`,
         `   </div>`,
         '</div>'
     ].join('');
@@ -250,51 +251,124 @@ function carregarToast(mensagem, tipo, titulo) {
     exibirToasts();
 }
 
-// Função para adicionar um novo toast à lista
-function carregarToast99(mensagem, tipo, titulo) {
-    let ti = "Mensagem";
-    if (titulo) {
-        ti = titulo;
-    }
-    let cor = "bg-info";
-    switch (tipo) {
-        case "sucesso":
-            cor = "bg-success";
-            break;
-        case "erro":
-            cor = "bg-danger";
-            break;
-        case "alerta":
-            cor = "bg-warning";
-            break;
-        default:
-            cor = "bg-info";
-            break;
-    }
-    let wrapper = document.createElement('div');
-    let toastId = `liveToast-${Date.now()}`; // Adicionando um ID único para cada toast
-    wrapper.innerHTML = [
-        `<div id="${toastId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">`, // Removemos o autohide padrão para controlar manualmente o fechamento
-        `   <div class="toast-header">`,
-        `       <strong class="me-auto">${ti}</strong>`,
-        `       <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`,
-        `   </div>`,
-        `   <div class="toast-body" id="msgToast"><strong>${mensagem}<strong></div>`,
-        `   <div class="progress" style="height: 5px;">`, // Adicionamos a barra de progresso
-        `       <div id="progressBar-${toastId}" class="progress-bar ${cor} progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;"></div>`,
-        `   </div>`,
-        '</div>'
-    ].join('');
-    document.getElementById("toastId").append(wrapper);
-    toasts.push({
-        id: toastId,
-        remainingTime: tempo_ms_toast
+// Função para exibir todos os toasts presentes na lista
+function exibirToasts() {
+    let activeToastId; // Variável para armazenar o ID do toast ativo
+
+    toasts.forEach((toastObj) => {
+        const toastElement = document.getElementById(toastObj.id);
+        const progressBar = toastElement.querySelector(`#progressBar-${toastObj.id}`);
+        progressBar.classList.add('custom-progress-bar'); // Adicionar a classe custom-progress-bar
+        const toast = new bootstrap.Toast(toastElement);
+        const animationDuration = 5000; // Duração da animação em milissegundos
+
+        const startAnimation = () => {
+            progressBar.style.animation = 'none'; // Reiniciar a animação
+            void progressBar.offsetWidth; // Forçar o recálculo do estilo (reflow)
+            progressBar.style.animation = `toast-progress ${animationDuration}ms linear`; // Definir a duração da animação individualmente para cada toast
+        };
+
+        const resetAnimation = () => {
+            progressBar.style.animation = 'none'; // Reiniciar a animação
+            void progressBar.offsetWidth; // Forçar o recálculo do estilo (reflow)
+            progressBar.style.animation = `toast-progress ${animationDuration}ms linear`; // Definir a duração da animação individualmente para cada toast
+        };
+
+        toastElement.addEventListener('shown.bs.toast', () => {
+            if (activeToastId !== toastObj.id) {
+                startAnimation(); // Iniciar a animação somente se o toast não estiver ativo
+            }
+        }, {once: true}); // Usar { once: true } para que o ouvinte seja removido após a primeira execução
+
+        const toastMouseEnterHandler = () => {
+            if (activeToastId === toastObj.id) {
+                resetAnimation(); // Reiniciar a animação somente se o toast estiver ativo
+            }
+        };
+
+        const toastMouseLeaveHandler = () => {
+            if (activeToastId === toastObj.id) {
+                progressBar.style.animationPlayState = 'paused'; // Pausar a animação ao passar o mouse sobre o toast
+            }
+        };
+
+        toastElement.addEventListener('mouseenter', toastMouseEnterHandler);
+        toastElement.addEventListener('mouseleave', toastMouseLeaveHandler);
+
+        toastElement.addEventListener('hidden.bs.toast', () => {
+            progressBar.style.animation = 'none'; // Parar a animação quando o toast for fechado manualmente
+            toastElement.removeEventListener('mouseenter', toastMouseEnterHandler);
+            toastElement.removeEventListener('mouseleave', toastMouseLeaveHandler);
+        });
+
+        toastElement.addEventListener('shown.bs.toast', () => {
+            activeToastId = toastObj.id; // Definir o ID do toast como ativo quando for exibido
+            progressBar.style.animationPlayState = 'running'; // Iniciar a animação da barra de progresso
+            setTimeout(() => {
+                progressBar.style.animationPlayState = 'paused'; // Pausar a animação após o tempo definido
+            }, animationDuration);
+        }, {once: true}); // Usar { once: true } para que o ouvinte seja removido após a primeira execução
+
+        toast.show();
+        let remainingTime = toastObj.remainingTime; // Tempo restante do toast
+        let intervalId;
+        let paused = false; // Variável para controlar o estado de pausa da contagem
+
+        const updateProgressBar = () => {
+            const percentage = (remainingTime / tempo_ms_toast) * 100;
+            progressBar.style.width = `${percentage}%`;
+        };
+        const startCountdown = () => {
+            clearInterval(intervalId);
+            updateProgressBar();
+            intervalId = setInterval(() => {
+                if (!paused) {
+                    remainingTime -= 100;
+                    if (remainingTime <= 0) {
+                        clearInterval(intervalId);
+                        removerToast(toastObj.id); // Remover o toast da lista quando o tempo expirar
+                        toast.hide(); // Fechar o toast após o tempo expirar
+                    } else {
+                        updateProgressBar();
+                    }
+                }
+            }, 100);
+        };
+        const resetCountdown = () => {
+            remainingTime = tempo_ms_toast;
+            updateProgressBar();
+        };
+        const pauseCountdown = () => {
+            paused = true;
+            progressBar.style.animationPlayState = 'paused'; // Pausar a animação da barra de progresso
+        };
+        const resumeCountdown = () => {
+            paused = false;
+            progressBar.style.animationPlayState = 'running'; // Retomar a animação da barra de progresso
+        };
+        toastElement.addEventListener('mouseenter', () => {
+            resetCountdown();
+            pauseCountdown(); // Pausar a contagem ao passar o mouse sobre o toast
+        });
+        toastElement.addEventListener('mouseleave', () => {
+            resumeCountdown(); // Retomar a contagem ao tirar o mouse do toast
+        });
+        toastElement.querySelector('.btn-close').addEventListener('click', () => {
+            removerToast(toastObj.id); // Remover o toast da lista quando o botão de fechar é clicado manualmente
+            toast.hide(); // Fechar o toast manualmente ao clicar no botão de fechar
+        });
+        startCountdown(); // Iniciar a contagem do tempo e a barra de progresso
+
+        // Adicionando um ouvinte para remover o toast da lista quando for fechado
+        toastElement.addEventListener('hidden.bs.toast', () => {
+            removerToast(toastObj.id);
+            clearInterval(intervalId); // Limpa o intervalo quando o toast é fechado
+        });
     });
-    exibirToasts();
 }
 
 /// Função para exibir todos os toasts presentes na lista
-function exibirToasts() {
+function exibirToastsOK() {
     toasts.forEach((toastObj) => {
         const toastElement = document.getElementById(toastObj.id);
         const progressBar = toastElement.querySelector(`#progressBar-${toastObj.id}`);
@@ -378,3 +452,5 @@ function checkFileSize(event, alertId) {
 }
 
 
+var tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+var tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));

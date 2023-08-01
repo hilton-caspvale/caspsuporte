@@ -6,6 +6,7 @@ package caspvale.caspsuporte.modulos.atendimento.api.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.List;
+import javax.validation.constraints.NotEmpty;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -23,7 +24,9 @@ public class UsuariosAberturaModel {
     private static final long serialVersionUID = 1L;
     @EqualsAndHashCode.Include
     private Integer iUsuario;
+    @NotEmpty
     private String nlogin;
+    @NotEmpty
     private String nomeUsuario;
     private List<EntidadesDescricaoModel> caspEntidadesList;
     

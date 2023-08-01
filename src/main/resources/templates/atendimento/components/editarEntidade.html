@@ -106,10 +106,15 @@
             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" onclick="limparModal()">
                 <i class="fas fa-times"></i>
                 Fechar</button>
-            <button type='button' class='btn btn-success bg-gradient' data-bs-dismiss="modal" th:value="*{iEntidade}"
+            <button type='button' class='btn btn-success bg-gradient' th:value="*{iEntidade}"
                     onclick="editarEntidade(event)">
                 <i class="fas fa-check"></i>
                 Gravar</button>  
         </div>
     </div>
 </form>
+
+<script>
+    var tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    var tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+</script>

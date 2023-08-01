@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: caspvale.caspsuporte.CaspsuporteApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 30.338 s - in caspvale.caspsuporte.CaspsuporteApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 36.938 s - in caspvale.caspsuporte.CaspsuporteApplicationTests

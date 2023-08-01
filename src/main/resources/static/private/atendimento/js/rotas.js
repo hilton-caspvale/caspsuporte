@@ -34,7 +34,7 @@ var MV_A_ENTIDADE = MV_A + 'entidade';
 //requestFrontGestao
 var MV_A_SELECIONAR_USUARIO = MV_A + 'selecionar-usuario';
 var MV_A_MODAL_SISTEMA = MV_A + 'conteudoModalSistemas';
-var MV_A_MODAL_AREA = MV_A + 'conteudoModalArea';
+var MV_A_MODAL_AREA = MV_A + 'conteudoModalAreas';
 var MV_A_MODAL_PROBLEMA = MV_A + 'conteudoModalProblemas';
 var MV_A_MODAL_NIVEL = MV_A + 'conteudoModalNiveis';
 var MV_A_MODAL_ORIGEM = MV_A + 'conteudoModalOrigens';

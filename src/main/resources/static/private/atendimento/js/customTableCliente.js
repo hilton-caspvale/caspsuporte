@@ -45,8 +45,7 @@ function situacaoChamado(value) {
 }
 
 function acoesTabelaChamado(value) {
-    let url = "'/mv/atendimento/chamado/" + value + "','root'";
-    return '<div class="btn-group btn-group-sm" role="group"><a class="btn btn-outline-success" role="button"title="Abrir" data-id=' + value + ' onclick="carregaHtml(' + url + ')">' + value + '</a></div>';
+    return '<div class="btn-group btn-group-sm" role="group"><a class="btn btn-outline-success" role="button"title="Abrir" data-id=' + value + ' onclick="visualizarChamado(' + value + ')">' + value + '</a></div>';
 }
 
 function acoesTabela(uriModal, tituloModal, value) {

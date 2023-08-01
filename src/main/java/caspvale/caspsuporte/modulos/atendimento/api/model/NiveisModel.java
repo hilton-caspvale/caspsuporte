@@ -5,6 +5,7 @@
 package caspvale.caspsuporte.modulos.atendimento.api.model;
 
 
+import javax.validation.constraints.NotEmpty;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -20,6 +21,7 @@ public class NiveisModel {
     private static final long serialVersionUID = 1L;
     @EqualsAndHashCode.Include
     private Integer iNivel;
+    @NotEmpty
     private String descricaoNivel;
     private String situacaoNivel;
     //private List<CaspUsuariosConfig> caspUsuariosConfigList;

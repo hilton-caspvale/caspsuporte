@@ -1,0 +1,157 @@
+<div th:fragment="acoes" id="acoesdochamadoTop"> 
+    <nav class="nav navbar-expand-lg cor-g rounded-3 border-3 border-top border-success">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#acoesdochamadoTop" aria-controls="acoesdochamadoTop" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="row justify-content-between">
+                <div class="col col-md">
+                    <div class="collapse navbar-collapse" id="navbarAcoes">
+                        <div class="navbar-nav">
+                            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                                <div class="btn-group me-2" role="group" aria-label="First group">
+                                    <button type="button" class="btn btn-sm btn-outline-success rounded-1 nav-item border-0"
+                                            th:if="${atender}!=null"  
+                                            data-bs-toggle="modal" data-bs-target="#atenderModal">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pin-fill" viewBox="0 0 16 16">
+                                            <path d="M4.146.146A.5.5 0 0 1 4.5 0h7a.5.5 0 0 1 .5.5c0 .68-.342 1.174-.646 1.479-.126.125-.25.224-.354.298v4.431l.078.048c.203.127.476.314.751.555C12.36 7.775 13 8.527 13 9.5a.5.5 0 0 1-.5.5h-4v4.5c0 .276-.224 1.5-.5 1.5s-.5-1.224-.5-1.5V10h-4a.5.5 0 0 1-.5-.5c0-.973.64-1.725 1.17-2.189A5.921 5.921 0 0 1 5 6.708V2.277a2.77 2.77 0 0 1-.354-.298C4.342 1.674 4 1.179 4 .5a.5.5 0 0 1 .146-.354z"/>
+                                        </svg>
+                                        <u th:text="${atender}"></u>
+                                    </button>                                      
+                                    <button type="button" class="btn btn-sm btn-outline-success rounded-1 nav-item border-0"
+                                            th:if="${encerrar}!=null" onclick="btnEncerrar()"
+                                            data-bs-toggle="modal" data-bs-target="#encerrarModal">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                            <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+                                        </svg>
+                                        <u th:text="${encerrar}"></u>
+                                    </button> 
+                                    <button type="button" class="btn btn-sm btn-outline-success rounded-1 nav-item border-0"
+                                            th:if="${aguardarUsuario}!=null" name="acao"
+                                            data-bs-toggle="modal" data-bs-target="#aguardarUsuarioModal">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                                        </svg>
+                                        <u th:text="${aguardarUsuario}"></u>
+                                    </button>                        
+                                    <button type="button" class="btn btn-sm btn-outline-success rounded-1 nav-item border-0"
+                                            th:if="${reabrir}!=null" name="acao"
+                                            data-bs-toggle="modal" data-bs-target="#reabrirModal">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-unlock-fill" viewBox="0 0 16 16">
+                                            <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2z"/>
+                                        </svg>
+                                        <u th:text="${reabrir}"></u>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-success rounded-1 nav-item border-0"                                        
+                                            th:if="${deixarAtendimento}!=null" name="acao"
+                                            data-bs-toggle="modal" data-bs-target="#deixarAtendimentoModal">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pin-angle-fill" viewBox="0 0 16 16">
+                                            <path d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a5.927 5.927 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707-.195-.195.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a5.922 5.922 0 0 1 1.013.16l3.134-3.133a2.772 2.772 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146z"/>
+                                        </svg>
+                                        <u th:text="${deixarAtendimento}"></u>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-success rounded-1 nav-item border-0"   
+                                            th:if="${anexar}!=null"
+                                            name="acao"
+                                            data-bs-toggle="modal" data-bs-target="#enviarAnexoModal">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-paperclip" viewBox="0 0 16 16">
+                                            <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
+                                        </svg>
+                                        <u th:text="Anexar"></u>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-success rounded-1 nav-item border-0" 
+                                            th:if="${responder}!=null" name="acao"
+                                            data-bs-toggle="modal" data-bs-target="#responderModal">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-check" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                                            <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
+                                        </svg>
+                                        <u th:text="Responder"></u>
+                                    </button>
+                                </div>
+                                <div class="btn-group me-2" role="group" aria-label="Second group">
+                                    <button class="btn btn-sm dropend btn-outline-success rounded-1 border-0 dropdown-toggle" type="button" id="dropdownSubMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <u>Mais pções</u>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownSubMenu">
+                                        <li>
+                                            <button type="button" class="btn btn-sm btn-outline-success rounded-1 nav-item border-0"
+                                                    th:if="${comentario}!=null"
+                                                    data-bs-toggle="modal" data-bs-target="#comentarioModal">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-square-text-fill" viewBox="0 0 16 16">
+                                                    <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.5a1 1 0 0 0-.8.4l-1.9 2.533a1 1 0 0 1-1.6 0L5.3 12.4a1 1 0 0 0-.8-.4H2a2 2 0 0 1-2-2V2zm3.5 1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 2.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5z"/>
+                                                </svg>
+                                                <u th:text="${comentario}"></u>
+                                            </button>
+                                        </li>
+                                        <li> 
+                                            <button type="button" class="btn btn-sm btn-outline-success rounded-1 nav-item border-0"
+                                                    th:if="${editar}!=null"
+                                                    id="btEditarChamado"
+                                                    th:attr="data-id=*{iChamado}"
+                                                    onclick="chamadoEdicao(event)"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top" 
+                                                    title="Editar atendimento">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                                                    <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
+                                                </svg>
+                                                <u th:text="${editar}"></u>
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button type="button" class="btn btn-sm btn-outline-success rounded-1 nav-item border-0"
+                                                    th:if="${agendar}!=null"
+                                                    data-bs-toggle="modal" data-bs-target="#agendarModal">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar3-event-fill" viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2h16a2 2 0 0 0-2-2H2zM0 14V3h16v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm12-8a1 1 0 1 0 2 0 1 1 0 0 0-2 0z"/>
+                                                </svg>
+                                                <u th:text="${agendar}"></u>
+                                            </button>
+                                        </li>                                                                                
+                                        <li>
+                                            <button type="button" class="btn btn-sm btn-outline-success rounded-1 nav-item border-0"
+                                                    th:if="${enviarEstudo}!=null" name="acao"
+                                                    data-bs-toggle="modal" data-bs-target="#enviarEstudoModal">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
+                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                                                </svg>
+                                                <u th:text="${enviarEstudo}"></u>
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button type="button" class="btn btn-sm btn-outline-success rounded-1 nav-item border-0"
+                                                    th:if="${encaminhar}!=null" 
+                                                    data-bs-toggle="modal" data-bs-target="#encaminharModal">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-circle-fill" viewBox="0 0 16 16">
+                                                    <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
+                                                </svg>
+                                                <u th:text="${encaminhar}"></u>
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button type="button" class="btn btn-sm btn-outline-success rounded-1 nav-item border-0"
+                                                    th:if="${cancelar}!=null" 
+                                                    data-bs-toggle="modal" data-bs-target="#cancelarModal">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-octagon-fill" viewBox="0 0 16 16">
+                                                    <path d="M11.46.146A.5.5 0 0 0 11.107 0H4.893a.5.5 0 0 0-.353.146L.146 4.54A.5.5 0 0 0 0 4.893v6.214a.5.5 0 0 0 .146.353l4.394 4.394a.5.5 0 0 0 .353.146h6.214a.5.5 0 0 0 .353-.146l4.394-4.394a.5.5 0 0 0 .146-.353V4.893a.5.5 0 0 0-.146-.353L11.46.146zm-6.106 4.5L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+                                                </svg>
+                                                <u th:text="${cancelar}"></u>
+                                            </button>
+                                        </li>                                        
+                                    </ul>
+                                </div>
+                                <div class="btn-group" role="group" aria-label="Third group">
+                                    <button type="button" class="btn btn-sm btn-outline-success rounded-1 nav-item border-0"                                        
+                                            onclick="visualizarChamado(3);"
+                                            title="Voltar para o painel">
+                                        <i class="fas fa-arrow-left"></i> 
+                                    </button>
+                                </div>
+                            </div>    
+                        </div>
+                    </div>                                    
+                </div>
+            </div>
+        </div>            
+    </nav>
+</div>

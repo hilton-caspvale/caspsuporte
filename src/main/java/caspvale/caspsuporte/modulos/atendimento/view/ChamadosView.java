@@ -255,7 +255,7 @@ public class ChamadosView {
             String role = rotas.role();
             switch (chamado.getISituacao().getDescricaoSituacao()) {
                 case "AGUARDANDO ATENDIMENTO":
-                    if (role.equals("ANALISTA")) {
+                    if (rotas.roleAnalistaAdmin()) {
                         mv.addObject("atender", "Atender");
                         mv.addObject("anexar", "Anexar");
                         mv.addObject("agendar", "Agendar");
@@ -274,7 +274,7 @@ public class ChamadosView {
 
                     break;
                 case "EM ATENDIMENTO":
-                    if (role.equals("ANALISTA")) {
+                    if (rotas.roleAnalistaAdmin()) {
                         if (Objects.equals(chamado.getIUsuarioAtendimento().getIUsuario(), usuarioLogado.getIUsuario())) {
                             mv.addObject("encerrar", "Encerrar");
                             mv.addObject("cancelar", "Cancelar");
@@ -302,7 +302,7 @@ public class ChamadosView {
                     }
                     break;
                 case "ENCAMINHADO":
-                    if (role.equals("ANALISTA")) {
+                    if (rotas.roleAnalistaAdmin()) {
                         mv.addObject("atender", "Atender");
                         mv.addObject("anexar", "Anexar");
                         mv.addObject("comentario", "Comentário");
@@ -314,7 +314,7 @@ public class ChamadosView {
                     }
                     break;
                 case "AGUARDANDO CHAMADO EXTERNO":
-                    if (role.equals("ANALISTA")) {
+                    if (rotas.roleAnalistaAdmin()) {
                         mv.addObject("atender", "Atender");
                         mv.addObject("anexar", "Anexar");
                         mv.addObject("comentario", "Comentário");
@@ -326,7 +326,7 @@ public class ChamadosView {
                     }
                     break;
                 case "AGUARDANDO USUÁRIO":
-                    if (role.equals("ANALISTA")) {
+                    if (rotas.roleAnalistaAdmin()) {
                         mv.addObject("atender", "Atender");
                         mv.addObject("anexar", "Anexar");
                         mv.addObject("comentario", "Comentário");
@@ -339,7 +339,7 @@ public class ChamadosView {
                     }
                     break;
                 case "EM ESTUDO":
-                    if (role.equals("ANALISTA")) {
+                    if (rotas.roleAnalistaAdmin()) {
                         mv.addObject("atender", "Atender");
                         mv.addObject("anexar", "Anexar");
                         mv.addObject("comentario", "Comentário");
@@ -351,7 +351,7 @@ public class ChamadosView {
                     }
                     break;
                 case "AGENDADO":
-                    if (role.equals("ANALISTA")) {
+                    if (rotas.roleAnalistaAdmin()) {
                         mv.addObject("atender", "Atender");
                         mv.addObject("anexar", "Anexar");
                         mv.addObject("comentario", "Comentário");
@@ -363,7 +363,7 @@ public class ChamadosView {
                     }
                     break;
                 case "ENCERRADO":
-                    if (role.equals("ANALISTA")) {
+                    if (rotas.roleAnalistaAdmin()) {
                         mv.addObject("reabrir", "Reabrir");
                         mv.addObject("comentario", "Comentário");
                     } else {
@@ -374,7 +374,7 @@ public class ChamadosView {
                     }
                     break;
                 case "CANCELADO":
-                    if (role.equals("ANALISTA")) {
+                    if (rotas.roleAnalistaAdmin()) {
                         mv.addObject("reabrir", "Reabrir");
                         mv.addObject("comentario", "Comentário");
                     } else {

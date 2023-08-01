@@ -1,6 +1,7 @@
 package caspvale.caspsuporte.modulos.atendimento.api.model;
 
 
+import javax.validation.constraints.NotEmpty;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -16,7 +17,9 @@ public class SituacoesModel {
     private static final long serialVersionUID = 1L;
     @EqualsAndHashCode.Include
     private Integer iSituacao;
+    @NotEmpty
     private String descricaoSituacao;
+    @NotEmpty
     private String situacao;
     
     @Override

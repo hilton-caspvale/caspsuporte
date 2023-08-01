@@ -6,6 +6,7 @@ package caspvale.caspsuporte.modulos.atendimento.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
+import javax.validation.constraints.NotEmpty;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -21,6 +22,7 @@ public class EntidadesInputModel {
     private static final long serialVersionUID = 1L;
     @EqualsAndHashCode.Include
     private Integer iEntidade;
+    @NotEmpty
     private String nomeEntidade;    
     
     @Override

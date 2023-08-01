@@ -31,7 +31,7 @@ and open the template in the editor.
 }
 
 .casp-margens{
-/*    padding-top: 3rem;*/
+    /*    padding-top: 3rem;*/
     margin-top: 4.2rem;
 }
 
@@ -49,35 +49,35 @@ and open the template in the editor.
 }
 
 .cor-compras{
-    background-color: #cc0066;    
+    background-color: #cc0066;
 }
 
 .cor-tributos{
-    background-color: #009966;    
+    background-color: #009966;
 }
 
 .cor-rh{
-    background-color: #008fa1;    
+    background-color: #008fa1;
 }
 
 .cor-contabil{
-    background-color: #9999ff;    
+    background-color: #9999ff;
 }
 
 .cor-betha{
-    background-color: #084298;    
+    background-color: #084298;
 }
 
 .cor-saude{
-    background-color: #008fa1;    
+    background-color: #008fa1;
 }
 
 .cor-suporte{
-    background-color: darkgrey;    
+    background-color: darkgrey;
 }
 
 .cor-verd{
-    background-color: #c3ffb8;    
+    background-color: #c3ffb8;
 }
 
 .cor-logocasp{
@@ -107,5 +107,31 @@ table {
 }
 
 .casp-span{
-    padding: 7px;margin-right: 3px;margin-top: 3px;
+    padding: 7px;
+    margin-right: 3px;
+    margin-top: 3px;
+}
+
+/* Remova a classe .progress-bar-animated e a animação do CSS */
+.custom-progress-bar {
+    width: 100%;
+}
+
+/* Adicione a animação global para a barra de progresso */
+@keyframes toast-progress {
+    from {
+        width: 100%;
+    }
+    to {
+        width: 0;
+    }
+}
+
+.quebra-texto {
+    word-wrap: break-word; /* Isso fará com que o texto quebre em várias linhas quando atingir o limite da célula */
+    max-width: 5px; /* Aqui você pode definir o tamanho máximo da célula */
+}
+
+.navbar-brand, .dropdown-item{
+    cursor: pointer;
 }

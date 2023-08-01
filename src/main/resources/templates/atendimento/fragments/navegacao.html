@@ -1,0 +1,194 @@
+<div th:fragment="nav-atendimento">
+    <nav class="navbar navbar-expand-sm navbar-light rounded" 
+         style="--bs-breadcrumb-divider: '>';padding: 5px">            
+        <a class="navbar-brand breadcrumb-item" th:href="@{/}">
+            <i class="fas fa-home" style="margin-left: 10px;"></i>
+            Início                
+        </a>
+        <a class="navbar-brand breadcrumb-item">
+            <i class="fab fa-adn"></i>
+            Atendimento
+        </a>
+    </nav>
+</div>
+
+<div th:fragment="inicio">
+    <a class="navbar-brand breadcrumb-item" onclick="moduloAtendimento()">
+        <i class="fas fa-home" style="margin-left: 10px;"></i>
+        Início                
+    </a>
+</div>
+
+<div th:fragment="atendimento">
+    <a class="navbar-brand breadcrumb-item icone-link"  onclick="moduloAtendimento()">
+        <i class="fab fa-adn"></i>
+        Atendimento
+    </a>
+</div>
+
+<div th:fragment="area">
+    <a class="navbar-brand breadcrumb-item">
+        <i class="fab fa-elementor"></i>
+        Áreas
+    </a>
+</div>
+
+<div th:fragment="cliente">
+    <a class="navbar-brand breadcrumb-item">
+        <i class="fas fa-user"></i>
+        Clientes
+    </a>
+</div>
+
+<div th:fragment="usuario">
+    <a class="navbar-brand breadcrumb-item">
+        <i class="fas fa-user"></i>
+        Usuários
+    </a>
+</div>
+
+<div th:fragment="nivel">
+    <a class="navbar-brand breadcrumb-item">
+        <i class="fas fa-list-ol"></i>
+        Níveis
+    </a>
+</div>
+
+<div th:fragment="sistema">
+    <a class="navbar-brand breadcrumb-item">
+        <i class="fas fa-laptop"></i>
+        Sistemas
+    </a>
+</div>
+
+<div th:fragment="problema">
+    <a class="navbar-brand breadcrumb-item">
+        <i class="fas fa-tools"></i>
+        Problemas
+    </a>
+</div>
+
+<div th:fragment="origem">
+    <a class="navbar-brand breadcrumb-item">
+        <i class="fas fa-map-pin"></i>
+        Origens
+    </a>
+</div>
+
+<div th:fragment="entidade">
+    <a class="navbar-brand breadcrumb-item">
+        <i class="fas fa-building"></i>
+        Entidades
+    </a>
+</div>
+
+<div th:fragment="tipo-arquivo">
+    <a class="navbar-brand breadcrumb-item">
+        <i class="fas fa-file"></i>
+        Tipos de Arquivo
+    </a>
+</div>
+
+<div th:fragment="tipo-entidade">
+    <a class="navbar-brand breadcrumb-item">
+        <i class="fas fa-building"></i>
+        Tipos de Entidade
+    </a>
+</div>
+
+<div th:fragment="navegar-inicio">
+    <nav class="navbar navbar-expand-sm navbar-light rounded" 
+         style="--bs-breadcrumb-divider: '>';padding: 5px">            
+        <div th:replace="atendimento/fragments/navegacao :: inicio"></div>   
+    </nav>
+</div>
+
+<div th:fragment="navegar-atendimento">
+    <nav class="navbar navbar-expand-sm navbar-light rounded " 
+         style="--bs-breadcrumb-divider: '>';padding: 5px">            
+        <div th:replace="atendimento/fragments/navegacao :: inicio"></div>  
+        <div th:replace="atendimento/fragments/navegacao :: atendimento"></div>  
+    </nav>
+</div>
+
+<div th:fragment="navegar-area">
+    <nav class="navbar navbar-expand-sm navbar-light rounded" 
+         style="--bs-breadcrumb-divider: '>';padding: 5px">            
+        <div th:replace="atendimento/fragments/navegacao :: atendimento"></div>  
+        <div th:replace="atendimento/fragments/navegacao :: area"></div>  
+    </nav>
+</div>
+
+<div th:fragment="navegar-usuario">
+    <nav class="navbar navbar-expand-sm navbar-light rounded" 
+         style="--bs-breadcrumb-divider: '>';padding: 5px">            
+        <div th:replace="atendimento/fragments/navegacao :: atendimento"></div>  
+        <div th:replace="atendimento/fragments/navegacao :: usuario"></div>  
+    </nav>
+</div>
+
+<div th:fragment="navegar-cliente">
+    <nav class="navbar navbar-expand-sm navbar-light rounded" 
+         style="--bs-breadcrumb-divider: '>';padding: 5px">            
+        <div th:replace="atendimento/fragments/navegacao :: atendimento"></div>  
+        <div th:replace="atendimento/fragments/navegacao :: cliente"></div>  
+    </nav>
+</div>
+
+<div th:fragment="navegar-nivel">
+    <nav class="navbar navbar-expand-sm navbar-light rounded" 
+         style="--bs-breadcrumb-divider: '>';padding: 5px">            
+        <div th:replace="atendimento/fragments/navegacao :: atendimento"></div>  
+        <div th:replace="atendimento/fragments/navegacao :: nivel"></div>  
+    </nav>
+</div>
+
+<div th:fragment="navegar-origem">
+    <nav class="navbar navbar-expand-sm navbar-light rounded" 
+         style="--bs-breadcrumb-divider: '>';padding: 5px">            
+        <div th:replace="atendimento/fragments/navegacao :: atendimento"></div>  
+        <div th:replace="atendimento/fragments/navegacao :: origem"></div>  
+    </nav>
+</div>
+
+<div th:fragment="navegar-problema">
+    <nav class="navbar navbar-expand-sm navbar-light rounded" 
+         style="--bs-breadcrumb-divider: '>';padding: 5px">            
+        <div th:replace="atendimento/fragments/navegacao :: atendimento"></div>  
+        <div th:replace="atendimento/fragments/navegacao :: problema"></div>  
+    </nav>
+</div>
+
+<div th:fragment="navegar-entidade">
+    <nav class="navbar navbar-expand-sm navbar-light rounded" 
+         style="--bs-breadcrumb-divider: '>';padding: 5px">            
+        <div th:replace="atendimento/fragments/navegacao :: atendimento"></div>  
+        <div th:replace="atendimento/fragments/navegacao :: entidade"></div>  
+    </nav>
+</div>
+
+<div th:fragment="navegar-sistema">
+    <nav class="navbar navbar-expand-sm navbar-light rounded" 
+         style="--bs-breadcrumb-divider: '>';padding: 5px">            
+        <div th:replace="atendimento/fragments/navegacao :: atendimento"></div>  
+        <div th:replace="atendimento/fragments/navegacao :: sistema"></div>  
+    </nav>
+</div>
+
+<div th:fragment="navegar-tipo-arquivo">
+    <nav class="navbar navbar-expand-sm navbar-light rounded" 
+         style="--bs-breadcrumb-divider: '>';padding: 5px">            
+        <div th:replace="atendimento/fragments/navegacao :: atendimento"></div>  
+        <div th:replace="atendimento/fragments/navegacao :: tipo-arquivo"></div>  
+    </nav>
+</div>
+
+<div th:fragment="navegar-tipo-entidade">
+    <nav class="navbar navbar-expand-sm navbar-light rounded" 
+         style="--bs-breadcrumb-divider: '>';padding: 5px">            
+        <div th:replace="atendimento/fragments/navegacao :: atendimento"></div>  
+        <div th:replace="atendimento/fragments/navegacao :: tipo-entidade"></div>  
+    </nav>
+</div>
+
+

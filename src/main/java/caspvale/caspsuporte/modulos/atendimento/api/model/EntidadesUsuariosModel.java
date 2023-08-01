@@ -2,6 +2,7 @@ package caspvale.caspsuporte.modulos.atendimento.api.model;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.validation.constraints.NotEmpty;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -16,6 +17,7 @@ import lombok.EqualsAndHashCode;
 public class EntidadesUsuariosModel implements Serializable {
 private static final long serialVersionUID = 1L;
     private Integer iEntidade;
+    @NotEmpty
     private String nomeEntidade;
     private String cnpjEntidade;
     private String telefoneEntidade;

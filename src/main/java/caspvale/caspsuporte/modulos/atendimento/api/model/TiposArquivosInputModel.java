@@ -5,6 +5,7 @@
 package caspvale.caspsuporte.modulos.atendimento.api.model;
 
 
+import javax.validation.constraints.NotEmpty;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -19,5 +20,6 @@ import lombok.EqualsAndHashCode;
 public class TiposArquivosInputModel {
     private static final long serialVersionUID = 1L;
     @EqualsAndHashCode.Include
+    @NotEmpty
     private String descricaoTipoArquivo;
 }

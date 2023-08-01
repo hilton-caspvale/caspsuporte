@@ -5,6 +5,7 @@
 package caspvale.caspsuporte.modulos.atendimento.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.validation.constraints.NotEmpty;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -20,6 +21,7 @@ public class TiposUsuariosModel {
     private static final long serialVersionUID = 1L;
     @EqualsAndHashCode.Include
     private Integer iTipoUsuario;
+    @NotEmpty
     private String descricaoTipoUsuario;
     private String situacaoTipoUsuario;
     

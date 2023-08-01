@@ -1,7 +1,11 @@
 <div th:fragment="tabelaEntidades">
+    <div id="toolbar">
+        <div th:replace="atendimento/fragments/navegacao :: navegar-entidade"></div>
+    </div>  
     <div class="tab-content">
         <div class="table-responsive">
             <table id="table"
+                   data-toolbar="#toolbar"
                    data-toggle="table"
                    data-search="true"     
                    data-search-accent-neutralise="true"                           

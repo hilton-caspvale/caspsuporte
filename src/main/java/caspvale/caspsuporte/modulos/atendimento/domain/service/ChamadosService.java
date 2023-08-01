@@ -1,5 +1,6 @@
 package caspvale.caspsuporte.modulos.atendimento.domain.service;
 
+import caspvale.caspsuporte.modulos.atendimento.common.OperacoesTexto;
 import caspvale.caspsuporte.modulos.atendimento.domain.model.CaspChamados;
 import caspvale.caspsuporte.modulos.atendimento.domain.model.CaspSituacoes;
 import caspvale.caspsuporte.modulos.atendimento.domain.model.CaspUsuarios;
@@ -105,7 +106,7 @@ public class ChamadosService {
     }
 
     @Transactional
-    public CaspChamados movimentarChamado(CaspChamados caspChamado, String acao, String mensagem, CaspUsuarios usuarioLogado, String agenda, Integer usuarioEncaminhar) {
+    public CaspChamados movimentarChamado(CaspChamados caspChamado, String acao, String comentario, CaspUsuarios usuarioLogado, String agenda, Integer usuarioEncaminhar) {
 
         switch (acao) {
             case "atender":
@@ -157,11 +158,16 @@ public class ChamadosService {
         if (acaoPermitidaParaSituacaoDoChamado(caspChamado, acao)) {
             gravar(caspChamado);
         }
-
-        if (mensagem != null) {
-            anexosService.adicionarComentario(caspChamado, usuarioLogado, mensagem);
+        OperacoesTexto operacoesTexto = new OperacoesTexto();
+        
+        if (acao.equals("comentario")) {
+            if (operacoesTexto.textoVazio(comentario)) {
+                throw new NegocioException("Não foi informado um comentário!");
+            }
         }
-
+        if (!operacoesTexto.textoVazio(comentario)) {
+            anexosService.adicionarComentario(caspChamado, usuarioLogado, comentario);
+        }
         return caspChamado;//"Chamado "+caspChamado.getIChamado()+" atualizado!";
     }
 

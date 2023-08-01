@@ -5,6 +5,7 @@
 package caspvale.caspsuporte.modulos.atendimento.domain.service;
 
 import caspvale.caspsuporte.modulos.atendimento.common.ManipulaArquivos;
+import caspvale.caspsuporte.modulos.atendimento.common.OperacoesTexto;
 import caspvale.caspsuporte.modulos.atendimento.common.Permissoes;
 import caspvale.caspsuporte.modulos.atendimento.domain.model.CaspAnexos;
 import caspvale.caspsuporte.modulos.atendimento.domain.model.CaspArquivos;
@@ -83,7 +84,7 @@ public class AnexosService {
     public void adicionarArquivo(CaspChamados caspChamado, CaspUsuarios caspUsuariologado, List<MultipartFile> file, String comentarioAnexo) {
         manipulaArquivos.tamanhoPermitido(file);
         gravarArquivosAnexados(caspChamado, file, caspUsuariologado);
-        if (!comentarioAnexo.equals("")) {
+        if (!new OperacoesTexto().textoVazio(comentarioAnexo)) {
             adicionarComentario(caspChamado, caspUsuariologado, comentarioAnexo);
         }
     }

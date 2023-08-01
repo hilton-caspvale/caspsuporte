@@ -226,9 +226,8 @@ function criarCliente(event) {
     requestDef(clientesPath + event.currentTarget.value, 'POST', getCliente('#cadastroUsuarioModal'))
             .then(response => {
                 carregarToast("Cliente [" + response.nlogin + "] cadastrado!", "sucesso");
-                limparAlertaModal();
-                fecharModal('#modal');
                 atualizarTabela('table');
+                limparModal();
             })
             .catch(error => {
                 requestError(error, 'alertaModal');
@@ -250,9 +249,8 @@ function criarUsuario(event) {
     requestDef(usuariosPath + event.currentTarget.value, 'POST', getUsuario('#cadastroUsuarioModal'))
             .then(response => {
                 carregarToast("Usuário [" + response.nlogin + "] cadastrado!", "sucesso");
-                limparAlertaModal();
-                fecharModal('#modal');
                 atualizarTabela('table');
+                limparModal();
             })
             .catch(error => {
                 requestError(error, 'alertaModal');
@@ -263,8 +261,7 @@ function editarUsuario(event) {
     requestDef(usuariosPath + event.currentTarget.value, 'PUT', getUsuario('#cadastroUsuarioModal'))
             .then(response => {
                 carregarToast("Usuário [" + response.nlogin + "] atualizado!", "sucesso");
-                limparAlertaModal();
-                fecharModal('#modal');
+                limparModal();
             })
             .catch(error => {
                 requestError(error, 'alertaModal');
@@ -287,8 +284,7 @@ function editarUsuarioAbertura(event) {
     requestDef(uri, 'PUT', usuario)
             .then(response => {
                 carregarToast("Usuário [" + response.nlogin + "] atualizado!", "sucesso");
-                limparAlertaModal();
-                fecharModal('#modal');
+                limparModal();
                 requestMV(MV_A_CHAMADO + '?user=' + login);
             })
             .catch(error => {
@@ -300,8 +296,7 @@ function criarClienteAbertura(event) {
     requestDef(clientesPath + event.currentTarget.value, 'POST', getCliente('#cadastroUsuarioModalAbertura'))
             .then(response => {
                 carregarToast("Usuário [" + response.nlogin + "] cadastrado!", "sucesso");
-                limparAlertaModal();
-                fecharModal('#modal');
+                limparModal();
                 requestMV(MV_A_CHAMADO + '?user=' + response.nlogin);
             })
             .catch(error => {

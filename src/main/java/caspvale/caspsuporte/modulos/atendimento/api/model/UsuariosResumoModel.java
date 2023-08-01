@@ -8,6 +8,7 @@ import caspvale.caspsuporte.modulos.atendimento.domain.model.CaspTiposUsuarios;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 
@@ -26,7 +27,9 @@ public class UsuariosResumoModel {
     private static final long serialVersionUID = 1L;
     @EqualsAndHashCode.Include
     private Integer iUsuario;
+    @NotEmpty
     private String nlogin;
+    @NotEmpty
     private String nomeUsuario;
     private String situacaoUsuario;
     private TiposUsuariosInputModel iTipoUsuario;
