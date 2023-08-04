@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Tabela de Dados</title>
+        <!-- Incluir os links para Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Incluir o CSS do Tabulator -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/tabulator/5.1.0/css/tabulator.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+            <button class="btn btn-secondary" onclick="testes()">Teste1</button>
+            <h1>Tabela de Dados</h1>
+            <div id="tabela-dados"></div>
+        </div>
+        
+        <!-- Incluir o script do jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <!-- Incluir o script do Tabulator -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tabulator/5.1.0/js/tabulator.min.js"></script>
+
+        <script>
+                function tab() {
+                    let json = JSON.parse(JSON.stringify(testes()));
+                    console.log("json: " + json);
+                    criarTabela(json);
+                }
+
+                function testes() {
+                    fetch('atendimento/sistemas')
+                            .then(response => {
+                                response.json()
+                                        .then(json => {
+                                            criarTabela(json);
+                                        });
+                            })
+                            .catch(error => {
+                                alert(error);
+                            });
+                    ;
+                }
+                // Supondo que você já tenha os dados JSON retornados do endpoint
+                const dadosEndpoint1 = [
+                    {
+                        "nome": "João",
+                        "idade": 30,
+                        "cidade": "São Paulo"
+                    },
+                    {
+                        "nome": "Maria",
+                        "idade": 25,
+                        "cidade": "Rio de Janeiro"
+                    }
+                ];
+
+                const dadosEndpoint2 = [
+                    {
+                        "first_name": "José",
+                        "last_name": "Silva",
+                        "age": 35,
+                        "address": {
+                            "city": "Curitiba",
+                            "country": "Brasil"
+                        }
+                    },
+                    {
+                        "first_name": "Ana",
+                        "last_name": "Pereira",
+                        "age": 28,
+                        "address": {
+                            "city": "Belo Horizonte",
+                            "country": "Brasil"
+                        }
+                    }
+                ];
+
+                // Função para criar a tabela usando o Tabulator
+                function criarTabela(dados) {
+                    const tabelaDiv = document.getElementById('tabela-dados');
+                    new Tabulator(tabelaDiv, {
+                        data: dados,
+                        layout: "fitDataStretch", // Ajusta o tamanho das colunas de acordo com o conteúdo
+                        columns: Object.keys(dados[0]).map(key => ({title: key, field: key})),
+                        tableClass: "table table-bordered table-striped"
+                    });
+                }
+
+                // Chamar a função para criar a tabela
+                criarTabela(dadosEndpoint1); // Exemplo de dados do primeiro endpoint
+                criarTabela(dadosEndpoint2); // Exemplo de dados do segundo endpoint
+
+                // Função para criar a tabela usando o Tabulator
+                function criarTabela2(dados) {
+                    const tabelaDiv = document.getElementById('tabela-dados');
+                    new Tabulator(tabelaDiv, {
+                        data: dados,
+                        layout: "fitDataStretch", // Ajusta o tamanho das colunas de acordo com o conteúdo
+                        columns: [
+                            {title: "Nome", field: "nome"},
+                            {title: "Idade", field: "idade"},
+                            {title: "Cidade", field: "endereco.cidade"}, // Acessando o subconjunto "endereco"
+                            {title: "País", field: "endereco.pais"} // Acessando o subconjunto "endereco"
+                        ],
+                    });
+                }
+        </script>
+    </body>
+</html>

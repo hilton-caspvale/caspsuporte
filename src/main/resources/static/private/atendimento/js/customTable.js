@@ -20,6 +20,10 @@ function spanTabela(value) {
     return '<span class="badge text-dark">' + value + '</span>';
 }
 
+function spanLogin(value) {
+    return '<span class="badge bg-secondary bg-gradient loginlog">' + value + '</span>';
+}
+
 function situacaoTabela(value) {
     if (value === 'A') {
         return '<span class="badge bg-success bg-gradient">Ativo</span>';
@@ -233,7 +237,7 @@ function acoesTabelaAdminUsuarios(value) {
     return '<div class="btn-group btn-group-sm" role="group"><a role="button" class="btn btn-outline-secondary" data-id=' + value + ' onclick="modalUsuarios(' + value + ')"><i class="fas fa-pencil-alt"></i></a>' + botaoSenha + '</div>';
 }
 
-function botaoEditarUsuario() {    
+function botaoEditarUsuario() {
     const evento = function () {
         modalUsuarios();
     };

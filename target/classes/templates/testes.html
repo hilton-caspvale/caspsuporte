@@ -1,32 +1,107 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org/"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-    <head th:fragment="header">
-        <title>CASPVALE</title>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>        
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous"/>                                    
-        <link rel="stylesheet" type="text/css" href="/public/css/style.css"/>
-    </head> 
-    <body>
-        <div id="clasid" value="didi">
-            <input id="a" value="55" class="clasitem" text="asdf">
-            </input>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                    >Voltar</button>
-            <button type="button" class="btn btn-success" data-bs-dismiss="modal"
-                    th:value=1 onclick="testes()">
-                Atender
-            </button>
-        </div>
-    </body>
-    <script>
-        function testes(){
-            const elementInContainer = document.querySelector('#clasid > #a');
+<html>
+    <head>
+        <title>JSON Formatter</title>
+        <!-- Incluir o CSS do Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            /* Estilo para o conteúdo JSON */
+            pre {
+                background-color: #f8f8f8;
+                border: 1px solid #ddd;
+                padding: 10px;
+                overflow-x: auto;
+                max-width: 800px;
+                margin: 0 auto;
+            }
 
-            
-            alert('Tt: '+elementInContainer.value);
-        }
-    </script>
+            /* Estilo para destacar as chaves do JSON */
+            .json-key {
+                color: #d73a49; /* Vermelho escuro (ou outra cor de sua escolha) */
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1 class="text-center">JSON Tree View</h1>
+
+            <!-- Input para inserir a URL do endpoint -->
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="input-group mb-3">
+                        <input type="text" id="endpoint-url" class="form-control" placeholder="Insira a URL do endpoint">
+                        <button class="btn btn-primary" onclick="loadJSONFromEndpointExterno()">Carregar</button>
+                    </div>
+                </div>
+            </div>
+
+
+            <h1 class="text-center">JSON Formatter</h1>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <pre>
+          <!-- JSON será exibido aqui com identação -->
+                    </pre>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Função para fazer a requisição do JSON para o endpoint desejado
+            //https://tributos.betha.cloud/service-layer-tributos/api/imoveis
+            function getJSONFromEndpointExterno(endpoint) {
+                let header = new Headers({
+                    'Content-Type': 'application/json;charset=utf-8',
+                    'Authorization': 'Bearer 83a89256-46d0-4e16-8e04-06d30e2e59c8'
+                });
+                let conteudo = {
+                    method: 'GET',
+                    headers: header
+                };
+                return fetch(endpoint, conteudo)
+                        .then(response => response.json())
+                        .then(data => data)
+                        .catch(error => console.error(error));
+            }
+            // Função para fazer a requisição do JSON para o endpoint desejado
+            function getJSONFromEndpoint(endpoint) {
+                return fetch(endpoint)
+                        .then(response => response.json())
+                        .then(data => data)
+                        .catch(error => console.error(error));
+            }
+
+            // Função para adicionar o destaque para as chaves do JSON
+            function addKeyHighlighting(jsonData) {
+                return JSON.stringify(jsonData, null, 2)
+                        .replace(/"(\w+)"(?=\s*:)/g, '"<span class="json-key">$1</span>"');
+            }
+
+            // Função para exibir o JSON formatado na página com o destaque para as chaves
+            function displayFormattedJSON(jsonData) {
+                const container = document.querySelector('pre');
+
+                // Converter o JSON em string com identação e destaque para as chaves
+                container.innerHTML = addKeyHighlighting(jsonData);
+            }
+
+            // Endpoint desejado para obter o JSON (substitua pelo seu endpoint)
+            const endpoint = 'https://exemplo.com/api/dados';
+
+            // Fazer a requisição do JSON e exibir na página quando estiver pronto
+            function loadJSONFromEndpoint() {
+                let uri = document.querySelector('#endpoint-url').value;
+                getJSONFromEndpoint(uri)
+                        .then(jsonData => displayFormattedJSON(jsonData));
+            }
+
+            function loadJSONFromEndpointExterno() {
+                let uri = document.querySelector('#endpoint-url').value;
+                getJSONFromEndpointExterno(uri)
+                        .then(jsonData => displayFormattedJSON(jsonData));
+            }
+
+        </script>
+    </body>
 </html>

@@ -1,0 +1,22 @@
+<div class="btn-toolbar align-content-center" role="toolbar">
+    <div class="btn-group me-2" role="group" aria-label="Second group">
+        <a class="btn btn-outline-success" onclick="moduloAtendimento()"><i class="bi bi-house-fill"></i></a>
+        <a class="btn btn-outline-success" onclick="chamadoUsuarioLogado()"><i class="bi bi-plus-square-fill"></i></a>
+    </div>
+</div>
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle text-success" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Cadastros
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <li><a class="dropdown-item" href="/atendimento/novo" target="_blank">Chamado em nova guia</a></li>         
+        <li><a class="dropdown-item" onclick="cadastroSistemas()">Sistemas</a></li>        
+        <li><a class="dropdown-item" onclick="cadastroProblemas()">Problemas</a></li>  
+        <li><a class="dropdown-item" onclick="cadastroOrigens()">Origens</a></li>
+        <li><a class="dropdown-item" onclick="cadastroTipoArquivos()">Tipo de Arquivo</a></li>
+        <li><a class="dropdown-item" onclick="cadastroTipoEntidades()">Tipo de Entidade</a></li>
+        <li><a class="dropdown-item" onclick="cadastroEntidades()">Entidades</a></li>
+        <li><a class="dropdown-item" onclick="cadastroClientes()">Clientes</a></li>
+
+    </ul>
+</li>

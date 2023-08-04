@@ -31,6 +31,25 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="menuPrincipal"/>
                 </div>
                 <span class="badge bg-secondary bg-gradient loginlog" th:text="'Usuário: '+${login}" th:id="${login}"></span>
+                <div th:replace="atendimento/fragments/menuPrincipal :: menu-modulos"></div>
+                <div class="btn-group btn-group-sm" role="group" aria-label="Third group">
+                    <a type="button" class="btn btn-danger" href="/logout">Sair</a>
+                </div>
+            </div>
+            <!--<div class="container-fluid">
+                <a class="navbar-brand" href="/">
+                    <img src="/public/imagens/casp.png" class="align-content-center">
+                        CASPVALE
+                    </img>    
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>   
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="menuPrincipal"/>
+                </div>
+                <span class="badge bg-secondary bg-gradient loginlog" th:text="'Usuário: '+${login}" th:id="${login}"></span>
                 <div class="btn-group p-1" role="group" aria-label="Basic radio toggle button group">
                     <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked
                            th:if="${role} == '[ANALISTA]'? 'true' : (${role} == '[ADMINISTRADOR]'? 'true' : false)"/>
@@ -50,7 +69,7 @@
                 <div class="btn-group p-1" role="group" aria-label="Third group">
                     <a type="button" class="btn btn-danger" href="/logout">Sair</a>
                 </div>
-            </div>
+            </div>-->
         </nav>        
         <section> 
             <main class="container">                 

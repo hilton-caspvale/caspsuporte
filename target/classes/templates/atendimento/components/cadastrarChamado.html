@@ -145,6 +145,18 @@
                                                 contenteditable="false"/>
                                     </select>
                                 </div>
+                                <div th:if="${areasDoUsuario.isEmpty}">
+                                    <select class="form-control choicesmultiple link-success" 
+                                            multiple=""   
+                                            th:field="*{caspAreasList}"
+                                            id="areas"
+                                            placeholder="Área">
+                                        <option th:each="area : ${areasDoUsuario}"                                                         
+                                                th:value="${area}"                                                         
+                                                th:text="${area.descricaoArea}"                                                        
+                                                contenteditable="false"/>
+                                    </select>
+                                </div>                                
                             </div>
                         </div>
                         <div class="row">
@@ -174,6 +186,18 @@
                                     </select>
                                     <label for="sistemas">Sistema</label>
                                 </div>
+                                <div th:if="${sistemasDoUsuario.isEmpty}">     
+                                    <select class="form-control choicesmultiple link-success"
+                                            multiple=""
+                                            th:field="*{sistemas}"
+                                            id="sistemas"
+                                            placeholder="Sistema">
+                                        <option th:each="sistema : ${sistemasDoUsuario}" 
+                                                th:value="${sistema}" 
+                                                th:text="${sistema.descricaoSistema}"
+                                                contenteditable="false"/>
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-md mb-3">
                                 <div th:if="${listaProblemas.size} == 1"
@@ -190,6 +214,18 @@
                                     <label for="problemas">Sistema</label>
                                 </div>
                                 <div th:if="${listaProblemas.size} > 1">
+                                    <select class="form-control choicesmultiple link-success"                                             
+                                            multiple=""   
+                                            th:field="*{problemas}"
+                                            id="problemas"
+                                            placeholder="Problemas">
+                                        <option th:each="problema : ${listaProblemas}"                                                         
+                                                th:value="${problema}"                                                         
+                                                th:text="${problema.descricaoProblema}"                                                        
+                                                contenteditable="false"/>
+                                    </select>                                            
+                                </div>
+                                <div th:if="${listaProblemas.isEmpty}">
                                     <select class="form-control choicesmultiple link-success"                                             
                                             multiple=""   
                                             th:field="*{problemas}"
@@ -264,21 +300,19 @@
                                             <div class="accordion-body">
                                                 <div class="row">
                                                     <div class="col-md mb-3">
-                                                        <ul class="list-group">                                                                        
-                                                            <li class="list-group-item">
-                                                                <input type="file"
-                                                                       id="file"
-                                                                       class="row col-md-6 form-control"                                                     
-                                                                       form="formAnexo"
-                                                                       name="file"
-                                                                       multiple="multiple"
-                                                                       th:attr="data-tamanho-maximo=${tamanhoMaximo}, accept=${extensoes}"
-                                                                       onchange="checkFileSize(event, 'alertaGeral')"/>
-                                                            </li>
-                                                        </ul>
+                                                        <input type="file"
+                                                               id="file"
+                                                               class="row col-md-6 form-control"                                                     
+                                                               form="formAnexo"
+                                                               name="file"
+                                                               multiple="multiple"
+                                                               th:attr="data-tamanho-maximo=${tamanhoMaximo}, accept=${extensoes}"
+                                                               onchange="checkFileSize(event, 'alertaGeral')"/>
                                                     </div>
                                                 </div>
-
+                                                <div class="row">
+                                                    <label>Nível</label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
