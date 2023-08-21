@@ -78,21 +78,57 @@ function delClass(id, classe) {
 }
 
 function carregarChoices() {
-    document.querySelectorAll('.choicesmultiple').forEach(function (element) {
-        new Choices(element, {
-            removeItemButton: true,
-            maxItemCount: 999,
-            searchResultLimit: 5,
-            renderChoiceLimit: 999
-        });
+
+    /*var $select = $('#caspEntidadesList').selectize({
+     maxItems: null,
+     valueField: 'id',
+     labelField: 'title',
+     searchField: 'title'
+     });*/
+
+    /*document.querySelectorAll('.choicesmultiple').forEach(function (element) {
+     new Choices(element, {
+     removeItemButton: true,
+     maxItemCount: 999,
+     searchResultLimit: 5,
+     renderChoiceLimit: 999
+     });
+     });
+     document.querySelectorAll('.choicessingle').forEach(function (element) {
+     new Choices(element, {
+     removeItemButton: true,
+     maxItemCount: 1,
+     searchResultLimit: 5,
+     renderChoiceLimit: 999
+     });
+     });*/
+
+    const selectElementsMultiple = document.querySelectorAll('.choicesmultiple');
+    selectElementsMultiple.forEach(function (element) {
+        // Verifique se o elemento já foi atualizado anteriormente
+        if (!element.classList.contains("atualizado")) {
+            new Choices(element, {
+                removeItemButton: true,
+                maxItemCount: 999,
+                searchResultLimit: 5,
+                renderChoiceLimit: 999
+            });
+            element.classList.add("atualizado");
+        }
     });
-    document.querySelectorAll('.choicessingle').forEach(function (element) {
-        new Choices(element, {
-            removeItemButton: true,
-            maxItemCount: 1,
-            searchResultLimit: 5,
-            renderChoiceLimit: 999
-        });
+
+    const selectElementsSingle = document.querySelectorAll('.choicessingle');
+    selectElementsSingle.forEach(function (element) {
+        // Verifique se o elemento já foi atualizado anteriormente
+        if (!element.classList.contains("atualizado")) {
+            new Choices(element, {
+                removeItemButton: true,
+                maxItemCount: 999,
+                searchResultLimit: 5,
+                renderChoiceLimit: 999
+            });
+            element.classList.add("atualizado");
+        }
     });
 }
 
@@ -106,6 +142,34 @@ function choicesUsuarios() {
             searchResultLimit: 10,
             renderChoiceLimit: 999
         });
+    });
+}
+
+function removeInvalidClass() {
+    if (this.checkValidity()) {
+        this.classList.remove('is-invalid');
+        this.classList.add('is-valid');
+    } else {
+        this.classList.remove('is-valid');
+        this.classList.add('is-invalid');
+    }
+}
+
+function invalidFeedback(objects) {
+    objects.forEach(campo => {
+        let id = '#' + campo.name;
+        let feedback = document.querySelector(id + '-feedback');
+        document.querySelector(id).classList.remove('is-valid');
+        document.querySelector(id).classList.add('is-invalid');
+        if (feedback) {
+            document.querySelector(id + '-feedback').innerHTML = campo.userMessage;
+        }
+    });
+
+    const inputElements = document.querySelectorAll('.form-control, .form-select');
+
+    inputElements.forEach(inputElement => {
+        inputElement.addEventListener('input', removeInvalidClass);
     });
 }
 
@@ -152,16 +216,33 @@ function validarSelectUsuario(select, bt) {
     }
 }
 
-function alertaCampos(mensagem, detalhe, idLocal) {
+function alertaCampos(titulo, detalhe, idLocal) {
     let wrapper = document.createElement('div');
     wrapper.innerHTML = [
         `<div class="text-start fixed-top" style="margin-top: 4rem">`,
         `<div class="row justify-content-md-center">`,
         `<div class="col-md-auto" onclick="this.style.display = 'none'">`,
         `   <div class="alert alert-danger alert-dismissible" role="alert">`,
-        `       <div>${mensagem}</div>`,
+        `       <div>${titulo}</div>`,
         `       <hr>`,
         `       <div>${detalhe}</div>`,
+        '       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+        '   </div>',
+        '</div>',
+        '</div>',
+        '</div>'
+    ].join('');
+    document.getElementById(idLocal).append(wrapper);
+}
+
+function alerta(mensagem, idLocal) {
+    let wrapper = document.createElement('div');
+    wrapper.innerHTML = [
+        `<div class="text-start fixed-top" style="margin-top: 4rem">`,
+        `<div class="row justify-content-md-center">`,
+        `<div class="col-md-auto" onclick="this.style.display = 'none'">`,
+        `   <div class="alert alert-danger alert-dismissible" role="alert">`,
+        `       <div><strong>${mensagem}</strong></div>`,
         '       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
         '   </div>',
         '</div>',
@@ -230,10 +311,16 @@ function carregarToast(mensagem, tipo, titulo) {
             cor = "bg-info";
             break;
     }
-    let wrapper = document.createElement('div');
+    
     let toastId = `liveToast-${Date.now()}`; // Adicionando um ID único para cada toast
+    let wrapper = document.createElement('div');
+    wrapper.classList.add('toast');
+    wrapper.setAttribute('role', 'alert');
+    wrapper.setAttribute('aria-live', 'assertive');
+    wrapper.setAttribute('aria-atomic', 'true');
+    wrapper.setAttribute('data-bs-autohide', 'false');
+    wrapper.setAttribute('id', toastId);
     wrapper.innerHTML = [
-        `<div id="${toastId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">`, // Removemos o autohide padrão para controlar manualmente o fechamento
         `   <div class="toast-header">`,
         `       <strong class="me-auto">${mensagem}</strong>`,
         `       <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`,
@@ -363,6 +450,7 @@ function exibirToasts() {
         toastElement.addEventListener('hidden.bs.toast', () => {
             removerToast(toastObj.id);
             clearInterval(intervalId); // Limpa o intervalo quando o toast é fechado
+            toastElement.remove();
         });
     });
 }
@@ -450,6 +538,8 @@ function checkFileSize(event, alertId) {
         }
     }
 }
+
+
 
 
 var tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');

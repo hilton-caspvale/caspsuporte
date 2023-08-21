@@ -272,7 +272,6 @@ function editarUsuarioAbertura(event) {
     event.preventDefault();
     limparAlertaModal();
     let form = document.querySelector('#edicaoUsuarioModalAbertura');
-    let login = form.querySelector('#nlogin').value;
     let tipo = form.querySelector('#itipoUsuario').value;
     let usuario = getUsuario('#edicaoUsuarioModalAbertura');
     let uri = usuariosPath + event.currentTarget.value;
@@ -285,7 +284,7 @@ function editarUsuarioAbertura(event) {
             .then(response => {
                 carregarToast("Usuário [" + response.nlogin + "] atualizado!", "sucesso");
                 limparModal();
-                requestMV(MV_A_CHAMADO + '?user=' + login);
+                requestMVIdElemento(MV_A_CHAMADO_DADOS_USUARIO + response.nlogin, 'dados-usuario');
             })
             .catch(error => {
                 requestError(error, 'alertaModal');

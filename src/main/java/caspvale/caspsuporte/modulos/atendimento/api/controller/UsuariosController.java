@@ -58,6 +58,15 @@ public class UsuariosController {
         return ResponseEntity.ok("Senha atualizada");
     }
 
+    @PatchMapping("/perfil")
+    public ResponseEntity<?> perfil(@Valid @RequestBody UsuariosModel usuario) {
+        CaspUsuarios caspUsuario = permissoes.caspUsuarioLogado();
+        CaspUsuarios caspUsuarioAtualizado = usuariosService
+                .atualizarPerfil(caspUsuario, usuariosAssembler
+                        .toEntity(usuario));
+        return ResponseEntity.ok(usuariosAssembler.toModel(caspUsuarioAtualizado));
+    }
+
     @GetMapping("/{iUsuario}")
     public ResponseEntity<?> usuario(@PathVariable @Valid Integer iUsuario) {
         permissoes.restritoAoCliente();

@@ -49,7 +49,7 @@ public class CaspNiveis implements Serializable {
     private String situacaoNivel;
     @OneToMany(mappedBy = "iNivel")
     private List<CaspUsuariosConfig> caspUsuariosConfigList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "iNivel")
+    @OneToMany(/*cascade = CascadeType.ALL,*/ mappedBy = "iNivel")
     private List<CaspChamados> caspChamadosList;
 
     public CaspNiveis() {

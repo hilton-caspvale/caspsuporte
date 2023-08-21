@@ -10,6 +10,7 @@ import caspvale.caspsuporte.modulos.atendimento.exception.NegocioException;
 import caspvale.caspsuporte.modulos.atendimento.exception.UsuarioRestritoException;
 import caspvale.caspsuporte.modulos.atendimento.common.Permissoes;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,9 +50,9 @@ public class UsuariosService {
         if (usuarioCliente(input) || usuarioCliente(usuarioAtual)) {
             throw new UsuarioRestritoException("Usuário CLIENTE não pode ser alterado por esse recurso!");
         }
-        if (!permissoes.roleADMIN()) {             
+        if (!permissoes.roleADMIN()) {
             input.setITipoUsuario(usuarioAtual.getITipoUsuario());
-        }       
+        }
         input.setSenha(usuarioAtual.getSenha());
         return usuariosRepository.save(input);
     }
@@ -91,6 +92,17 @@ public class UsuariosService {
         } catch (Exception e) {
             throw new NegocioException("Senha não alterada!");
         }
+    }
+
+    @Transactional
+    public CaspUsuarios atualizarPerfil(CaspUsuarios usuarioAtual, CaspUsuarios usuarioAtualizado) {
+        if (!Objects.equals(usuarioAtual.getIUsuario(), usuarioAtualizado.getIUsuario())) {
+            throw new UsuarioRestritoException("Sem permissão para alterar o perfil de outro usuário!");
+        }
+        usuarioAtual.setNomeUsuario(usuarioAtualizado.getNomeUsuario());
+        usuarioAtual.setContatoUsuario(usuarioAtualizado.getContatoUsuario());
+        usuarioAtual.setEmailUsuario(usuarioAtualizado.getEmailUsuario());
+        return usuariosRepository.saveAndFlush(usuarioAtual);
     }
 
     public List<CaspUsuarios> listarClientes(String situacao) {

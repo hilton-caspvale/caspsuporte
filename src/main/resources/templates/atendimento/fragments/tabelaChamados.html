@@ -21,7 +21,8 @@
         data-toolbar="#toolbar"
         data-toggle="table"
         data-search="true"     
-        data-search-accent-neutralise="true"                           
+        data-search-accent-neutralise="true"
+        data-search-highlight="true"
         data-pagination="true"
         data-buttons-prefix="btn-md btn"
         data-buttons-class="success bg-gradient"
@@ -37,20 +38,66 @@
         data-page-list="[7, 30, 60, 120, All]"
         data-remember-order="true"
         class="table-striped table-sm"
+        data-sort-name="dataAbertura"
+        data-sort-order="desc"
+        data-sort-reset-page="true"
+        data-sortable="true"
+        data-detail-view="true"
+        data-detail-view-by-click="true"
+        data-detail-view-icon="false"
+        data-detail-formatter="detailFormatter"
         data-url="/atendimento/chamados/aguardando">
         <thead>
             <tr><!--class="badge bg-light text-dark" atendimentos/tipoTabela?tipo=aguardando-->
-                <th data-field="ichamado" data-sortable="true" data-formatter="acoesTabelaChamado">Nº</th>
+                <th data-field="ichamado" data-sortable="true" data-formatter="acoesTabelaChamado" data-detail-formatter="idFormatter">Nº</th>
                 <th data-field="caspEntidadesList" data-sortable="true" data-halign="left" data-align="left" data-formatter="entidades" class="col-md-3">Entidade</th>
                 <th data-field="caspAreasList" data-sortable="true" data-halign="left" data-align="center" data-formatter="areas">Área</th>
                 <th data-field="dataAbertura" data-sortable="true" data-formatter="spanTabela">Abertura</th>
                 <th data-field="iusuarioAbertura.nome" data-sortable="true" data-formatter="spanTabela">Usuário</th>
                 <th data-field="resumoChamado" data-sortable="true" data-formatter="textoNormalTabela" class="col-md-4 small">Resumo</th>
-                <th data-field="isituacao" data-sortable="true" data-align="center" data-formatter="situacaoChamado">Situação</th>
+                <th data-field="isituacao" data-sortable="true" data-align="center" data-formatter="situacaoChamado" data-detail-formatter="situacaoFormatter">Situação</th>
             </tr>
         </thead>
     </table> 
     <script>
+
+        function detailFormatter(index, row) {
+            let html = [];
+            $.each(row, function (key, value) {
+                switch (key) {
+                    case "descricaoChamado":
+                        let descricao = [
+                            `<label for="descricao" class="form-label">Descrição</label>`,
+                            `<div class="card-header">
+                                    <textarea
+                                        id="descricao" 
+                                        class="form-control casp-textarea fonte"
+                                        aria-label="Descrição"
+                                        readonly="">${value}</textarea>
+                                 </div>`
+                        ].join('');
+                        html.push(descricao);
+                        break;
+                    case "iusuarioEncaminhamento":
+                        if (value) {
+                            html.push("<p>" + key + ": " + value.nome + "</p>");
+                        }
+                        break;
+                    default:
+                        html.push("<p>" + key + ": " + value + "</p>");
+                        break;
+                }
+            });
+            return html.join('');
+        }
+
+        function idFormatter(index, row) {
+            return "";
+        }
+
+        function situacaoFormatter(index, row) {
+            return index + '. Item ID: ' + row.resumoChamado;
+        }
 
         function novoChamadoTabela() {
             return {

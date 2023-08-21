@@ -43,6 +43,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 
 import caspvale.caspsuporte.modulos.atendimento.exception.NegocioException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.postgresql.util.PSQLException;
 import org.springframework.dao.DataIntegrityViolationException;
 
 @ControllerAdvice
@@ -78,7 +81,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex,
             HttpHeaders headers, HttpStatus status, WebRequest request) {
         ProblemType problemType = ProblemType.PARAMETRO_INVALIDO;
-        String detail = "Parametro obrigatório [" + ex.getParameterName() + "] do tipo [" + ex.getParameterType() + "] nao foi informado";
+        String detail = "Campo obrigatório [" + ex.getParameterName() + "] do tipo [" + ex.getParameterType() + "] nao foi informado";
         Object body = Problem.builder()
                 .timestamp(LocalDateTime.now())
                 .title(problemType.getTitle())
@@ -279,22 +282,63 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         String detail = ex.getMessage();
 
         Problem problem = createProblemBuilder(status, problemType, detail)
-                .userMessage(detail)
+                .detail(detail)
                 .userMessage("Você não possui permissão para executar essa operação.")
                 .build();
 
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
+    /*@ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<?> handleRegistroEmUso(DataIntegrityViolationException ex, WebRequest request) {
 
         HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
         ProblemType problemType = ProblemType.ERRO_NEGOCIO;
         String detail = ex.getMessage();
         Problem problem = createProblemBuilder(status, problemType, detail)
-                .userMessage(detail)
+                .detail(detail)
                 .userMessage("O registro não pode ser excluído pois está referenciado em outro cadastro!")
+                .build();
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+    }*/
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<?> handleRegistroEmUso(DataIntegrityViolationException ex, WebRequest request) {
+        Throwable rootCause = ExceptionUtils.getRootCause(ex);
+        String detail = "";
+        try {
+            if (rootCause instanceof PSQLException) {
+                PSQLException postgresException = (PSQLException) rootCause;
+                String errorMessage = postgresException.getMessage();
+                if (errorMessage.contains("still referenced from table")) {
+                    Pattern keyPattern = Pattern.compile("Key \\((.*?)\\)=\\((.*?)\\)");
+                    Matcher keyMatcher = keyPattern.matcher(errorMessage);
+                    String keyName = "?";
+                    String keyValue = "?";
+                    String tableName = "?";
+                    if (keyMatcher.find()) {
+                        keyName = keyMatcher.group(1);
+                        keyValue = keyMatcher.group(2);
+                    }
+
+                    Pattern tablePattern = Pattern.compile(" is still referenced from table \"(.*?)\"");
+                    Matcher tableMatcher = tablePattern.matcher(errorMessage);
+                    if (tableMatcher.find()) {
+                        tableName = tableMatcher.group(1);
+                    }
+                    detail = String.format("A chave [%s=%s] está em uso na tabela [%s].", keyName, keyValue, tableName);
+                }
+            }
+        } catch (Exception e) {
+            detail = "";
+        }
+        if (detail.equals("")) {
+            detail = ex.getMessage();
+        }
+        HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
+        ProblemType problemType = ProblemType.ERRO_NEGOCIO;
+        Problem problem = createProblemBuilder(status, problemType, detail)
+                .detail(detail)
+                .userMessage("O registro não pode ser excluído pois está referenciado em outro cadastro.")
                 .build();
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }

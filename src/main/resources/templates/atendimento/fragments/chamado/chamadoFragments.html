@@ -1,0 +1,186 @@
+<th:block th:fragment="dados-usuario" th:object="${chamado}">
+    <input type="hidden" form="formChamado" th:field="*{iusuarioAbertura}"/>
+    <div class="row justify-content-between">
+        <div class="col-md-3 mb-3">
+            <div class="form-floating">                                    
+                <input type="text"
+                       class="form-control" placeholder="LOGIN"
+                       th:field="*{nlogin}"   
+                       id="nlogin"
+                       form="formChamado"
+                       readonly=""
+                       disabled=""/>
+                <label for="nlogin" class="col-sm col-form-label">LOGIN</label>
+            </div>
+        </div>
+        <div class="col-md mb-3">
+            <div class="form-floating">                                    
+                <input type="text"
+                       class="form-control" placeholder="Nome"
+                       th:field="*{nomeUsuario}"
+                       id="nomeUsuario"
+                       form="formChamado"
+                       readonly=""
+                       disabled=""/>
+                <label for="nomeUsuario" class="col-sm col-form-label">Nome</label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md mb-3">
+            <div class="form-floating">                                       
+                <input type="text"
+                       class="form-control" placeholder="Contato"
+                       th:field="*{contatoSolicitante}"
+                       form="formChamado"
+                       id="contato"/>                                    
+                <label for="contato" class="col-sm col-form-label">Contato</label>
+            </div>
+        </div>
+        <div class="col-md mb-3">
+            <div class="form-floating">                                    
+                <input type="text"
+                       class="form-control" placeholder="E-mail"
+                       th:field="*{emailSolicitante}"
+                       form="formChamado"
+                       id="email"/>
+                <label for="email" class="col-sm col-form-label">E-mail</label>
+            </div>
+        </div>
+    </div>
+    <div class="row">                            
+        <div class="col-md-6 mb-3">
+            <div class="form-floating" id="entidadesDoUsuario">
+                <select th:if="${entidadesDoUsuario.size} == 1" 
+                        class="form-control form-select link-success"
+                        aria-label="Entidade"
+                        placeholder="Entidade"
+                        th:field="*{caspEntidadesList}">
+                    <option th:each="entidade : ${entidadesDoUsuario}" 
+                            th:value="${entidade}" 
+                            th:text="${entidade.nomeEntidade}"
+                            contenteditable="false"/>
+                </select>
+                <label for="caspEntidadesList" th:if="${entidadesDoUsuario.size} == 1" >Entidade</label>
+
+                <select th:if="${entidadesDoUsuario.size} != 1" 
+                        class="form-control form-select link-success choicesmultiple"
+                        aria-label="Entidade"
+                        placeholder="Entidade"
+                        multiple=""
+                        th:field="*{caspEntidadesList}">
+                    <option th:each="entidade : ${entidadesDoUsuario}" 
+                            th:value="${entidade}" 
+                            th:text="${entidade.nomeEntidade}"
+                            contenteditable="false"/>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div th:if="${areasDoUsuario.size} == 1"
+                 class="form-floating">
+                <select class="form-control link-success"
+                        aria-label="Área"
+                        th:field="*{caspAreasList}">
+                    <option th:each="areaUser : ${areasDoUsuario}" 
+                            th:value="${areaUser}" 
+                            th:text="${areaUser.descricaoArea}"
+                            contenteditable="false"/>
+                </select>
+                <label for="areas">Área</label>                                                
+            </div>
+            <div th:if="${areasDoUsuario.size} != 1">
+                <select class="form-control choicesmultiple link-success" 
+                        multiple=""   
+                        th:field="*{caspAreasList}"
+                        placeholder="Área">
+                    <option th:each="area : ${areasDoUsuario}"                                                         
+                            th:value="${area}"                                                         
+                            th:text="${area.descricaoArea}"                                                        
+                            contenteditable="false"/>
+                </select>
+            </div>                                
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md mb-3">
+            <div th:if="${sistemasDoUsuario.size} > 1">
+                <select class="form-control choicesmultiple link-success"                                             
+                        placeholder="Sistemas"
+                        multiple=""   
+                        th:field="*{sistemas}"
+                        id="sistemas">
+                    <option th:each="sistema : ${sistemasDoUsuario}"                                                         
+                            th:value="${sistema}"                                                         
+                            th:text="${sistema.descricaoSistema}"                                                        
+                            contenteditable="false"/>
+                </select>                                                
+            </div>
+            <div th:if="${sistemasDoUsuario.size} == 1"
+                 class="form-floating">     
+                <select class="form-control link-success"
+                        aria-label="Sistemas"
+                        th:field="*{sistemas}"
+                        id="sistemas">
+                    <option th:each="sistema : ${sistemasDoUsuario}" 
+                            th:value="${sistema}" 
+                            th:text="${sistema.descricaoSistema}"
+                            contenteditable="false"/>
+                </select>
+                <label for="sistemas">Sistema</label>
+            </div>
+            <div th:if="${sistemasDoUsuario.isEmpty}">     
+                <select class="form-control choicesmultiple link-success"
+                        multiple=""
+                        th:field="*{sistemas}"
+                        id="sistemas"
+                        placeholder="Sistema">
+                    <option th:each="sistema : ${sistemasDoUsuario}" 
+                            th:value="${sistema}" 
+                            th:text="${sistema.descricaoSistema}"
+                            contenteditable="false"/>
+                </select>
+            </div>
+        </div>
+        <div class="col-md mb-3">
+            <div th:if="${listaProblemas.size} == 1"
+                 class="form-floating">     
+                <select class="form-control link-success"
+                        aria-label="Problema"
+                        th:field="*{problemas}"
+                        id="problemas">
+                    <option th:each="problema : ${listaProblemas}" 
+                            th:value="${problema}" 
+                            th:text="${problema.descricaoProblema}"
+                            contenteditable="false"/>
+                </select>
+                <label for="problemas">Sistema</label>
+            </div>
+            <div th:if="${listaProblemas.size} > 1">
+                <select class="form-control choicesmultiple link-success"                                             
+                        multiple=""   
+                        th:field="*{problemas}"
+                        id="problemas"
+                        placeholder="Problemas">
+                    <option th:each="problema : ${listaProblemas}"                                                         
+                            th:value="${problema}"                                                         
+                            th:text="${problema.descricaoProblema}"                                                        
+                            contenteditable="false"/>
+                </select>                                            
+            </div>
+            <div th:if="${listaProblemas.isEmpty}">
+                <select class="form-control choicesmultiple link-success"                                             
+                        multiple=""   
+                        th:field="*{problemas}"
+                        id="problemas"
+                        placeholder="Problemas">
+                    <option th:each="problema : ${listaProblemas}"                                                         
+                            th:value="${problema}"                                                         
+                            th:text="${problema.descricaoProblema}"                                                        
+                            contenteditable="false"/>
+                </select>                                            
+            </div>
+        </div>
+    </div>
+    <script>carregarChoices();</script>
+</th:block>

@@ -1,26 +1,22 @@
-<div th:fragment="editarChamado">
+<th:block th:fragment="editarChamado">
     <div class="row justify-content-md-center">
-        <div class="col col-md-8">
-            <div id="alertaChamado"></div>
+        <div class="col col-md-9">
             <form id="formEdicaoChamado" class="row g-3" 
                   method="PATCH" 
-                  action="/atendimento/chamados" th:object="${chamado}">
-                <!--<div th:replace="fragments/layout :: msggeral"></div>
-                <div th:replace="fragments/layout :: msgcampos"></div>
-                <div class="alert alert-danger alert-dismissible fade show col-md" role="alert" th:each="m : ${msg}">
-                    <strong th:text="${m}"/>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>-->
-                <div class="card">                       
-                    <div class="card-header">
-                        <div class="casp-card-h">
-                            <div class="row">
-                                <div class="col-md"><h5 th:text="*{iChamado == null}? 'Novo Chamado' : 'Editar Chamado'"></h5></div>                                       
+                  action="/atendimento/chamados" th:object="${chamado}"> 
+                <div class="card shadow bg-body rounded">
+                    <div id="alertaChamado"></div>
+                    <h5 class="card-header">
+                        <div class="row justify-content-md-between">
+                            <div class="hstack gap-1">
+                                <div class="col-md">Editar Chamado</div>   
+                                <div class="col-md text-end">
+                                    <th:block th:replace="atendimento/fragments/layout :: situacao-chamado"></th:block>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-body ">                                  
-
+                    </h5>
+                    <div class="card-body "> 
                         <input type="hidden" form="formEdicaoChamado" th:field="*{iUsuarioAbertura.iUsuario}" id="iusuarioAbertura"/>
                         <div class="row justify-content-between">
                             <div class="col-md-3 mb-3">
@@ -84,7 +80,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <div th:if="${entidadesDoUsuario.size} > 1">
+                                <div th:if="${entidadesDoUsuario.size} != 1">
                                     <select class="form-control choicesmultiple link-success"                                             
                                             multiple=""     
                                             placeholder="Entidade"
@@ -110,8 +106,6 @@
                                     <label for="entidades">Entidade</label>                                                
                                 </div>
                             </div>
-
-
                             <div class="col-md-6 mb-3">
                                 <div th:if="${areasDoUsuario.size} == 1"
                                      class="form-floating">
@@ -126,7 +120,7 @@
                                     </select>
                                     <label for="areas">Área</label>                                                
                                 </div>
-                                <div th:if="${areasDoUsuario.size} > 1">
+                                <div th:if="${areasDoUsuario.size} != 1">
                                     <select class="form-control choicesmultiple link-success" 
                                             multiple=""   
                                             th:field="*{caspAreasList}"
@@ -142,7 +136,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md mb-3">
-                                <div th:if="${sistemasDoUsuario.size} > 1">
+                                <div th:if="${sistemasDoUsuario.size} != 1">
                                     <select class="form-control choicesmultiple link-success"                                             
                                             placeholder="Sistemas"
                                             multiple=""   
@@ -169,8 +163,7 @@
                                 </div>
                             </div>
                             <div class="col-md mb-3">
-                                <div th:if="${problemas.size} == 1"
-                                     class="form-floating">     
+                                <div th:if="${problemas.size} == 1" class="form-floating">     
                                     <select class="form-control link-success"
                                             aria-label="Problema"
                                             th:field="*{caspProblemasList}"
@@ -182,7 +175,7 @@
                                     </select>
                                     <label for="problemas">Sistema</label>
                                 </div>
-                                <div th:if="${problemas.size} > 1">
+                                <div th:if="${problemas.size} != 1">
                                     <select class="form-control choicesmultiple link-success"                                             
                                             multiple=""   
                                             th:field="*{caspProblemasList}"
@@ -227,7 +220,8 @@
                                     <label for="prioridade">Prioridade</label>
                                 </div>
                             </div>
-                            <div class="col-md-4 mb-3" ><!-- th:if="${role} == 'ANALISTA'? true : (${role}==ADMINISTRADOR? true : false)" -->
+                            <div class="col-md-4 mb-3" 
+                                 th:if="${role} == 'ANALISTA'? true : (${role}==ADMINISTRADOR? true : false)">
                                 <div class="form-floating">
                                     <select class="form-control link-success" 
                                             aria-label="Nível"
@@ -284,8 +278,7 @@
                                     <input type="text"
                                            class="form-control" placeholder="Resumo"
                                            th:field="*{resumoChamado}"
-                                           form="formEdicaoChamado"
-                                           id="resumoChamado"/>
+                                           form="formEdicaoChamado"/>
                                     <label for="resumoChamado" class="col-sm col-form-label">Resumo</label>
                                 </div>
                             </div>
@@ -333,14 +326,13 @@
                                 <div class="text-lg-end">
                                     <button type="button" 
                                             class="btn btn-success" 
-                                            id="liveToastBtn"
                                             data-edicao="edicao"
                                             th:attr="data-id=*{iChamado}"
                                             onclick="gravarChamado(event)">Gravar</button>                                        
                                 </div>
                             </div>
-                        </div>
-                    </div>    
+                        </div>                    
+                    </div>                
                 </div>
             </form>
             <form id="formAnexo" class="form-floating" method="PATCH" action="/atendimentos/anexos" 
@@ -348,7 +340,4 @@
             </form>
         </div>
     </div>
-    <div class="row mb-3">
-        <div th:if="${role}=='ANALISTA'? true : (${role}=='ADMINISTRADOR'? true : false)"></div>
-    </div>
-</div>
+</th:block>

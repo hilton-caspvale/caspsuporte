@@ -1,7 +1,7 @@
-<div th:fragment="acoesDoChamado" id="acoesdochamadoTop"> 
-    <nav class="navbar navbar-expand-lg navbar-light cor-g rounded-3 border-3 border-top border-success"
+<th:block th:fragment="acoesDoChamado" id="acoesdochamadoTop"> 
+    <nav class="navbar navbar-expand-lg navbar-light cor-g rounded-3 border-3 border-top border-success sticky-top"
          id="navSecundaria ">
-        <input type="hidden" form="formAcoes" th:field="${caspChamados.iChamado}" id="idChamado"/>
+        <!--<input type="hidden" form="formVerCahamado" th:field="${caspChamados.iChamado}" id="idChamado"/>-->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAcoes" aria-controls="navbarAcoes" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -143,9 +143,9 @@
                             </div>
                             <div class="btn-group" role="group" aria-label="Third group">
                                 <button type="button" class="btn btn-sm btn-outline-success rounded-1 nav-item border-0"                                        
-                                        onclick="visualizarChamado(3);"
+                                        onclick="visualizarChamado(40);"
                                         title="Voltar para o painel">
-                                    <i class="fas fa-arrow-left"></i> 
+                                    <i class="bi bi-arrow-left"></i> 
                                 </button>
                             </div>
                         </div>    
@@ -187,7 +187,7 @@
                 </div>
                 <div class="modal-body">
                     <p>Você confirma que deseja enviar o chamado para estudo?</p>
-                    <textarea class="form-control text-wrap" 
+                    <textarea class="form-control text-wrap casp-textarea" 
                               placeholder="Comentário (opcional)" id="comentarioEstudar"
                               name="comentarioEstudo"></textarea>
                 </div>
@@ -213,7 +213,7 @@
                 </div>
                 <div class="modal-body">
                     <p>Resposta ao analista:</p>
-                    <textarea class="form-control text-wrap" 
+                    <textarea class="form-control text-wrap casp-textarea" 
                               id="comentarioResponder"
                               name="comentarioResponder"></textarea>
                 </div>
@@ -238,7 +238,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <textarea class="form-control text-wrap" 
+                    <textarea class="form-control text-wrap casp-textarea" 
                               placeholder="Comentário"                                      
                               id="comentarioComentario"></textarea>
                 </div>
@@ -270,7 +270,7 @@
                                id="dataagendamentoinput"                               
                                class="form-control"/>
                     </div>
-                    <textarea class="form-control text-wrap" 
+                    <textarea class="form-control text-wrap casp-textarea" 
                               placeholder="Comentário (opcional)"                                      
                               id="comentarioAgendamento"></textarea>
                 </div>
@@ -296,7 +296,7 @@
                 </div>
                 <div class="modal-body">                           
                     <p>Deseja aguardar o retorno do usuário?</p>
-                    <textarea class="form-control text-wrap" 
+                    <textarea class="form-control text-wrap casp-textarea" 
                               placeholder="Comentário (opcional)" id="comentarioAguardar"
                               name="comentarioop"></textarea>
                 </div>
@@ -322,7 +322,7 @@
                 </div>
                 <div class="modal-body">
                     <p>Deseja cancelar esse chamado?</p>
-                    <textarea class="form-control text-wrap" 
+                    <textarea class="form-control text-wrap casp-textarea" 
                               placeholder="Motivo do cancelamento" id="comentarioCancelamento"
                               name="comentarioCancelamento"></textarea>
                     <small>*Essa ação não pode ser desfeita</small>
@@ -366,7 +366,7 @@
                         </select>
                     </div>
                     <div class="row mb-3">
-                        <textarea class="form-control text-wrap" 
+                        <textarea class="form-control text-wrap casp-textarea" 
                                   placeholder="Comentário (opcional)" id="comentarioEncaminhar"
                                   name="comentarioEncaminhar"></textarea>
                     </div>
@@ -393,19 +393,19 @@
                 </div>
                 <div class="modal-body">
                     <div class="row mb-3">
-                        <textarea class="form-control casp-textarea fs-6" 
+                        <label for="descricaoProblemaModal" class="form-label"><strong>Problema:</strong></label>
+                        <textarea class="form-control casp-textarea" 
                                   placeholder="Problema"
                                   th:field="${caspChamados.descricaoProblema}"
-                                  id="descricaoProblemaModal"
-                                  style="height: 8rem"></textarea>
+                                  id="descricaoProblemaModal"></textarea>
                     </div>
 
                     <div class="row mb-3">
-                        <textarea class="form-control text-wrap" 
+                        <label for="descricaoSolucaoModal" class="form-label"><strong>Solução</strong></label>
+                        <textarea class="form-control text-wrap casp-textarea" 
                                   placeholder="Solução"
                                   th:field="${caspChamados.descricaoSolucao}"
-                                  id="descricaoSolucaoModal"
-                                  style="height: 8rem"></textarea>                                
+                                  id="descricaoSolucaoModal"></textarea>                                
                     </div>                 
                 </div>
 
@@ -492,7 +492,7 @@
                                th:attr="data-tamanho-maximo=${tamanhoMaximo}, accept=${extensoes}"
                                onchange="checkFileSize(event, 'alertaModal')"/>  
                     </div>
-                    <textarea class="form-control text-wrap" 
+                    <textarea class="form-control text-wrap casp-textarea" 
                               placeholder="Comentário (opcional)" form="formAnexo"
                               id="comentarioAnexo"></textarea>
                 </div>
@@ -508,4 +508,4 @@
             </div>
         </div>
     </div>
-</div>
+</th:block>

@@ -116,4 +116,17 @@ public class UsuariosView {
         return mv;
     }
 
+    @GetMapping("perfil")
+    public ModelAndView perfil() {
+        rotas.viewsDaRota();
+        ModelAndView mv = new ModelAndView(rotas.PERFIL);
+        mv.addObject("usuarioModel", rotas.usuarioLogadoModel());
+        mv.addObject("listaSistemas", (List<SistemasModel>) sistemasController.listar().getBody());
+        mv.addObject("listaAreas", (List<AreasModel>) areasController.listar().getBody());
+        mv.addObject("listaEntidades", (List<EntidadesModel>) entidadesController.listar().getBody());
+        mv.addObject("listaTipos", (List<TiposUsuariosModel>) tiposUsuariosController.naoClientes().getBody());
+        mv.addObject("situacoes", new String[]{"A", "I"});
+        return mv;
+    }
+
 }

@@ -77,6 +77,7 @@ caspvale\caspsuporte\modulos\atendimento\view\SistemasView.class
 caspvale\caspsuporte\domain\security\DetalheUser.class
 caspvale\caspsuporte\modulos\atendimento\api\controller\AreasController.class
 caspvale\caspsuporte\modulos\atendimento\domain\service\TiposArquivosService.class
+caspvale\caspsuporte\domain\security\CorsConfig.class
 caspvale\caspsuporte\modulos\atendimento\exception\AreaNaoEncontradaException.class
 caspvale\caspsuporte\modulos\atendimento\view\TiposUsuariosView.class
 caspvale\caspsuporte\modulos\atendimento\api\controller\UsuariosClientesController.class
@@ -95,6 +96,8 @@ caspvale\caspsuporte\modulos\atendimento\domain\model\CaspConfigEmail.class
 caspvale\caspsuporte\api\exceptionHandler\Problem$Object.class
 caspvale\caspsuporte\modulos\atendimento\api\assembler\UsuariosConfigAssembler.class
 caspvale\caspsuporte\modulos\atendimento\api\model\AnexosInputModel.class
+caspvale\caspsuporte\modulos\atendimento\view\Testes.class
+caspvale\caspsuporte\domain\security\CustomInterceptor.class
 caspvale\caspsuporte\modulos\atendimento\api\controller\TiposArquivosController.class
 caspvale\caspsuporte\modulos\atendimento\view\ClientesView.class
 caspvale\caspsuporte\modulos\atendimento\api\model\AreasInputModel.class
@@ -106,6 +109,7 @@ caspvale\caspsuporte\modulos\atendimento\api\model\TiposArquivosModel.class
 caspvale\caspsuporte\modulos\atendimento\domain\model\CaspUsuarios.class
 caspvale\caspsuporte\modulos\atendimento\exception\UsuarioRestritoException.class
 caspvale\caspsuporte\modulos\atendimento\api\controller\TiposUsuariosController.class
+caspvale\caspsuporte\domain\security\WebConfig.class
 caspvale\caspsuporte\modulos\atendimento\api\assembler\EntidadesAssembler.class
 caspvale\caspsuporte\api\exceptionHandler\Problem.class
 caspvale\caspsuporte\modulos\atendimento\api\model\PrioridadesInputModel.class

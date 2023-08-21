@@ -1,0 +1,41 @@
+<form id="cadastroUsuarioModal" class="form-floating needs-validation"
+      method="PATCH" action="/atendimento/usuarios" 
+      th:object="${usuarioModel}">
+    <div class="modal-body">
+        <div class="row mb-3 justify-content-center">
+            <input type="hidden" th:field="*{iUsuario}" hidden="" id="iusuarioSenha"/>
+            <input type="text" th:field="*{nlogin}" class="form-control" id="usuarioinput" aria-describedby="emailHelp" name="username" autocomplete="username" hidden=""/>   
+            <div class="col-md-4 mb-3">            
+                <div class="form-floating">
+                    <input type="password" 
+                           autocomplete ="new-password"
+                           class="form-control" placeholder="Nova senha"
+                           id="senha" required=""
+                           onchange="trocarSenha()"/>
+                    <label for="senha" class="col-sm col-form-label">Nova Senha</label>
+                    <div class="invalid-feedback" id="senhaInvalida"></div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">            
+                <div class="form-floating">
+                    <input type="password" 
+                           autocomplete ="new-password"
+                           class="form-control" placeholder="Confirmação de senha"
+                           id="confirmacao" required=""
+                           onchange="trocarSenha()"/>
+                    <label for="confirmacao" class="col-sm col-form-label">Confirmação de senha</label>
+                    <div class="invalid-feedback" id="confirmacaoInvalida"></div>
+                </div>
+            </div>            
+        </div>
+    </div>
+    <div class="modal-footer"> 
+        <button type="button" class="btn btn-outline-secondary bi bi-x-lg" 
+                data-bs-dismiss="modal" onclick="limparModal()">
+            Fechar</button>
+        <button type='button' class='btn btn-success bg-gradient  bi bi-check-lg' 
+                data-bs-dismiss="modal" th:value="*{nlogin}" id="gravar"
+                onclick="trocarsenha(event)" disabled="">
+            Alterar senha</button>   
+    </div>
+</form>

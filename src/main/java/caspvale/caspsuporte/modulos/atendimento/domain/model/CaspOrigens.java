@@ -49,7 +49,7 @@ public class CaspOrigens implements Serializable {
     private String situacaoOrigem;
     @OneToMany(mappedBy = "iOrigemChamado")
     private List<CaspUsuariosConfig> caspUsuariosConfigList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "iOrigemChamado")
+    @OneToMany( mappedBy = "iOrigemChamado")
     private List<CaspChamados> caspChamadosList;
 
     public CaspOrigens() {

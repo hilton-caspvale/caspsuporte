@@ -64,7 +64,7 @@ public class ChamadosService {
 
     @Transactional
     public CaspChamados novoChamado(CaspChamados chamado) {
-        return gravar(popularNovoChamado(chamado));
+        return gravar(popularNovoChamado(replaceHtmlStrings(chamado)));
     }
 
     @Transactional
@@ -74,7 +74,7 @@ public class ChamadosService {
         if (!edicaoPermitida(chamadoAtual, usuarioLogado)) {
             throw new NegocioException("Edição não permitida para este chamado e usuário!");
         }
-        return gravar(chamadoParaEdicao(chamadoEdicao, chamadoAtual));
+        return gravar(chamadoParaEdicao(replaceHtmlStrings(chamadoEdicao), chamadoAtual));
     }
 
     public boolean edicaoPermitida(CaspChamados chamado, CaspUsuarios usuario) {
@@ -89,6 +89,23 @@ public class ChamadosService {
             return Objects.equals(usuario.getIUsuario(), chamado.getIUsuarioAbertura().getIUsuario());
         }
         return false;
+    }
+
+    private CaspChamados replaceHtmlStrings(CaspChamados caspChamado) {
+        OperacoesTexto operacoesTexto = new OperacoesTexto();
+        String resumo = operacoesTexto.replaceHtml(caspChamado.getResumoChamado());
+        String descricao = operacoesTexto.replaceHtml(caspChamado.getDescricaoChamado());
+        String problema = operacoesTexto.replaceHtml(caspChamado.getDescricaoProblema());
+        String solucao = operacoesTexto.replaceHtml(caspChamado.getDescricaoSolucao());
+        String historicoEmail = operacoesTexto.replaceHtml(caspChamado.getHistoricoEmail());
+        String historicoChat = operacoesTexto.replaceHtml(caspChamado.getHostoricoChat());
+        caspChamado.setResumoChamado(resumo);
+        caspChamado.setDescricaoChamado(descricao);
+        caspChamado.setDescricaoProblema(problema);
+        caspChamado.setDescricaoSolucao(solucao);
+        caspChamado.setHistoricoEmail(historicoEmail);
+        caspChamado.setHostoricoChat(historicoChat);
+        return caspChamado;
     }
 
     @Transactional
@@ -156,17 +173,17 @@ public class ChamadosService {
         }
 
         if (acaoPermitidaParaSituacaoDoChamado(caspChamado, acao)) {
-            gravar(caspChamado);
+            CaspChamados c = gravar(caspChamado);
         }
         OperacoesTexto operacoesTexto = new OperacoesTexto();
-        
+
         if (acao.equals("comentario")) {
             if (operacoesTexto.textoVazio(comentario)) {
                 throw new NegocioException("Não foi informado um comentário!");
             }
         }
         if (!operacoesTexto.textoVazio(comentario)) {
-            anexosService.adicionarComentario(caspChamado, usuarioLogado, comentario);
+            anexosService.adicionarComentario(caspChamado, usuarioLogado, operacoesTexto.replaceHtml(comentario));
         }
         return caspChamado;//"Chamado "+caspChamado.getIChamado()+" atualizado!";
     }

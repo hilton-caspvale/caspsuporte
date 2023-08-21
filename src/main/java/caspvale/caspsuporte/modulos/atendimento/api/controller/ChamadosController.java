@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  *
@@ -44,9 +45,8 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/atendimento/chamados")
 public class ChamadosController {
-    
-    //private static final Logger logger = LoggerFactory.getLogger(ChamadosController.class);
 
+    //private static final Logger logger = LoggerFactory.getLogger(ChamadosController.class);
     private final ChamadosAssembler chamadosAssembler;
     private final ChamadosInputAssembler chamadosInputAssembler;
     private final AnexosAssembler anexosAssembler;
@@ -109,6 +109,13 @@ public class ChamadosController {
         return ResponseEntity.ok(chamadoLocalizado);
     }
 
+    @GetMapping("t")
+    public ModelAndView teste() {
+        CaspChamados caspChamado = chamadosService.buscarOuFalhar(38);
+        ChamadosModel chamadoLocalizado = chamadosAssembler.toModel(caspChamado);
+        return new ModelAndView("t").addObject("chamado", chamadoLocalizado);
+    }
+
     @PostMapping
     public ResponseEntity<?> cadastrarNovoChamado(@Valid @RequestBody ChamadosInputModel chamadosInputModel) {
         ChamadosModel chamadoModel = chamadosInputAssembler.toEntity(chamadosInputModel);
@@ -134,10 +141,11 @@ public class ChamadosController {
             @RequestBody(required = false) String comentario,
             @RequestParam(value = "acao", required = true) String acao,
             @RequestParam(value = "agenda", required = false) String agenda,
-            @RequestParam(value = "usuario-encaminhar", required = false) Integer usuarioEncaminhar) {        
+            @RequestParam(value = "usuario-encaminhar", required = false) Integer usuarioEncaminhar) {
         CaspUsuarios caspUsuarioLogado = permissoes.caspUsuarioLogado();
         CaspChamados caspChamado = chamadosService.chamadoLocalizadoPermitidoParaUsuario(id, caspUsuarioLogado);
-        ChamadosModel chamadoAtualizado = chamadosAssembler.toModel(chamadosService.movimentarChamado(caspChamado, acao, comentario, caspUsuarioLogado, agenda, usuarioEncaminhar));
+        CaspChamados caspChamadoMovimentado = chamadosService.movimentarChamado(caspChamado, acao, comentario, caspUsuarioLogado, agenda, usuarioEncaminhar);        
+        ChamadosModel chamadoAtualizado = chamadosAssembler.toModel(caspChamadoMovimentado);
         return ResponseEntity.ok(chamadoAtualizado);
     }
 

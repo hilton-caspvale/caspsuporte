@@ -22,11 +22,6 @@ public class HomeController {
         this.permissoes = permissoes;
     }
     
-    @GetMapping("testes")
-    public ModelAndView teste(){
-        return  new ModelAndView("testes");
-    }
-
     @GetMapping("login")
     public ModelAndView login(HttpServletRequest httpServletRequest) {  
         return new ModelAndView("login");

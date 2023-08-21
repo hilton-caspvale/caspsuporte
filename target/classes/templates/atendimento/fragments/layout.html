@@ -1,4 +1,4 @@
-<div  id="situacaoChamado" class="col-sm"th:fragment="statusChamado">
+<th:block th:fragment="situacao-chamado">
     <span class="badge bg-warning text-wrap text-dark" 
           th:text="*{situacaoChamado}"
           th:if="*{iSituacao.situacao} == 'A'"></span>
@@ -11,4 +11,4 @@
     <span class="badge bg-danger text-wrap" 
           th:text="*{situacaoChamado}"
           th:if="*{iSituacao.situacao} == 'C'"></span>
-</div>
+</th:block>

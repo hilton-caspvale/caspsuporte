@@ -107,13 +107,13 @@ public class CaspUsuarios implements Serializable {
     private List<CaspEntidades> caspEntidadesList;
     @ManyToMany(mappedBy = "caspUsuariosList")
     private List<CaspChamados> caspChamadosList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "iUsuario")
+    @OneToMany(/*cascade = CascadeType.ALL,*/ mappedBy = "iUsuario")
     private List<PontoEncerramentos> pontoEncerramentosList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "iUsuario")
+    @OneToMany(/*cascade = CascadeType.ALL,*/ mappedBy = "iUsuario")
     private List<PontoJustificativas> pontoJustificativasList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "iUsuario")
+    @OneToMany(/*cascade = CascadeType.ALL, */mappedBy = "iUsuario")
     private List<RemotoListaEspera> remotoListaEsperaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "iUsuario")
+    @OneToMany(/*cascade = CascadeType.ALL, */mappedBy = "iUsuario")
     private List<PontoHorarios> pontoHorariosList;
     @OneToMany(mappedBy = "iUsuario")
     private List<RemotoContatos> remotoContatosList;
@@ -130,7 +130,7 @@ public class CaspUsuarios implements Serializable {
     private List<CaspChamados> caspChamadosList3;
     @OneToMany(mappedBy = "iUsuarioEncerramento")
     private List<CaspChamados> caspChamadosList4;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "iUsuario")
+    @OneToMany(/*cascade = CascadeType.ALL,*/ mappedBy = "iUsuario")
     private List<CaspUsuariosPermissoes> caspUsuariosPermissoesList;
     @OneToMany(mappedBy = "iUsuario")
     private List<CaspAnexos> caspAnexosList;

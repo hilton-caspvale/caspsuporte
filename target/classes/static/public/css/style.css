@@ -96,9 +96,13 @@ table {
     word-wrap: break-word;
 }
 
-.casp-textarea{
+.casp-textarea {
     height: 10rem;
+    min-height: 10rem; /* Tamanho mínimo inicial */
+    max-height: 20rem; /* Tamanho máximo */
+    font-size: 0.8rem;
 }
+
 
 .casp-alert{
     margin-left: auto;
@@ -134,4 +138,8 @@ table {
 
 .navbar-brand, .dropdown-item{
     cursor: pointer;
+}
+
+.fonte{
+    font-size: 0.8rem;
 }

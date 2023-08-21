@@ -1,0 +1,124 @@
+<div th:replace="atendimento/fragments/navegacao :: navegar-usuario"></div>
+<div class="row justify-content-md-center">
+    <div class="col col-md">
+        <form id="editarPerfil" class="form-floating needs-validation" novalidate=""
+              method="POST" action="/atendimento/clientes" 
+              th:object="${usuarioModel}">
+            <div class="card shadow bg-body rounded">
+                <div class="card-header rounded-1">
+                    <div class="row">
+                        <div class="hstack gap-3">
+                            <div class="col-md-2">
+                                <strong>Usuário </strong>
+                                <span class="badge bg-secondary bg-gradient loginlog col-md" th:text="*{nlogin}"></span>                            
+                            </div>                            
+                            
+                            <div class="col-md text-center">
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Button group with nested dropdown">
+                                    <button type="button" class="btn btn-outline-success" onclick=""><i class="bi bi-gear"> Solicitar alterações</i></button>
+                                    <button type="button" class="btn btn-outline-success" th:value="*{iUsuario}"  th:attr="onclick='modalTrocarSenha(' + *{iUsuario} + ')'"><i class="bi bi-key"> Trocar senha</i></button>
+                                    <button type="button" class="btn btn-outline-success" 
+                                            onclick="atualizarPerfil()"><i class="bi bi-check-lg"> Gravar</i></button>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 text-end">
+                                <strong>Situação </strong>
+                                <span class="badge bg-success bg-gradient col-md" 
+                                      th:text="*{situacaoUsuario}=='A'? 'Ativo' : 'dd'"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">                    
+                    <div class="row">
+                        <input type="hidden" th:field="*{iUsuario}" hidden="" id="iusuario"/>
+                        <input type="hidden" th:field="*{nlogin}" hidden="" id="nlogin"/>
+                        <div class="col-md mb-3">
+                            <div class="form-floating">                                    
+                                <input type="text" 
+                                       class="form-control" placeholder="Nome"
+                                       th:field="*{nomeUsuario}"
+                                       id="nomeUsuario"
+                                       required=""/>
+                                <div id="nomeUsuario-feedback" class="invalid-feedback"></div>
+                                <label for="nomeUsuario" class="col-sm col-form-label">Nome</label>    
+
+                            </div>
+                        </div>
+                        <div class="col-md mb-3">
+                            <div class="form-floating">                                    
+                                <input type="email" 
+                                       class="form-control" placeholder="E-mail"
+                                       th:field="*{emailUsuario}"
+                                       required=""/>
+                                <label for="emailUsuario" class="col-sm col-form-label">E-mail</label>
+                                <div id="emailUsuario-feedback" class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        <div class="col-md mb-3">
+                            <div class="form-floating">                                    
+                                <input type="tel" 
+                                       class="form-control" placeholder="Contato/Tel"
+                                       th:field="*{contatoUsuario}"
+                                       id="contatoUsuario"/>
+                                <label for="contatoUsuario" class="col-sm col-form-label">Contato / Tel</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md">
+                            <h6 class="mb-1">Entidades</h6>
+                            <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
+                                <li th:if="*{caspEntidadesList.size} > 0"
+                                    th:each="enti : *{caspEntidadesList}">
+                                    <span class="badge text-wrap text-dark bg-cinza casp-span"
+                                          th:text="${enti.nomeEntidade}"/>
+                                </li>
+                                <li 
+                                    th:if="*{caspEntidadesList.size} == 0">
+                                    <span class="badge text-wrap text-dark casp-span"
+                                          th:text="'Sem entidade informada'"/>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md">
+                            <h6 class="mb-1">Áreas</h6>                                                    
+                            <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
+                                <li th:if="*{caspAreasList.size} > 0"
+                                    th:each="area : *{caspAreasList}">
+                                    <span th:class="'badge text-wrap text-withe casp-span '
+                                          +${T(caspvale.caspsuporte.modulos.atendimento.view.common.StringToCSS).mapDescricaoAreaToCSSClass(area.descricaoArea)}"
+                                          th:text="${area.descricaoArea}"/>
+                                </li>
+                                <li th:if="*{caspAreasList.size} == 0">
+                                    <span class="badge text-wrap text-dark casp-span"
+                                          th:text="'Sem área informada'"/>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md">  
+                            <h6 class="mb-1">Sistemas</h6>
+                            <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
+                                <li th:if="*{caspSistemasList.size} > 0">
+                                    <span class="badge text-wrap text-dark bg-cinza" 
+                                          style="margin-right: 3px;margin-top: 3px"
+                                          th:each="sistema : *{caspSistemasList}"
+                                          th:text="${sistema.descricaoSistema}"/>
+                                </li>
+                                <li class="list-group-item"
+                                    th:if="*{caspSistemasList.size} == 0">
+                                    <span class="badge text-dark casp-span" 
+                                          th:text="'Sem sistema informado'"/>
+                                </li>
+                            </ul>
+                        </div>                              
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div th:replace="atendimento/fragments/modal :: modal"></div>
+<script>carregarChoices()</script>
+

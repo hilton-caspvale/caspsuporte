@@ -47,7 +47,7 @@ public class CaspTiposEntidades implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "tipo_descricao")
     private String tipoDescricao;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "iTipoEntidade")
+    @OneToMany(/*cascade = CascadeType.ALL,*/ mappedBy = "iTipoEntidade")
     private List<CaspEntidades> caspEntidadesList;
 
     public CaspTiposEntidades() {

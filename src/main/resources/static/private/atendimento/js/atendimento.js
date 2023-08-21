@@ -6,11 +6,17 @@ function getUriAtendimento() {
 }
 
 function moduloAtendimento() {
-    const elementos = [
-        [requestDef(getUriAtendimento(), 'GET', null), '#root'],
-        [requestDef(MV_A_MENU_ATENDIMENTO, 'GET', null), '#menuPrincipal']
-    ];
-    promiseHtml(elementos)
+    requestDef(getUriAtendimento(), 'GET', null)
+            .then(response => {
+                $('#root').html(response);
+            })
+            .catch(error => {
+                requestError(error, 'alertaGeral');
+            });
+    requestDef(MV_A_MENU_ATENDIMENTO, 'GET', null)
+            .then(response => {
+                $('#menuPrincipal').html(response);
+            })
             .catch(error => {
                 requestError(error, 'alertaGeral');
             });

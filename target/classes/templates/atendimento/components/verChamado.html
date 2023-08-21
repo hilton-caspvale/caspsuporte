@@ -1,325 +1,306 @@
 <div th:fragment="verChamado">   
     <div class="row justify-content-md-center">
-        <div class="col col-md-8">
-            <div th:replace="atendimento/components/acoesDoChamado :: acoesDoChamado"></div>    
+        <div class="col col-md-9">
+            <th:block th:replace="atendimento/components/acoesDoChamado :: acoesDoChamado"></th:block> 
             <form id="formVerCahamado" th:object="${caspChamados}">
                 <div class="card shadow bg-body rounded">
-                    <div class="card-header rounded-1">                        
-                        <div class="row">
-                            <div class="col p-2">
-                                <span class="badge bg-cinza text-dark fs-6" th:text="'Chamado: '+*{iChamado}"></span>
-                                <input type="hidden" th:value="*{iChamado}" id="ichamado"/>
-                            </div>
-                            <div class="col order-1 p-2">
-                                <span class="badge text-nowrap bg-transparent text-dark" th:text="'Aberto em: '+*{{dataAbertura}}"></span>
-                            </div>
-                            <div class="col order-5 p-2">
-                                <span class="badge bg-warning text-wrap text-dark" 
-                                      th:text="*{situacaoChamado}"
-                                      th:if="*{iSituacao.situacao} == 'A'"></span>
-                                <span class="badge bg-success text-wrap" 
-                                      th:text="*{situacaoChamado}"
-                                      th:if="*{iSituacao.situacao} == 'R'"></span>
-                                <span class="badge bg-secondary text-wrap" 
-                                      th:text="*{situacaoChamado}"
-                                      th:if="*{iSituacao.situacao} == 'E'"></span>
-                                <span class="badge bg-danger text-wrap" 
-                                      th:text="*{situacaoChamado}"
-                                      th:if="*{iSituacao.situacao} == 'C'"></span>
+                    <div class="card-header rounded-1">
+                        <div class="row justify-content-md-between">                        
+                            <div class="hstack gap-3">
+                                <div class="col-md">
+                                    <span class="badge bg-cinza text-dark fs-6" th:text="'Chamado: '+*{iChamado}"></span>
+                                    <input type="hidden" th:field="*{iChamado}"/>
+                                </div>
+                                <div class="col-md ms-auto">
+                                    <span class="badge text-nowrap bg-transparent text-dark" th:text="'Aberto em: '+*{{dataAbertura}}"></span>
+                                </div>
+                                <div class="col-md text-end">
+                                    <th:block th:replace="atendimento/fragments/layout :: situacao-chamado"></th:block>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="">
-                            <div class="row justify-content-between mb-2 shadow p-2 bg-body rounded">
-                                <div class="col-md">
-                                    <h6 class="mb-1" th:text="'Dados do usuário'"></h6>
-                                    <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary"
-                                        data-bs-toggle="tooltip" data-bs-placement="top"
-                                        id="ttt"
-                                        th:title="*{iUsuarioAbertura.nlogin}">
-                                        <li>
-                                            <p class="mb-0"><small th:text="*{iUsuarioAbertura.nome}"/></p>
-                                        </li>                                                    
-                                        <li th:if="*{contatoSolicitante}!=''">
-                                            <p class="mb-0"><small th:text="*{contatoSolicitante}"></small></p>                                                        
-                                        </li>
-                                        <li th:if="*{emailSolicitante}!=''">
-                                            <p class="mb-0"><small th:text="*{emailSolicitante}"></small></p>
-                                        <li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-5">
-                                    <h6 class="mb-1" th:text="*{iUsuarioEncaminhamento}!=null? 'Encaminhado para o analista' : 'Analista responsável'"></h6>
-                                    <ul class="list-unstyled text-center shadow p-1 cor-g rounded border-3 border-start border-secondary">
-                                        <li>
-                                            <p class="mb-0">
-                                                <small th:text="*{iUsuarioEncaminhamento}!=null? *{iUsuarioEncaminhamento.nome} : (*{iUsuarioAtendimento}==null? 'Nenhum' : *{iUsuarioAtendimento.nome})"></small>
-                                            </p>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-7">
-                                        <h6 class="mb-1">Entidade</h6>
-                                        <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
-                                            <li th:if="*{caspEntidadesList.size} > 0"
-                                                th:each="enti : *{caspEntidadesList}">
-                                                <span class="badge text-wrap text-dark bg-cinza casp-span"
-                                                      th:text="${enti.nomeEntidade}"/>
-                                            </li>
-                                            <li 
-                                                th:if="*{caspEntidadesList.size} == 0">
-                                                <span class="badge text-wrap text-dark casp-span"
-                                                      th:text="'Sem entidade informada'"/>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <h6 class="mb-1">Área</h6>                                                    
-                                        <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
-                                            <li th:if="*{caspAreasList.size} > 0"
-                                                th:each="area : *{caspAreasList}">
-                                                <span th:class="'badge text-wrap text-withe casp-span '
-                                                      +${T(caspvale.caspsuporte.modulos.atendimento.view.common.StringToCSS).mapDescricaoAreaToCSSClass(area.descricaoArea)}"
-                                                      th:text="${area.descricaoArea}"/>
-                                            </li>
-                                            <li th:if="*{caspAreasList.size} == 0">
-                                                <span class="badge text-wrap text-dark casp-span"
-                                                      th:text="'Sem área informada'"/>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-7">  
-                                        <h6 class="mb-1">Sistema</h6>
-                                        <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
-                                            <li th:if="*{caspSistemasList.size} > 0">
-                                                <span class="badge text-wrap text-dark bg-cinza" 
-                                                      style="margin-right: 3px;margin-top: 3px"
-                                                      th:each="sistema : *{caspSistemasList}"
-                                                      th:text="${sistema.descricaoSistema}"/>
-                                            </li>
-                                            <li class="list-group-item"
-                                                th:if="*{caspSistemasList.size} == 0">
-                                                <span class="badge text-dark casp-span" 
-                                                      th:text="'Sem sistema informado'"/>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <h6 class="mb-1">Problema</h6>
-                                        <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
-                                            <li th:if="*{caspProblemasList.size} > 0">
-                                                <span class="badge text-wrap text-dark"                                                      
-                                                      style="margin-right: 3px;margin-top: 3px"
-                                                      th:each="problema : *{caspProblemasList}"
-                                                      th:text="${problema.descricaoProblema}"/>
-                                            </li>
-                                            <li 
-                                                th:if="*{caspProblemasList.size} == 0">
-                                                <span class="badge text-dark" 
-                                                      th:text="'Sem problema informado'"/>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md">
-                                        <h6 class="mb-1">Prioridade</h6>
-                                        <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
-                                            <li>
-                                                <p class="mb-0"><small th:text="*{iPrioridade.descricaoPrioridade}"></small></p>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-md">
-                                        <h6 class="mb-1">Nível</h6>
-                                        <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
-                                            <li>
-                                                <p class="mb-0"><small th:text="*{iNivel.descricaoNivel}"></small></p>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-md">
-                                        <h6 class="mb-1">Origem</h6>
-                                        <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
-                                            <li>
-                                                <p class="mb-0"><small th:text="*{iOrigemChamado.descricaoOrigem}"></small></p>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-md" th:if="*{casoBetha}==''? false : (*{casoBetha}==null? false : true)">
-                                        <h6 class="mb-1">Chamado externo</h6>
-                                        <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
-                                            <li>
-                                                <p class="mb-0"><small th:text="*{casoBetha}"></small></p>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="row"> 
-                                    <div class="col-md">
-                                        <h6 class="mb-1">Resumo</h6>
-                                        <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
-                                            <li>
-                                                <p class="mb-0"><small th:text="*{resumoChamado}"></small></p>
-                                            </li>
-                                        </ul>
-                                    </div>                                    
-                                </div>
-                                <div class="row mb-3"
-                                     th:if="${quantidadeArquivos} > 0? true : false">
-                                    <div class="col-md">
-                                        <div class="accordion" id="accordionExample">                                                
-                                            <div class="accordion-item border-0">
-                                                <h2 class="accordion-header" id="headingThree">
-                                                    <button class="accordion-button collapsed p-2 shadow cor-g rounded border-3 border-start border-secondary" 
-                                                            type="button" data-bs-toggle="collapse"
-                                                            data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                                        <small th:text="${quantidadeArquivos} > 0? 'Arquivos anexados: '+ ${quantidadeArquivos} : 'Nenhum arquivo'"></small>
-                                                    </button>
-                                                </h2>
-                                                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                                                    <div class="accordion-body">                                    
-                                                        <div class="row">
-                                                            <div class="col-md mb-3">
-                                                                <ul class="list-unstyled">                                                                        
-                                                                    <li class="p-0" 
-                                                                        th:each="anexo : *{caspAnexosList}"
-                                                                        th:if="${anexo.iArquivo}!=null"
-                                                                        th:id="${anexo.iAnexo}">
-                                                                        <div class="input-group input-group-sm">
-                                                                            <input type="text" class="form-control" th:value="${anexo.descricaoArquivo}+' ('+${anexo.comentarioArquivo}+')'" readonly=""/>
-                                                                            <a th:if="${anexo.iUsuario.nlogin} == ${login}"                                                           
-                                                                               class="btn btn-outline-danger btEx" type="button"                                                            
-                                                                               data-bs-toggle="modal" 
-                                                                               data-bs-target="#confirmaExclusao"
-                                                                               th:attr="data-anexo=${anexo.iAnexo},data-id=${caspChamados.iChamado}" 
-                                                                               onclick="setarIAnexo(event)"
-                                                                               role="button">
-                                                                                <i class="fas fa-trash-alt"></i>
-                                                                            </a>
-                                                                            <a class="btn btn-outline-success" type="button" 
-                                                                               th:attr="data-anexo=${anexo.iAnexo}" 
-                                                                               th:href="@{'/atendimento/chamados/' + ${caspChamados.iChamado} + '/anexos/' + ${anexo.iAnexo}}">
-                                                                                <i class="fas fa-download"></i></a>
-                                                                        </div>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md mb-3">                                        
-                                        <nav>
-                                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                                <button class="nav-link active link-success" id="nav-descricao-tab" data-bs-toggle="tab" data-bs-target="#nav-descricao" type="button" role="tab" aria-controls="nav-descricao" aria-selected="true">Descrição</button>
-                                                <button class="nav-link link-success" id="nav-problema-tab" data-bs-toggle="tab" data-bs-target="#nav-problema" type="button" role="tab" aria-controls="nav-problema" aria-selected="false">Problema</button>
-                                                <button class="nav-link link-success" id="nav-solucao-tab" data-bs-toggle="tab" data-bs-target="#nav-solucao" type="button" role="tab" aria-controls="nav-solucao" aria-selected="false">Solução</button>
-                                                <button class="nav-link link-success" id="nav-comentarios-tab" data-bs-toggle="tab" data-bs-target="#nav-comentarios" type="button" role="tab" aria-controls="nav-comentarios" aria-selected="false"
-                                                        th:text="${quantidadeComentarios} > 0? 'Comentários ('+ ${quantidadeComentarios}+')' : 'Nenhum comentário'"></button>
-                                            </div>
-                                        </nav>
-                                        <div class="tab-content" id="nav-tabContent">                                                
-                                            <div class="tab-pane fade show active" id="nav-descricao" role="tabpanel" aria-labelledby="nav-descricao-tab">
-                                                <div class="card">
-                                                    <div class="card-header">
-                                                        <textarea id="idDescricaoChamado"
-                                                                  class="form-control casp-textarea fs-6"                                                                          
-                                                                  th:field="*{descricaoChamado}" 
-                                                                  aria-label="Descrição" 
-                                                                  readonly=""></textarea>
-                                                    </div>
-                                                </div>    
-                                            </div>    
-                                            <div class="tab-pane fade" id="nav-problema" role="tabpanel" aria-labelledby="nav-problema-tab">
-                                                <div class="card">
-                                                    <div class="card-header">
-                                                        <textarea class="form-control casp-textarea fs-6" th:field="*{descricaoProblema}"aria-label="Problema"
-                                                                  readonly=""></textarea>
-                                                    </div>
-                                                </div>    
-                                            </div>
-                                            <div class="tab-pane fade" id="nav-solucao" role="tabpanel" aria-labelledby="nav-solucao-tab">
-                                                <div class="card">
-                                                    <div class="card-header">
-                                                        <textarea class="form-control casp-textarea fs-6" th:field="*{descricaoSolucao}" aria-label="Solução"
-                                                                  readonly=""></textarea>  
-                                                    </div>
-                                                </div>    
-                                            </div>
-                                            <div class="tab-pane fade" id="nav-comentarios" role="tabpanel" aria-labelledby="nav-comentarios-tab">
-                                                <div class="list-group">
-                                                    <a class="list-group-item list-group-item-action"                                                                   
-                                                       th:each="anexo : *{caspAnexosList}"  
-                                                       th:if="${anexo.iArquivo}==null"
-                                                       th:value="${anexo}">                                                                    
-                                                        <div class="d-flex w-100 justify-content-end col-md">    
-                                                            <small class="p-1" th:text="${anexo.iUsuario.nlogin}+' - - '+${anexo.iUsuario}==null? 'Interno em '+${{anexo.dataArquivo}} : ${anexo.iUsuario.nome}+' em ' +${{anexo.dataArquivo}}"></small>
-                                                            <div class="btn-group mb-1" role="group">
-                                                                <button th:if="${anexo.iUsuario.nlogin} == ${login}"
-                                                                        class="btn btn-sm btn-outline-danger border-0 btEx" 
-                                                                        type="button"
-                                                                        data-bs-toggle="modal" 
-                                                                        data-bs-target="#confirmaExclusao"
-                                                                        th:attr="data-anexo=${anexo.iAnexo},data-id=*{iChamado}"
-                                                                        onclick="setarIAnexo(event)">
-                                                                    <i class="fas fa-trash-alt"></i>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                        <textarea 
-                                                            class="form-control fs-6" 
-                                                            th:text="${anexo.comentarioArquivo}" 
-                                                            aria-label="Comentário" 
-                                                            readonly="">                                                                    
-                                                        </textarea>                                                                                    
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>                               
+                        <div class="row">
+                            <div class="col-md">
+                                <h6 class="mb-1" th:text="'Dados do usuário'"></h6>
+                                <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary"
+                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                    id="ttt"
+                                    th:title="*{iUsuarioAbertura.nlogin}">
+                                    <li>
+                                        <p class="mb-0"><small th:text="*{iUsuarioAbertura.nome}"></small></p>
+                                    </li>                                                    
+                                    <li th:if="*{contatoSolicitante}!=''">
+                                        <p class="mb-0"><small th:text="*{contatoSolicitante}"></small></p>                                                        
+                                    </li>
+                                    <li th:if="*{emailSolicitante}!=''">
+                                        <p class="mb-0"><small th:text="*{emailSolicitante}"></small></p>
+                                    <li>
+                                </ul>
+                            </div>
+                            <div class="col-md-5">
+                                <h6 class="mb-1" th:text="*{iUsuarioEncaminhamento}!=null? 'Encaminhado para o analista' : 'Analista responsável'"></h6>
+                                <ul class="list-unstyled text-center shadow p-1 cor-g rounded border-3 border-start border-secondary">
+                                    <li>
+                                        <p class="mb-0">
+                                            <small th:text="*{iUsuarioEncaminhamento}!=null? *{iUsuarioEncaminhamento.nome} : (*{iUsuarioAtendimento}==null? 'Nenhum' : *{iUsuarioAtendimento.nome})"></small>
+                                        </p>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-7">
+                                <h6 class="mb-1">Entidade</h6>
+                                <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
+                                    <li th:if="*{caspEntidadesList.size} > 0"
+                                        th:each="enti : *{caspEntidadesList}">
+                                        <span class="badge text-wrap text-dark bg-cinza casp-span"
+                                              th:text="${enti.nomeEntidade}"></span>
+                                    </li>
+                                    <li 
+                                        th:if="*{caspEntidadesList.size} == 0">
+                                        <span class="badge text-wrap text-dark casp-span"
+                                              th:text="'Sem entidade informada'"></span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-5">
+                                <h6 class="mb-1">Área</h6>                                                    
+                                <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
+                                    <li th:if="*{caspAreasList.size} > 0"
+                                        th:each="area : *{caspAreasList}">
+                                        <span th:class="'badge text-wrap text-withe casp-span '
+                                              +${T(caspvale.caspsuporte.modulos.atendimento.view.common.StringToCSS).mapDescricaoAreaToCSSClass(area.descricaoArea)}"
+                                              th:text="${area.descricaoArea}"></span>
+                                    </li>
+                                    <li th:if="*{caspAreasList.size} == 0">
+                                        <span class="badge text-wrap text-dark casp-span"
+                                              th:text="'Sem área informada'"></span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-7">  
+                                <h6 class="mb-1">Sistema</h6>
+                                <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
+                                    <li th:if="*{caspSistemasList.size} > 0">
+                                        <span class="badge text-wrap text-dark bg-cinza" 
+                                              style="margin-right: 3px;margin-top: 3px"
+                                              th:each="sistema : *{caspSistemasList}"
+                                              th:text="${sistema.descricaoSistema}"></span>
+                                    </li>
+                                    <li class="list-group-item"
+                                        th:if="*{caspSistemasList.size} == 0">
+                                        <span class="badge text-dark casp-span" 
+                                              th:text="'Sem sistema informado'"></span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-5">
+                                <h6 class="mb-1">Problema</h6>
+                                <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
+                                    <li th:if="*{caspProblemasList.size} > 0">
+                                        <span class="badge text-wrap text-dark"                                                      
+                                              style="margin-right: 3px;margin-top: 3px"
+                                              th:each="problema : *{caspProblemasList}"
+                                              th:text="${problema.descricaoProblema}"></span>
+                                    </li>
+                                    <li 
+                                        th:if="*{caspProblemasList.size} == 0">
+                                        <span class="badge text-dark" 
+                                              th:text="'Sem problema informado'"></span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md">
+                                <h6 class="mb-1">Prioridade</h6>
+                                <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
+                                    <li>
+                                        <p class="mb-0"><small th:text="*{iPrioridade.descricaoPrioridade}"></small></p>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md">
+                                <h6 class="mb-1">Nível</h6>
+                                <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
+                                    <li>
+                                        <p class="mb-0"><small th:text="*{iNivel.descricaoNivel}"></small></p>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md">
+                                <h6 class="mb-1">Origem</h6>
+                                <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
+                                    <li>
+                                        <p class="mb-0"><small th:text="*{iOrigemChamado.descricaoOrigem}"></small></p>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md" th:if="*{casoBetha}==''? false : (*{casoBetha}==null? false : true)">
+                                <h6 class="mb-1">Chamado externo</h6>
+                                <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
+                                    <li>
+                                        <p class="mb-0"><small th:text="*{casoBetha}"></small></p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row"> 
+                            <div class="col-md">
+                                <h6 class="mb-1">Resumo</h6>
+                                <ul class="list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary">
+                                    <li>
+                                        <p class="mb-0"><small th:text="*{resumoChamado}"></small></p>
+                                    </li>
+                                </ul>
+                            </div>                                    
+                        </div>
+                        <div class="row mb-3"
+                             th:if="${quantidadeArquivos} > 0? true : false">
+                            <div class="col-md">
+                                <div class="accordion" id="accordionExample">                                                
+                                    <div class="accordion-item border-0">
+                                        <h2 class="accordion-header" id="headingThree">
+                                            <button class="accordion-button collapsed p-2 shadow cor-g rounded border-3 border-start border-secondary" 
+                                                    type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                <small th:text="${quantidadeArquivos} > 0? 'Arquivos anexados: '+ ${quantidadeArquivos} : 'Nenhum arquivo'"></small>
+                                            </button>
+                                        </h2>
+                                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">                                    
+                                                <div class="row">
+                                                    <div class="col-md mb-3">
+                                                        <ul class="list-unstyled">                                                                        
+                                                            <li class="p-0" 
+                                                                th:each="anexo : *{caspAnexosList}"
+                                                                th:if="${anexo.iArquivo}!=null"
+                                                                th:id="${anexo.iAnexo}">
+                                                                <div class="input-group input-group-sm">
+                                                                    <input type="text" class="form-control" th:value="${anexo.descricaoArquivo}+' ('+${anexo.comentarioArquivo}+')'" readonly=""/>
+                                                                    <a th:if="${anexo.iUsuario.nlogin} == ${login}"                                                           
+                                                                       class="btn btn-outline-danger btEx bi bi-trash" type="button"                                                            
+                                                                       data-bs-toggle="modal" 
+                                                                       data-bs-target="#confirmaExclusao"
+                                                                       th:attr="data-anexo=${anexo.iAnexo},data-id=${caspChamados.iChamado}" 
+                                                                       onclick="setarIAnexo(event)"
+                                                                       role="button"></a>
+                                                                    <a class="btn btn-outline-success bi bi-download" type="button" 
+                                                                       th:attr="data-anexo=${anexo.iAnexo}" 
+                                                                       th:href="@{'/atendimento/chamados/' + ${caspChamados.iChamado} + '/anexos/' + ${anexo.iAnexo}}"></a>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md mb-3">                                        
+                                <nav>
+                                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                        <button class="nav-link active link-success" id="nav-descricao-tab" data-bs-toggle="tab" data-bs-target="#nav-descricao" type="button" role="tab" aria-controls="nav-descricao" aria-selected="true">Descrição</button>
+                                        <button class="nav-link link-success" id="nav-problema-tab" data-bs-toggle="tab" data-bs-target="#nav-problema" type="button" role="tab" aria-controls="nav-problema" aria-selected="false">Problema</button>
+                                        <button class="nav-link link-success" id="nav-solucao-tab" data-bs-toggle="tab" data-bs-target="#nav-solucao" type="button" role="tab" aria-controls="nav-solucao" aria-selected="false">Solução</button>
+                                        <button class="nav-link link-success" id="nav-comentarios-tab" data-bs-toggle="tab" data-bs-target="#nav-comentarios" type="button" role="tab" aria-controls="nav-comentarios" aria-selected="false"
+                                                th:text="${quantidadeComentarios} > 0? 'Comentários ('+ ${quantidadeComentarios}+')' : 'Nenhum comentário'"></button>
+                                    </div>
+                                </nav>
+                                <div class="tab-content" id="nav-tabContent">                                                
+                                    <div class="tab-pane fade show active" id="nav-descricao" role="tabpanel" aria-labelledby="nav-descricao-tab">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <textarea id="idDescricaoChamado"
+                                                          class="form-control casp-textarea"                                                                          
+                                                          th:field="*{descricaoChamado}" 
+                                                          aria-label="Descrição" 
+                                                          readonly=""></textarea>
+                                            </div>
+                                        </div>    
+                                    </div>    
+                                    <div class="tab-pane fade" id="nav-problema" role="tabpanel" aria-labelledby="nav-problema-tab">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <textarea class="form-control casp-textarea" th:field="*{descricaoProblema}"aria-label="Problema"
+                                                          readonly=""></textarea>
+                                            </div>
+                                        </div>    
+                                    </div>
+                                    <div class="tab-pane fade" id="nav-solucao" role="tabpanel" aria-labelledby="nav-solucao-tab">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <textarea class="form-control casp-textarea" th:field="*{descricaoSolucao}" aria-label="Solução"
+                                                          readonly=""></textarea>  
+                                            </div>
+                                        </div>    
+                                    </div>
+                                    <div class="tab-pane fade" id="nav-comentarios" role="tabpanel" aria-labelledby="nav-comentarios-tab">
+                                        <div class="list-group">
+                                            <a class="list-group-item list-group-item-action"                                                                   
+                                               th:each="anexo : *{caspAnexosList}"  
+                                               th:if="${anexo.iArquivo}==null"
+                                               th:value="${anexo}">                                                                    
+                                                <div class="d-flex w-100 justify-content-end col-md">    
+                                                    <small class="p-1" th:text="${anexo.iUsuario.nlogin}+' - - '+${anexo.iUsuario}==null? 'Interno em '+${{anexo.dataArquivo}} : ${anexo.iUsuario.nome}+' em ' +${{anexo.dataArquivo}}"></small>
+                                                    <div class="btn-group mb-1" role="group">
+                                                        <button th:if="${anexo.iUsuario.nlogin} == ${login}"
+                                                                class="btn btn-sm btn-outline-danger border-0 btEx bi bi-trash" 
+                                                                type="button"
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#confirmaExclusao"
+                                                                th:attr="data-anexo=${anexo.iAnexo},data-id=*{iChamado}"
+                                                                onclick="setarIAnexo(event)">
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <textarea 
+                                                    class="form-control casp-textarea" 
+                                                    th:text="${anexo.comentarioArquivo}" 
+                                                    aria-label="Comentário" 
+                                                    readonly="">                                                                    
+                                                </textarea>                                                                                    
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>     
                     </div>
                 </div>
-            </form>
-            <div class="modal fade" 
-                 id="confirmaExclusao" 
-                 data-bs-backdrop="static" 
-                 data-bs-keyboard="false" 
-                 tabindex="-1" 
-                 aria-labelledby="confirmaExclusao">
-                <div class="modal-dialog modal-dialog-centered modal-sm border-0">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            Deseja excluir o registro?
-                        </div>
-                        <div class="modal-body">
-                            <div class="row justify-content-md-center">
-                                <div class="btn-group btn-group-sm" role="group">
-                                    <a class="btn btn-secondary" type="button"
-                                       data-bs-dismiss="modal">                                    
-                                        <i class="fas fa-arrow-left"></i>
-                                        Voltar
-                                    </a>
-                                    <a class="btn btn-danger" type="button" 
-                                       th:id="btExcluir"
-                                       th:attr="data-id=*{iChamado}"
-                                       onclick="deletarComentario(event)"
-                                       data-bs-dismiss="modal">                                    
-                                        <i class="fas fa-trash-alt"></i>
-                                        Excluir
-                                    </a>                                     
-                                </div>
+            </form>            
+        </div>
+    </div>
+    <div class="row">
+        <div class="modal fade" 
+             id="confirmaExclusao" 
+             data-bs-backdrop="static" 
+             data-bs-keyboard="false" 
+             tabindex="-1" 
+             aria-labelledby="confirmaExclusao">
+            <div class="modal-dialog modal-dialog-centered modal-sm border-0">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        Deseja excluir o registro?
+                    </div>
+                    <div class="modal-body">
+                        <div class="row justify-content-md-center">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a class="btn btn-secondary bi bi-arrow-left" type="button"
+                                   data-bs-dismiss="modal">Voltar</a>
+                                <a class="btn btn-danger bi bi-trash" type="button" 
+                                   th:id="btExcluir"
+                                   th:attr="data-id=*{iChamado}"
+                                   onclick="deletarComentario(event)"
+                                   data-bs-dismiss="modal">Excluir</a>                                     
                             </div>
                         </div>
                     </div>

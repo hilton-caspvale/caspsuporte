@@ -37,8 +37,8 @@ public class ChamadosModel {
     private List<UsuariosInputModel> caspUsuariosList;
     private List<AnexosInputModel> caspAnexosList;
     private LocalDateTime dataAbertura;
-    private LocalDate dataEncerramento;
-    private LocalDate dataAgendamento;
+    private LocalDateTime dataEncerramento;
+    private LocalDateTime dataAgendamento;
     private LocalDateTime dataAtendimento;
     private LocalDateTime dtAlteracao;
     private PrioridadesInputModel iPrioridade;

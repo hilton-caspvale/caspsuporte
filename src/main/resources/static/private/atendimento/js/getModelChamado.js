@@ -1,17 +1,21 @@
 function getChamado() {
-    let listaEntidades = document.getElementById("entidades") || null;
+    let listaEntidades = document.getElementById("caspEntidadesList") || null;
     let entidades = [];
-    for (i = 0; i < listaEntidades.length; i = i + 1) {
-        let entidade = {ientidade: listaEntidades.options[i].value,
-            nomeEntidade: listaEntidades.options[i].text};
-        entidades.push(entidade);
+    if (listaEntidades) {
+        for (i = 0; i < listaEntidades.length; i = i + 1) {
+            let entidade = {ientidade: listaEntidades.options[i].value,
+                nomeEntidade: listaEntidades.options[i].text};
+            entidades.push(entidade);
+        }
     }
-    let listaAreas = document.getElementById("areas") || null;
+    let listaAreas = document.getElementById("caspAreasList") || null;
     let areas = [];
-    for (i = 0; i < listaAreas.length; i = i + 1) {
-        let area = {iarea: listaAreas.options[i].value,
-            descricaoArea: listaAreas.options[i].text};
-        areas.push(area);
+    if (listaAreas) {
+        for (i = 0; i < listaAreas.length; i = i + 1) {
+            let area = {iarea: listaAreas.options[i].value,
+                descricaoArea: listaAreas.options[i].text};
+            areas.push(area);
+        }
     }
     let listaSistemas = document.getElementById("sistemas") || null;
     let sistemas = [];
@@ -31,7 +35,7 @@ function getChamado() {
             problemas.push(problema);
         }
     }
-    let listaNiveis = document.getElementById("nivel") || null;
+    let listaNiveis = document.getElementById("iNivel") || null;
     let nivel = listaNiveis.options[listaNiveis.selectedIndex].value || null;
     let listaOrigens = document.getElementById("origem") || null;
     let origem = listaOrigens.options[listaOrigens.selectedIndex].value || null;

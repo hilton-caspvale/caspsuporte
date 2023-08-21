@@ -15,23 +15,27 @@ function validarUsuario(formulario) {
         fetch(uri)
                 .then(response => response.json())
                 .then(data => {
-                    if (data.status === 404) {
-                        if (data.detail === 'Usuário não localizado!') {
-                            texto = "";
-                            adicionarClass(login, 'is-valid');
-                            deletarClass(login, 'is-invalid');
-                            botaoGravar.removeAttribute('disabled');
+                    if (response.status === 401) {
+                        window.location.href = '/login';
+                    } else {
+                        if (data.status === 404) {
+                            if (data.detail === 'Usuário não localizado!') {
+                                texto = "";
+                                adicionarClass(login, 'is-valid');
+                                deletarClass(login, 'is-invalid');
+                                botaoGravar.removeAttribute('disabled');
+                            } else {
+                                adicionarClass(login, 'is-invalid');
+                                deletarClass(login, 'is-valid');
+                                botaoGravar.setAttribute('disabled', '');
+                                usuarioInvalido.innerHTML = 'Não foi possível verificar o login informado!!';
+                            }
                         } else {
                             adicionarClass(login, 'is-invalid');
                             deletarClass(login, 'is-valid');
                             botaoGravar.setAttribute('disabled', '');
-                            usuarioInvalido.innerHTML = 'Não foi possível verificar o login informado!!';
+                            usuarioInvalido.innerHTML = 'Login [' + data.nlogin + '] está em uso!';
                         }
-                    } else {
-                        adicionarClass(login, 'is-invalid');
-                        deletarClass(login, 'is-valid');
-                        botaoGravar.setAttribute('disabled', '');
-                        usuarioInvalido.innerHTML = 'Login [' + data.nlogin + '] está em uso!';
                     }
                 })
                 .catch(function (error) {
@@ -92,25 +96,34 @@ function gravarChamado(event) {
                         visualizarChamado(json.ichamado);
                     });
                 } else {
-                    response.json().then(function (json) {
-                        if (json.status === 500) {
-                            carregarToast(json.userMessage);
-                        } else {
-                            if (json.detail === undefined) {
-                                carregarToast(response.status + ' - Recurso não encontrado! ' + json.path);
+                    if (response.status === 401) {
+                        window.location.href = '/login';
+                    } else {
+                        response.json().then(function (json) {
+                            if (json.status === 500) {
+                                carregarToast(json.userMessage);
                             } else {
-                                let detalhe = '';
-                                if (json.objects === undefined) {
-                                    alertaUnico(json.title, json.userMessage, 'alertaGeral');
+                                if (json.detail === undefined) {
+                                    carregarToast(response.status + ' - Recurso não encontrado! ' + json.path);
                                 } else {
-                                    json.objects.forEach(ob => {
-                                        detalhe = detalhe + 'Campo <strong>' + ob.name + '</strong> ' + ob.userMessage + '<br>';
-                                    });
-                                    alertaCampos(json.userMessage, detalhe, 'alertaGeral');
+                                    let detalhe = '';
+                                    if (json.objects === undefined) {
+                                        alertaUnico(json.title, json.userMessage, 'alertaGeral');
+                                    } else {
+                                        json.objects.forEach(ob => {
+                                            detalhe = detalhe + 'Campo <strong>' + ob.name + '</strong> ' + ob.userMessage + '<br>';
+                                        });
+                                        invalidFeedback(json.objects);
+                                        if (detalhe === '') {
+                                            alerta(json.userMessage, 'alertaGeral');
+                                        } else {
+                                            alertaCampos(json.userMessage, detalhe, 'alertaGeral');
+                                        }
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             })
             .catch(function (error) {
@@ -175,6 +188,7 @@ function setarIAnexo(event) {
     document.getElementById("btExcluir").setAttribute("data-anexo", idAnexo);
     document.getElementById("btExcluir").setAttribute("data-id", iChamado);
 }
+
 function deletarComentario(event) {
     event.preventDefault();
     let currentTarget = $(event.currentTarget);
@@ -197,7 +211,7 @@ function patchEnviarAnexo(event, idChamado) {
     let form = $('#formAnexo')[0];
     let comentarioAnexo = '';
     if (!idChamado) {
-        idChamado = document.getElementById('ichamado').value;
+        idChamado = document.getElementById('iChamado').value;
         comentarioAnexo = document.getElementById('comentarioAnexo').value;
     }
     var data = new FormData(form);
@@ -227,13 +241,17 @@ function patchEnviarAnexo(event, idChamado) {
                         visualizarChamado(idChamado);
                     });
                 } else {
-                    response.json()
-                            .then(json => {
-                                carregarToast(json.userMessage, 'erro', json.userMessage);
-                            })
-                            .catch(er => {
-                                throw {errorType: 'other', data: {status: response.status, body: er}};
-                            });
+                    if (response.status === 401) {
+                        window.location.href = '/login';
+                    } else {
+                        response.json()
+                                .then(json => {
+                                    carregarToast(json.userMessage, 'erro', json.userMessage);
+                                })
+                                .catch(er => {
+                                    throw {errorType: 'other', data: {status: response.status, body: er}};
+                                });
+                    }
                 }
             })
             .catch(error => {
@@ -275,6 +293,99 @@ function atualizarTotais() {
             });
 }
 
+function requestDef(url, metodo, object) {
+    let header = new Headers({'Content-Type': 'application/json'});
+
+    if (metodo === 'GET') {
+        object = null;
+        header = new Headers({'Content-Type': 'text/html'});
+    }
+
+    const conteudo = {
+        method: metodo,
+        headers: header,
+        body: object
+    };
+    return fetch(url, conteudo)
+            .then(response => {
+                const contentType = response.headers.get('content-type');
+                if (response.ok) {
+                    if (response.status === 204) {
+                        return "";
+                    } else if (contentType && contentType.includes('application/json')) {
+                        return response.json();
+                    } else if (contentType && contentType.includes('text/html')) {
+                        return response.text();
+                    } else {
+                        return response.text();
+                    }
+                } else {
+
+                    if (response.status === 401) {
+                        window.location.href = '/login';
+                    } else {
+                        if (contentType && contentType.includes('application/json')) {
+                            return response.json()
+                                    .then(json => {
+                                        if (json.objects !== undefined) {
+                                            throw {errorType: 'json-object', data: json};
+                                        } else {
+                                            throw {errorType: 'json-default', data: json};
+                                        }
+                                    });
+                        } else {
+                            return response.text()
+                                    .then(text => {
+                                        throw {errorType: 'http-error', data: {status: response.status, body: text}};
+                                    });
+                        }
+                    }
+                }
+            })
+            .catch(error => {
+                throw error;
+            });
+}
+
+function requestError(rejection, idLocal) {
+    const {errorType, data} = rejection;
+    switch (errorType) {
+        case 'json-object':
+            let json = JSON.parse(JSON.stringify(rejection.data));
+            invalidFeedback(json.objects);
+            alerta(json.userMessage, idLocal);
+            return json.objects;
+        case 'json-default':
+            return carregarToast(JSON.parse(JSON.stringify(rejection.data)).userMessage, 'erro');
+        case 'other':
+            return carregarToast(JSON.parse(JSON.stringify(rejection)).userMessage, 'erro');
+        default:
+            return carregarToast(JSON.parse(JSON.stringify(rejection)).userMessage, 'erro');
+    }
+}
+
+function requestExcluirCadastro(url) {
+    requestDef(url, 'DELETE', null)
+            .then(response => {
+                carregarToast("Regitro excluído!", "alerta");
+                atualizarTabela('table');
+                limparModal();
+            })
+            .catch(error => {
+                requestError(error, 'alertaModal');
+            });
+}
+
+function atualizarPerfil() {
+    requestDef(perfilPath, 'PATCH', getPerfil())
+            .then(response => {
+                carregarToast("perfil [" + response.nlogin + "] atualizado!", "sucesso");
+            })
+            .catch(error => {
+                requestError(error, 'alertaGeral');
+            });
+}
+
 function promiseHtml(promisesEElementos, promiseAPI) {
     // Verifica se o primeiro parâmetro é um array
     if (!Array.isArray(promisesEElementos)) {
@@ -305,84 +416,13 @@ function promiseHtml(promisesEElementos, promiseAPI) {
     return resultPromise;
 }
 
-function requestDef(url, metodo, object) {
-    let header = new Headers({'Content-Type': 'application/json'});
-
-    if (metodo === 'GET') {
-        object = null;
-        header = new Headers({'Content-Type': 'text/html'});
-    }
-
-    const conteudo = {
-        method: metodo,
-        headers: header,
-        body: object
-    };
-    return fetch(url, conteudo)
-            .then(response => {
-                const contentType = response.headers.get('content-type');
-                if (response.ok) {
-                    if (response.status === 204) {
-                        return "";
-                    } else if (contentType && contentType.includes('application/json')) {
-                        return response.json();
-                    } else if (contentType && contentType.includes('text/html')) {
-                        return response.text();
-                    } else {
-                        return response.text();
-                    }
-                } else {
-                    if (contentType && contentType.includes('application/json')) {
-                        return response.json()
-                                .then(json => {
-                                    if (json.objects !== undefined) {
-                                        throw {errorType: 'json-object', data: json};
-                                    } else {
-                                        throw {errorType: 'json-default', data: json};
-                                    }
-                                });
-                    } else {
-                        return response.text()
-                                .then(text => {
-                                    throw {errorType: 'http-error', data: {status: response.status, body: text}};
-                                });
-                    }
-                }
-            })
+function moduloAtendimentoPromiseHtml() {
+    const elementos = [
+        [requestDef(getUriAtendimento(), 'GET', null), '#root'],
+        [requestDef(MV_A_MENU_ATENDIMENTO, 'GET', null), '#menuPrincipal']
+    ];
+    promiseHtml(elementos)
             .catch(error => {
-                throw error;
-            });
-}
-
-function requestError(rejection, idLocal) {
-    const {errorType, data} = rejection;
-    switch (errorType) {
-        case 'json-object':
-            let json = JSON.parse(JSON.stringify(rejection.data));
-            let detalhe = '';
-            json.objects.forEach(ob => {
-                detalhe = detalhe + 'Campo <strong>' + ob.name + '</strong> ' + ob.userMessage + '<br>';
-            });
-            return alertaCampos(json.userMessage, detalhe, idLocal);
-        case 'json-default':
-            return carregarToast(JSON.parse(JSON.stringify(rejection.data)).userMessage, 'erro');
-        case 'other':
-            return carregarToast(JSON.parse(JSON.stringify(rejection)).userMessage, 'erro');
-            ;
-        default:
-            return carregarToast(JSON.parse(JSON.stringify(rejection)).userMessage, 'erro');
-            ;
-    }
-}
-
-function requestExcluirCadastro(url) {
-    requestDef(url, 'DELETE', null)
-            .then(response => {
-                carregarToast("Regitro excluído!", "alerta");
-                atualizarTabela('table');
-                limparModal();
-            })
-            .catch(error => {
-                requestError(error, 'alertaModal');
+                requestError(error, 'alertaGeral');
             });
 }

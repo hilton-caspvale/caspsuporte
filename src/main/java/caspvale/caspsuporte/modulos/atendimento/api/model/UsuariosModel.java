@@ -2,6 +2,7 @@ package caspvale.caspsuporte.modulos.atendimento.api.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.List;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -27,6 +28,8 @@ public class UsuariosModel {
     @NotEmpty
     private String nomeUsuario;
     private String contatoUsuario;
+    @NotEmpty
+    @Email
     private String emailUsuario;
     private String situacaoUsuario;
     private List<AreasInputModel> caspAreasList;

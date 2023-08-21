@@ -1,129 +1,27 @@
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org/"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-    <head th:fragment="header">
-        <title>CASPVALE</title>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
-        <link rel="icon" th:href="@{/public/imagens/casp.png}"/>
-        <link rel="stylesheet" type="text/css" href="/public/css/bootstrap.min.css"/>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.0/font/bootstrap-icons.css"/>
-        <link rel="stylesheet" type="text/css" href="/public/css/bootstrap-table.min.css"/>
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous"/>
-        <link rel="stylesheet" type="text/css" href="/public/css/choices.min.css"/>
-        <link rel="stylesheet" type="text/css" href="/public/css/style.css"/>        
-    </head>
+
+    <head th:replace="header-footer :: header"></head>
+
     <body class="cor-g">
         <input th:value="${login}" id="usuarioLogado" hidden="true"></input>        
-        <nav class="navbar navbar-expand-lg navbar-dark bg-gradient mb-3"style="background-color: #95bb32"
-             id="navPrincipal">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/">
-                    <img src="/public/imagens/casp.png" class="align-content-center">
-                        CASPVALE
-                    </img>    
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>   
+        <th:block th:replace="atendimento/fragments/menuPrincipal :: menu-principal"></th:block>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="menuPrincipal"/>
-                </div>
-                <span class="badge bg-secondary bg-gradient loginlog" th:text="'Usuário: '+${login}" th:id="${login}"></span>
-                <div th:replace="atendimento/fragments/menuPrincipal :: menu-modulos"></div>
-                <div class="btn-group btn-group-sm" role="group" aria-label="Third group">
-                    <a type="button" class="btn btn-danger" href="/logout">Sair</a>
-                </div>
-            </div>
-            <!--<div class="container-fluid">
-                <a class="navbar-brand" href="/">
-                    <img src="/public/imagens/casp.png" class="align-content-center">
-                        CASPVALE
-                    </img>    
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>   
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="menuPrincipal"/>
-                </div>
-                <span class="badge bg-secondary bg-gradient loginlog" th:text="'Usuário: '+${login}" th:id="${login}"></span>
-                <div class="btn-group p-1" role="group" aria-label="Basic radio toggle button group">
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked
-                           th:if="${role} == '[ANALISTA]'? 'true' : (${role} == '[ADMINISTRADOR]'? 'true' : false)"/>
-                    <label class="btn btn-outline-success" for="btnradio1" 
-                           th:if="${role} == '[ANALISTA]'? 'true' : (${role} == '[ADMINISTRADOR]'? 'true' : false)">Acesso Remoto</label>
-
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off"
-                           onclick="moduloAtendimento()"/>
-                    <label class="btn btn-outline-success" for="btnradio2">Atendimento</label>
-
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off"
-                           th:if="${role} == 'ANALISTA'? 'true' : (${role} == 'ADMINISTRADOR'? 'true' : false)"
-                           onclick="carregaHtml('/mv/ponto', 'root')"/>
-                    <label class="btn btn-outline-success" for="btnradio3"
-                           th:if="${role} == 'ANALISTA'? 'true' : (${role} == 'ADMINISTRADOR'? 'true' : false)">Registro de Ponto</label>
-                </div>
-                <div class="btn-group p-1" role="group" aria-label="Third group">
-                    <a type="button" class="btn btn-danger" href="/logout">Sair</a>
-                </div>
-            </div>-->
-        </nav>        
         <section> 
             <main class="container">                 
                 <div class="row">        
                     <div class="cor-g1 bg-gradient rounded p-2">
-                        <div id="principal">
-                            <div id="alertaGeral"></div>                                
-                            <div id="root">
-                                <input type="radio" class="btn-check" name="botaoradio1" id="botaoradio1" autocomplete="off"
-                                       onclick="moduloAtendimento()"/>
-                                <label class="btn btn-outline-success" for="botaoradio1">Atendimento</label>
-
-                                <input type="radio" class="btn-check" name="botaoradio2" id="btnradio2" autocomplete="off"
-                                       th:if="${role} == 'ANALISTA'? 'true' : (${role} == 'ADMINISTRADOR'? 'true' : false)"
-                                       onclick="carregaHtml('/mv/ponto', 'root')"/>
-                                <label class="btn btn-outline-success" for="botaoradio2"
-                                       th:if="${role} == 'ANALISTA'? 'true' : (${role} == 'ADMINISTRADOR'? 'true' : false)">Registro de Ponto</label>
-                            </div>
-                            <div id="toastId" class="toast-container position-fixed bottom-0 start-0 p-3"></div>
-
-                        </div>                            
+                        <div id="alertaGeral"></div>      
+                        <div id="root"></div>
+                        <div id="toastId" class="toast-container position-fixed bottom-0 start-0 p-3"></div>
                     </div>
                 </div>
             </main>
         </section>
 
-        <!-- <footer>
-             <div class="d-flex flex-column flex-sm-row justify-content-end py-1 border-top fixed-bottom">
-                 <p>&copy; 2022 CASPVALE, Todos os direitos reservados.</p>                
-             </div>
-         </footer>-->
-        <script src="/public/js/jquery-3.6.0.min.js"></script>
-        <script src="/public/js/bootstrap.bundle.min.js"></script>
-        <script src="/public/js/choices.min.js"></script>
-        <script src="/public/js/sidebars.js"></script>
-        <script src="/private/atendimento/js/main.js"></script>        
-        <script src="/private/atendimento/js/atendimento.js"></script>
-        <script src="/private/atendimento/js/getModel.js"></script>        
-        <script src="/private/atendimento/js/requestGestao.js"
-                th:if="${role} == 'ANALISTA'? 'true' : (${role} == 'ADMINISTRADOR'? 'true' : false)">
-        </script>
-        <script src="/private/atendimento/js/request.js"></script>
-        <script src="/private/atendimento/js/getModelChamado.js"></script>
-        <script src="/private/atendimento/js/requestFront.js"></script> 
-        <script src="/private/atendimento/js/customTable.js" 
-                th:if="${role} == 'ANALISTA'? 'true' : (${role} == 'ADMINISTRADOR'? 'true' : false)">
-        </script>
-        <script src="/private/atendimento/js/requestFrontGestao.js" 
-                th:if="${role} == 'ANALISTA'? 'true' : (${role} == 'ADMINISTRADOR'? 'true' : false)">
-        </script>
-        <script src="/private/atendimento/js/customTableCliente.js" 
-                th:if="${role} == 'CLIENTE'? 'true' : 'false'">
-        </script>
-        <script src="/private/atendimento/js/rotas.js"></script>
-        <!--<script>moduloAtendimento()</script>-->
+        <th:block th:replace="header-footer :: scriptsFooter"></th:block>
+
     </body> 
 </html>

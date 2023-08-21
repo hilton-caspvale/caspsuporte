@@ -52,7 +52,7 @@ public class CaspPrioridades implements Serializable {
     private List<RemotoListaEspera> remotoListaEsperaList;
     @OneToMany(mappedBy = "iPrioridade")
     private List<CaspUsuariosConfig> caspUsuariosConfigList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "iPrioridade")
+    @OneToMany(/*cascade = CascadeType.ALL,*/ mappedBy = "iPrioridade")
     private List<CaspChamados> caspChamadosList;
 
     public CaspPrioridades() {

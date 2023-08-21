@@ -1,107 +1,104 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>JSON Formatter</title>
-        <!-- Incluir o CSS do Bootstrap -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-        <style>
-            /* Estilo para o conteúdo JSON */
-            pre {
-                background-color: #f8f8f8;
-                border: 1px solid #ddd;
-                padding: 10px;
-                overflow-x: auto;
-                max-width: 800px;
-                margin: 0 auto;
-            }
-
-            /* Estilo para destacar as chaves do JSON */
-            .json-key {
-                color: #d73a49; /* Vermelho escuro (ou outra cor de sua escolha) */
-                font-weight: bold;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1 class="text-center">JSON Tree View</h1>
-
-            <!-- Input para inserir a URL do endpoint -->
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <div class="input-group mb-3">
-                        <input type="text" id="endpoint-url" class="form-control" placeholder="Insira a URL do endpoint">
-                        <button class="btn btn-primary" onclick="loadJSONFromEndpointExterno()">Carregar</button>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org/"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head th:replace="header-footer :: header"></head>
+    <body class="cor-g">
+        <form class="row g-3 needs-validation" novalidate>
+            <div class="col-md-4">
+                <label for="validationCustom01" class="form-label">First name</label>
+                <input type="text" class="form-control" id="validationCustom01" value="Mark" required>
+                    <div class="valid-feedback">
+                        Looks good!
                     </div>
+            </div>
+            <div class="col-md-4">
+                <label for="validationCustom02" class="form-label">Last name</label>
+                <input type="text" class="form-control" id="validationCustom02" value="Otto" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+            </div>
+            <div class="col-md-4">
+                <label for="validationCustomUsername" class="form-label">Username</label>
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend">@</span>
+                    <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required>
+                        <div class="invalid-feedback">
+                            Please choose a username.
+                        </div>
                 </div>
             </div>
+            <div class="col-md-6">
+                <label for="validationCustom03" class="form-label">City</label>
+                <input type="text" class="form-control" id="validationCustom03" required>
+                    <div class="invalid-feedback">
+                        Please provide a valid city.
+                    </div>
+            </div>
+            <div class="col-md-3">
+                <label for="validationCustom04" class="form-label">State</label>
+                <select class="form-select" id="validationCustom04" required>
+                    <option selected disabled value="">Choose...</option>
+                    <option>...</option>
+                </select>
+                <div class="invalid-feedback">
+                    Please select a valid state.
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label for="validationCustom05" class="form-label">Zip</label>
+                <input type="text" class="form-control" id="validationCustom05" required>
+                    <div class="invalid-feedback">
+                        Please provide a valid zip.
+                    </div>
+            </div>
+            <div class="col-12">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                        <label class="form-check-label" for="invalidCheck">
+                            Agree to terms and conditions
+                        </label>
+                        <div class="invalid-feedback">
+                            You must agree before submitting.
+                        </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-primary" type="button" onclick="new Choices(document.querySelector('.choicesmultiple'), {
+                            noResultsText: 'Nenhum resultado encontrado. Clique para cadastrar:'
+                        });
+                        choices.passedElement.addEventListener('search', function (event) {
+                            const inputText = event.detail.value;
 
+                            if (!choices.getValue().includes(inputText)) {
+                                // Novo item não encontrado na lista
+                                // Exibir um botão ou mensagem para cadastrar o item
+                                const addButton = document.createElement('button');
+                                addButton.textContent = 'Cadastrar ' + inputText;
+                                addButton.addEventListener('click', function () {
+                                    // Abra um modal ou outra tela para cadastrar o item
+                                    // Implemente a lógica de cadastro aqui
+                                    alert('Abrir modal para cadastrar: ' + inputText);
+                                });
 
-            <h1 class="text-center">JSON Formatter</h1>
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <pre>
-          <!-- JSON será exibido aqui com identação -->
-                    </pre>
+                                choices.choiceList.append(addButton);
+                            }
+                        });">Submit form</button>
+            </div>
+        </form>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <div class="mb-3 form-text row d-flex justify-content-center mt-100">
+                    <select class="form-control choicesmultiple"                                                             
+                            multiple="">
+                        <option th:each="entidades : ${lista}"                                                         
+                                th:value="${entidades}"                                                         
+                                th:text="${entidades.nomeEntidade}"                                                        
+                                contenteditable="false"/>
+                    </select>
                 </div>
             </div>
         </div>
-
-        <script>
-            // Função para fazer a requisição do JSON para o endpoint desejado
-            //https://tributos.betha.cloud/service-layer-tributos/api/imoveis
-            function getJSONFromEndpointExterno(endpoint) {
-                let header = new Headers({
-                    'Content-Type': 'application/json;charset=utf-8',
-                    'Authorization': 'Bearer 83a89256-46d0-4e16-8e04-06d30e2e59c8'
-                });
-                let conteudo = {
-                    method: 'GET',
-                    headers: header
-                };
-                return fetch(endpoint, conteudo)
-                        .then(response => response.json())
-                        .then(data => data)
-                        .catch(error => console.error(error));
-            }
-            // Função para fazer a requisição do JSON para o endpoint desejado
-            function getJSONFromEndpoint(endpoint) {
-                return fetch(endpoint)
-                        .then(response => response.json())
-                        .then(data => data)
-                        .catch(error => console.error(error));
-            }
-
-            // Função para adicionar o destaque para as chaves do JSON
-            function addKeyHighlighting(jsonData) {
-                return JSON.stringify(jsonData, null, 2)
-                        .replace(/"(\w+)"(?=\s*:)/g, '"<span class="json-key">$1</span>"');
-            }
-
-            // Função para exibir o JSON formatado na página com o destaque para as chaves
-            function displayFormattedJSON(jsonData) {
-                const container = document.querySelector('pre');
-
-                // Converter o JSON em string com identação e destaque para as chaves
-                container.innerHTML = addKeyHighlighting(jsonData);
-            }
-
-            // Endpoint desejado para obter o JSON (substitua pelo seu endpoint)
-            const endpoint = 'https://exemplo.com/api/dados';
-
-            // Fazer a requisição do JSON e exibir na página quando estiver pronto
-            function loadJSONFromEndpoint() {
-                let uri = document.querySelector('#endpoint-url').value;
-                getJSONFromEndpoint(uri)
-                        .then(jsonData => displayFormattedJSON(jsonData));
-            }
-
-            function loadJSONFromEndpointExterno() {
-                let uri = document.querySelector('#endpoint-url').value;
-                getJSONFromEndpointExterno(uri)
-                        .then(jsonData => displayFormattedJSON(jsonData));
-            }
-
-        </script>
-    </body>
+        <head th:replace="header-footer :: scriptsFooter"></head>
+    </body> 
 </html>

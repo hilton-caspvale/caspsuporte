@@ -15,6 +15,7 @@ var tiposArquivosPath = contextPath + 'tipos-arquivos/';
 var tiposEntidadesPath = contextPath + 'tipos-entidades/';
 var entidadesPath = contextPath + 'entidades/';
 var clientesPath = contextPath + 'clientes/';
+var perfilPath = contextPath + 'usuarios/perfil';
 
 //requestFront
 var MV_A = '/mv/atendimento/';
@@ -30,6 +31,8 @@ var MV_A_ORIGEM = MV_A + 'origem';
 var MV_A_TIPOARQUIVO = MV_A + 'tipoArquivo';
 var MV_A_TIPOENTIDADE = MV_A + 'tipoEntidade';
 var MV_A_ENTIDADE = MV_A + 'entidade';
+var MV_A_PERFIL = MV_A + 'perfil';
+var MV_A_CHAMADO_DADOS_USUARIO = MV_A + 'chamado/dados-usuario?user=';
 
 //requestFrontGestao
 var MV_A_SELECIONAR_USUARIO = MV_A + 'selecionar-usuario';

@@ -196,3 +196,17 @@ function getUsuario(formularioNome) {
     let dto = JSON.stringify(usuario);
     return dto;
 }
+
+function getPerfil() {
+    let formularioNome = '#editarPerfil';
+    let form = document.querySelector(formularioNome);
+    let usuario = {
+        iusuario: form.querySelector('#iusuario').value,
+        nlogin: form.querySelector('#nlogin').value,
+        nomeUsuario: form.querySelector('#nomeUsuario').value,
+        emailUsuario: form.querySelector('#emailUsuario').value,
+        contatoUsuario: form.querySelector('#contatoUsuario').value
+    };
+    let dto = JSON.stringify(usuario);
+    return dto;
+}

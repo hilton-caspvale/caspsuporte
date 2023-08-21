@@ -35,12 +35,12 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Service
 public class AnexosService {
-
+    
     private final AnexosRepository anexosRepository;
     private final ArquivosRepository arquivosRepository;
     private final TiposArquivosRepository tiposArquivosRepository;
     private final ManipulaArquivos manipulaArquivos;
-
+    
     public AnexosService(AnexosRepository anexosRepository,
             ArquivosRepository arquivosRepository,
             TiposArquivosRepository tiposArquivosRepository,
@@ -50,18 +50,18 @@ public class AnexosService {
         this.tiposArquivosRepository = tiposArquivosRepository;
         this.manipulaArquivos = manipulaArquivos;
     }
-
+    
     public CaspAnexos buscarOuFalhar(Integer id) {
         CaspAnexos caspAnexo = anexosRepository.findById(id).orElseThrow(()
                 -> new AnexoNaoEncontradoException("Comentário ou arquivo não localizado!")
         );
         return caspAnexo;
     }
-
+    
     public boolean permiteExcluirAnexo(CaspAnexos caspAnexo, Integer iUsuarioLogado) {
         return Objects.equals(caspAnexo.getIUsuario().getIUsuario(), iUsuarioLogado);
     }
-
+    
     @Transactional
     public boolean deletarAnexo(CaspAnexos caspAnexo) {
         try {
@@ -74,21 +74,22 @@ public class AnexosService {
             return false;
         }
     }
-
+    
     @Transactional
     private CaspAnexos gravar(CaspAnexos caspAnexo) {
         return anexosRepository.saveAndFlush(caspAnexo);
     }
-
+    
     @Transactional
     public void adicionarArquivo(CaspChamados caspChamado, CaspUsuarios caspUsuariologado, List<MultipartFile> file, String comentarioAnexo) {
         manipulaArquivos.tamanhoPermitido(file);
         gravarArquivosAnexados(caspChamado, file, caspUsuariologado);
-        if (!new OperacoesTexto().textoVazio(comentarioAnexo)) {
-            adicionarComentario(caspChamado, caspUsuariologado, comentarioAnexo);
+        OperacoesTexto operacoesTexto = new OperacoesTexto();
+        if (!operacoesTexto.textoVazio(comentarioAnexo)) {
+            adicionarComentario(caspChamado, caspUsuariologado, operacoesTexto.replaceHtml(comentarioAnexo));
         }
     }
-
+    
     @Transactional
     public CaspAnexos adicionarComentario(CaspChamados caspchamado, CaspUsuarios caspUsuariologado, String comentario) {
         CaspAnexos caspAnexos = new CaspAnexos();
@@ -98,7 +99,7 @@ public class AnexosService {
         caspAnexos.setDataArquivo(LocalDateTime.now());
         return gravar(caspAnexos);
     }
-
+    
     @Transactional
     private void gravarArquivosAnexados(CaspChamados caspChamados, List<MultipartFile> file, CaspUsuarios usuarioLogado) {
         List<CaspAnexos> listaAnexos = new ArrayList<>();
@@ -131,7 +132,7 @@ public class AnexosService {
         });
         anexosRepository.saveAll(listaAnexos);
     }
-
+    
     public CaspTiposArquivos tiposArquivos(String contentType) {
         if (contentType.contains("image")) {
             return tiposArquivosRepository.findById(3).get();
@@ -139,7 +140,7 @@ public class AnexosService {
             return tiposArquivosRepository.findById(1).get();
         }
     }
-
+    
     public double tamanhoDoArquivoEmKB(MultipartFile file) {
         double total = 0;
         long mb = 1024L;
@@ -147,9 +148,9 @@ public class AnexosService {
         total = total / mb;
         return Math.round(total * 100.0) / 100.0;
     }
-
+    
     public String formataTamanhoArquivoEmMB(double tamanho) {
         return String.valueOf(tamanho).replace(".", ",") + " KB";
     }
-
+    
 }

@@ -1,5 +1,6 @@
 package caspvale.caspsuporte.modulos.atendimento.common;
 
+import caspvale.caspsuporte.modulos.atendimento.api.model.UsuariosModel;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -46,9 +47,10 @@ public class Rotas {
     public String MODAL_SELECIONAR_USUARIO = "redirect:/index";
     public String SELECIONAR_USUARIO = "redirect:/index";
     public String VER_CHAMADO = "redirect:/index";
+    public String PERFIL = "redirect:/index";
 
     private void rotasAnalista() {
-        TROCAR_SENHA = "/atendimento/components/admin/trocarSenha";
+        TROCAR_SENHA = "/atendimento/components/trocarSenha";
         CADASTRAR_CLIENTE = "/atendimento/components/cadastrarCliente";
         CADASTRAR_CLIENTE_ABERTURA = "/atendimento/components/cadastrarClienteAbertura";
         EDITAR_CLIENTE = "/atendimento/components/editarCliente";
@@ -73,6 +75,7 @@ public class Rotas {
         PAGINA_CHAMADO = "/atendimento/pageChamado";
         PAGINA_EDICAO_CHAMADO = "/atendimento/pageEdicaoChamado";
         VER_CHAMADO = "/atendimento/components/verChamado";
+        PERFIL = "/atendimento/components/perfil";
     }
 
     private void rotasAdministrador() {
@@ -107,6 +110,7 @@ public class Rotas {
         PAGINA_CHAMADO = "/atendimento/pageChamado";
         PAGINA_EDICAO_CHAMADO = "/atendimento/pageEdicaoChamado";
         VER_CHAMADO = "/atendimento/components/verChamado";
+        PERFIL = "/atendimento/components/perfil";
     }
 
     private void rotasCliente() {
@@ -117,6 +121,7 @@ public class Rotas {
         PAGINA_CHAMADO = "/atendimento/pageChamado";
         PAGINA_EDICAO_CHAMADO = "/atendimento/pageEdicaoChamado";
         VER_CHAMADO = "/atendimento/components/verChamado";
+        PERFIL = "/atendimento/components/perfil";
     }
 
     public void viewsDaRota() {
@@ -154,12 +159,18 @@ public class Rotas {
     public boolean roleADMIN() {
         return permissoes.roleADMIN();
     }
-    public boolean roleAnalistaAdmin(){
+
+    public boolean roleAnalistaAdmin() {
         return permissoes.roleAnalistaAdmin();
     }
 
     public boolean permiteEditarUsuario(String loginUsuarioEdicao) {
         return permissoes.permiteEditarUsuario(loginUsuarioEdicao);
     }
+    
+    public UsuariosModel usuarioLogadoModel(){
+        return permissoes.usuarioLogadoModel();
+    }
+    
 
 }

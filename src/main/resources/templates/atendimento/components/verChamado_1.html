@@ -1,0 +1,64 @@
+<div th:fragment="verChamado">   
+    <div class="row justify-content-md-center">
+        <div class="col col-md-8">
+            <div th:replace="atendimento/components/acoesDoChamado :: acoesDoChamado"></div> 
+            <form id="formVerCahamado" th:object="${caspChamados}">
+                <div class="card shadow bg-body rounded">
+                    <div class="card-header rounded-1">
+                        <div class="row">
+                            <div class="col p-2">
+                                <span class="badge bg-cinza text-dark fs-6" th:text="'Chamado: '+*{iChamado}"></span>
+                                <input type="hidden" th:field="*{iChamado}"/>
+                            </div>
+                            <div class="col order-1 p-2">
+                                <span class="badge text-nowrap bg-transparent text-dark" th:text="'Aberto em: '+*{{dataAbertura}}"></span>
+                            </div>
+                            <div class="col order-5 p-2">
+                                <th:block th:replace="atendimento/fragments/layout :: situacao-chamado"></th:block>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="col-md">
+                            <h6 class="mb-1" th:text="'Dados do usuário'"></h6>
+                        </div>
+                    </div>
+                </div>
+            </form>            
+        </div>
+    </div>
+    <div class="row">
+        <div class="modal fade" 
+             id="confirmaExclusao" 
+             data-bs-backdrop="static" 
+             data-bs-keyboard="false" 
+             tabindex="-1" 
+             aria-labelledby="confirmaExclusao">
+            <div class="modal-dialog modal-dialog-centered modal-sm border-0">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        Deseja excluir o registro?
+                    </div>
+                    <div class="modal-body">
+                        <div class="row justify-content-md-center">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a class="btn btn-secondary bi bi-arrow-left" type="button"
+                                   data-bs-dismiss="modal">
+                                    Voltar
+                                </a>
+                                <a class="btn btn-danger" type="button" 
+                                   th:id="btExcluir"
+                                   th:attr="data-id=*{iChamado}"
+                                   onclick="deletarComentario(event)"
+                                   data-bs-dismiss="modal">                                    
+                                    <i class="bi bi-trash"></i>
+                                    Excluir
+                                </a>                                     
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

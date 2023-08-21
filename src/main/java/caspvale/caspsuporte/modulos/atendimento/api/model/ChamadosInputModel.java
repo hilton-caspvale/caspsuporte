@@ -41,7 +41,7 @@ public class ChamadosInputModel {
     @Size(min = 10, max = 255)
     private String resumoChamado;
     @NotBlank
-    @Size(min = 10, max = 2147483647)
+    @Size(min = 10)
     private String descricaoChamado;
     @Size(max = 2147483647)
     private String comentarioChamado;
@@ -80,6 +80,6 @@ public class ChamadosInputModel {
     private Integer iusuarioAbertura;
     @Size(max = 50)
     private String nlogin;
-    @Size(max = 255)
+    @Size(max = 100)
     private String nomeUsuario;
 }

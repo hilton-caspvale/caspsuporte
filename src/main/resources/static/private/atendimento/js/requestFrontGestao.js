@@ -4,6 +4,11 @@ function chamadoUsuarioSelecionado() {
     requestMV(MV_A_CHAMADO + '?user=' + user.value);
 }
 
+function atualizaDadosDoUsuario() {
+    let user = document.getElementById('choices-usuarios');
+    requestMVIdElemento(MV_A_CHAMADO_DADOS_USUARIO + user.value, 'dados-usuario');
+}
+
 function chamadoUsuarioEditado(user) {
     limparAlertaGeral();
     requestMV(MV_A_CHAMADO + '?user=' + user.value);
@@ -41,11 +46,11 @@ function modalEditarUsuario(id) {
 function modalEditarUsuarioAbertura(id) {
     let value = document.getElementById(id).value;
     let url = MV_A_MODAL_USUARIO_ABERTURA + '&id=' + value;
-    requestMVModal(url, null, "MV_A_MODAL_USUARIO_ABERTURA");
+    requestMVModal(url, null, "Editar Cadastro");
 }
 
 function modalCriarUsuarioAbertura() {
-    requestMVModal(MV_A_MODAL_CLIENTE_ABERTURA, null, "Adicionar Cliente avbbb");
+    requestMVModal(MV_A_MODAL_CLIENTE_ABERTURA, null, "Adicionar Cliente");
 }
 
 function cadastroSistemas() {

@@ -2,6 +2,7 @@ C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\ja
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\modulos\atendimento\api\model\OrigensModel.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\modulos\atendimento\api\assembler\UsuariosAberturaAssembler.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\modulos\atendimento\domain\model\CaspAnexos.java
+C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\modulos\atendimento\view\Testes.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\modulos\atendimento\api\assembler\EntidadesAssembler.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\modulos\atendimento\api\controller\TiposArquivosController.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\modulos\atendimento\api\assembler\AreasAssembler.java
@@ -113,6 +114,7 @@ C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\ja
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\modulos\atendimento\domain\model\CaspNiveis.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\modulos\atendimento\domain\repository\UsuariosRepository.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\modulos\atendimento\domain\repository\PontoConfigRepository.java
+C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\domain\security\CustomInterceptor.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\modulos\atendimento\api\model\AreasUsuariosModel.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\modulos\atendimento\view\NiveisView.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\modulos\atendimento\api\assembler\TiposEntidadesAssembler.java
@@ -128,6 +130,7 @@ C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\ja
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\modulos\atendimento\domain\repository\EntidadesRepository.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\modulos\atendimento\domain\model\CaspUsuariosPermissoes.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\modulos\atendimento\view\common\StringToCSS.java
+C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\domain\security\WebConfig.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\modulos\atendimento\api\model\NiveisInputModel.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\modulos\atendimento\domain\model\CaspTiposArquivos.java
 C:\Users\Hilton\Documents\NetBeansProjects\NB16\Caspvale\caspsuporte\src\main\java\caspvale\caspsuporte\modulos\ponto\domain\model\PontoFeriados.java

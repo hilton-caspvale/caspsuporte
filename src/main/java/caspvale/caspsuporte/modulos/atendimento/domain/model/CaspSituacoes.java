@@ -47,7 +47,7 @@ public class CaspSituacoes implements Serializable {
     @Size(max = 1)
     @Column(name = "situacao")
     private String situacao;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "iSituacao")
+    @OneToMany(/*cascade = CascadeType.ALL,*/ mappedBy = "iSituacao")
     private List<CaspChamados> caspChamadosList;
 
     public CaspSituacoes() {

@@ -57,7 +57,7 @@ function acoesTabelaChamado(value) {
 }
 
 function botaoEditarItemTabela(dataId, onClick) {
-    return `<div class="btn-group btn-group-sm" role="group"><a role="button" class="btn btn-outline-secondary" ${dataId} ${onClick}><i class="fas fa-pencil-alt"></i></a></div>`;
+    return `<div class="btn-group btn-group-sm" role="group"><a role="button" class="btn btn-outline-secondary" ${dataId} ${onClick}><i class="bi bi-pencil"></i></a></div>`;
 }
 
 function botaoAddTabela(evento) {
@@ -221,7 +221,7 @@ function botaoAddEntidades() {
 
 function acoesTabelaClientes(value) {
     let botaoSenha = '<a role="button" class="btn btn-outline-secondary" data-id=' + value + ' onclick="modalTrocarSenha(' + value + ')"><i class="bi bi-key"></i></a>';
-    return '<div class="btn-group btn-group-sm" role="group"><a role="button" class="btn btn-outline-secondary" data-id=' + value + ' onclick="modalClientes(' + value + ')"><i class="fas fa-pencil-alt"></i></a>' + botaoSenha + '</div>';
+    return '<div class="btn-group btn-group-sm" role="group"><a role="button" class="btn btn-outline-secondary" data-id=' + value + ' onclick="modalClientes(' + value + ')"><i class="bi bi-pencil"></i></a>' + botaoSenha + '</div>';
 }
 
 function botaoAddTabelaClientes() {
@@ -234,7 +234,7 @@ function botaoAddTabelaClientes() {
 
 function acoesTabelaAdminUsuarios(value) {
     let botaoSenha = '<a role="button" class="btn btn-outline-secondary" data-id=' + value + ' onclick="modalTrocarSenha(' + value + ')"><i class="bi bi-key"></i></a>';
-    return '<div class="btn-group btn-group-sm" role="group"><a role="button" class="btn btn-outline-secondary" data-id=' + value + ' onclick="modalUsuarios(' + value + ')"><i class="fas fa-pencil-alt"></i></a>' + botaoSenha + '</div>';
+    return '<div class="btn-group btn-group-sm" role="group"><a role="button" class="btn btn-outline-secondary" data-id=' + value + ' onclick="modalUsuarios(' + value + ')"><i class="bi bi-pencil"></i></a>' + botaoSenha + '</div>';
 }
 
 function botaoEditarUsuario() {

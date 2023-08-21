@@ -132,18 +132,29 @@ public class ChamadosView {
         return mv;
     }
 
-    @GetMapping("chamado")
-    public ModelAndView pageChamado(@RequestParam(value = "user", required = true) String user, RedirectAttributes attributes) {
-        rotas.viewsDaRota();
-        ModelAndView mv = new ModelAndView(rotas.PAGINA_CHAMADO);
-        String loginPermitido = loginPermitido(user);
+    @GetMapping("/chamado/dados-usuario")
+    public ModelAndView dadosDoUsuario(@RequestParam(value = "user", required = true) String user, ModelAndView mv) {
+        mv.setViewName("atendimento/fragments/chamado/chamadoFragments :: dados-usuario");
+        UsuariosModel usuario = new UsuariosModel();
+        if (rotas.role().equals("ADMINISTRADOR") || rotas.role().equals("ANALISTA")) {
+            usuario = (UsuariosModel) usuariosController.buscarPorLogin(loginPermitido(user)).getBody();
+        } else {
+            usuario = permissoes.usuarioLogadoModel();
+        }
+        ChamadosInputModel chamado = new ChamadosInputModel();
+        chamado.setIusuarioAbertura(usuario.getIUsuario());
+        chamado.setNlogin(usuario.getNlogin());
+        chamado.setNomeUsuario(usuario.getNomeUsuario());
+        chamado.setContatoSolicitante(usuario.getContatoUsuario());
+        chamado.setEmailSolicitante(usuario.getEmailUsuario());
+
         List<EntidadesModel> entidadesDoUsuario = new ArrayList<>();
         List<SistemasModel> sistemasDoUsuario = new ArrayList<>();
         List<AreasModel> areasDoUsuario = new ArrayList<>();
         if (rotas.roleADMIN() || rotas.roleANALISTA()) {
-            entidadesDoUsuario = (List<EntidadesModel>) entidadesController.entidadesDoUsuario("A", loginPermitido).getBody();
-            sistemasDoUsuario = (List<SistemasModel>) sistemasController.sistemasDoUsuario(loginPermitido, "A").getBody();
-            areasDoUsuario = (List<AreasModel>) areasController.areasDoUsuario("A", loginPermitido).getBody();
+            entidadesDoUsuario = (List<EntidadesModel>) entidadesController.entidadesDoUsuario("A", usuario.getNlogin()).getBody();
+            sistemasDoUsuario = (List<SistemasModel>) sistemasController.sistemasDoUsuario(usuario.getNlogin(), "A").getBody();
+            areasDoUsuario = (List<AreasModel>) areasController.areasDoUsuario("A", usuario.getNlogin()).getBody();
         } else {
             entidadesDoUsuario = (List<EntidadesModel>) entidadesController.minhasEntidades("A").getBody();
             sistemasDoUsuario = (List<SistemasModel>) sistemasController.meusSistemas("A").getBody();
@@ -159,14 +170,21 @@ public class ChamadosView {
                 }
             });
         });
-        ChamadosInputModel chamadoInput = novoChamado(loginPermitido);
-        mv.addObject("role", rotas.role());
-        mv.addObject("login", rotas.login());
-        mv.addObject("chamado", chamadoInput);
         mv.addObject("entidadesDoUsuario", entidadesDoUsuario);
         mv.addObject("sistemasDoUsuario", sistemasDoUsuario);
         mv.addObject("areasDoUsuario", areasDoUsuario);
         mv.addObject("listaProblemas", problemas);
+        mv.addObject("chamado", chamado);
+        return mv;
+    }
+
+    @GetMapping("chamado")
+    public ModelAndView pageChamado(@RequestParam(value = "user", required = true) String user, RedirectAttributes attributes) {
+        rotas.viewsDaRota();
+        ModelAndView mv = new ModelAndView(rotas.PAGINA_CHAMADO);
+        mv.addObject("role", rotas.role());
+        mv.addObject("login", rotas.login());
+        mv.addObject("chamado", new ChamadosInputModel());
         mv.addObject("origens", (List<OrigensModel>) origensController.listar().getBody());
         mv.addObject("niveis", (List<NiveisModel>) niveisController.listar().getBody());
         mv.addObject("prioridades", (List<PrioridadesModel>) prioridadesController.listar().getBody());
@@ -174,22 +192,6 @@ public class ChamadosView {
         mv.addObject("tamanhoMaximo", TAMANHO_MAXIMO);
         mv.addObject("extensoes", EXTENSOES);
         return mv;
-    }
-
-    private ChamadosInputModel novoChamado(String nlogin) {
-        UsuariosModel usuario = new UsuariosModel();
-        if (rotas.role().equals("ADMINISTRADOR") || rotas.role().equals("ANALISTA")) {
-            usuario = (UsuariosModel) usuariosController.buscarPorLogin(loginPermitido(nlogin)).getBody();
-        } else {
-            usuario = permissoes.usuarioLogadoModel();
-        }
-        ChamadosInputModel chamado = new ChamadosInputModel();
-        chamado.setIusuarioAbertura(usuario.getIUsuario());
-        chamado.setNlogin(usuario.getNlogin());
-        chamado.setNomeUsuario(usuario.getNomeUsuario());
-        chamado.setContatoSolicitante(usuario.getContatoUsuario());
-        chamado.setEmailSolicitante(usuario.getEmailUsuario());
-        return chamado;
     }
 
     @GetMapping("edicaoChamado")

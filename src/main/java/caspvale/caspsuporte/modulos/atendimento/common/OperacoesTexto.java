@@ -9,7 +9,15 @@ package caspvale.caspsuporte.modulos.atendimento.common;
  * @author Hilton
  */
 public class OperacoesTexto {
-    
+
+    public String replaceHtml(String value) {
+        if (value == null) {
+            return value;
+        } else {
+            return value.replace("<", "-").replace(">", "-");
+        }
+    }
+
     public boolean textoVazio(String texto) {
         if (texto == null) {
             return true;
@@ -22,5 +30,5 @@ public class OperacoesTexto {
         }
         return false;
     }
-    
+
 }
