@@ -109,13 +109,6 @@ public class ChamadosController {
         return ResponseEntity.ok(chamadoLocalizado);
     }
 
-    @GetMapping("t")
-    public ModelAndView teste() {
-        CaspChamados caspChamado = chamadosService.buscarOuFalhar(38);
-        ChamadosModel chamadoLocalizado = chamadosAssembler.toModel(caspChamado);
-        return new ModelAndView("t").addObject("chamado", chamadoLocalizado);
-    }
-
     @PostMapping
     public ResponseEntity<?> cadastrarNovoChamado(@Valid @RequestBody ChamadosInputModel chamadosInputModel) {
         ChamadosModel chamadoModel = chamadosInputAssembler.toEntity(chamadosInputModel);

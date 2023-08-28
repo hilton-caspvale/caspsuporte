@@ -122,11 +122,15 @@ public interface ChamadosRepository extends JpaRepository<CaspChamados, Integer>
             + "and (c.iUsuarioAbertura.nlogin = :usuario or c.iUsuarioAtendimento.nlogin = :usuario)")
     public Integer aguardandoClienteUsuarioSize(String usuario);
 
-    /*@Query("SELECT c FROM CaspChamados c WHERE c.iSituacao.situacao in('R') "
-            + "and (c.iUsuarioAbertura.nlogin = :usuario or c.iUsuarioAtendimento.nlogin = :usuario or c.iUsuarioEncaminhamento.nlogin = :usuario)")
-    public List<CaspChamados> emAnaliseClienteUsuario(String usuario);
-
+    @Query("SELECT c FROM CaspChamados c WHERE c.iSituacao.situacao in('R') "
+            + "and (c.iUsuarioAbertura = :usuario or c.iUsuarioAtendimento = :usuario or c.iUsuarioEncaminhamento = :usuario)")
+    public List<CaspChamados> emAnaliseUsuario(CaspUsuarios usuario);
+    
     @Query("SELECT count(c.iChamado) FROM CaspChamados c WHERE c.iSituacao.situacao in('R') "
+            + "and (c.iUsuarioAbertura = :usuario or c.iUsuarioAtendimento = :usuario or c.iUsuarioEncaminhamento = :usuario)")
+    public Integer emAnaliseUsuarioSize(CaspUsuarios usuario);
+
+    /*@Query("SELECT count(c.iChamado) FROM CaspChamados c WHERE c.iSituacao.situacao in('R') "
             + "and (c.iUsuarioAbertura.nlogin = :usuario or c.iUsuarioAtendimento.nlogin = :usuario or c.iUsuarioEncaminhamento.nlogin = :usuario)")
     public Integer emAnaliseClienteUsuarioSize(String usuario);
 

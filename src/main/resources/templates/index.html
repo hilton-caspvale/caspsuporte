@@ -8,20 +8,18 @@
     <body class="cor-g">
         <input th:value="${login}" id="usuarioLogado" hidden="true"></input>        
         <th:block th:replace="atendimento/fragments/menuPrincipal :: menu-principal"></th:block>
-
-        <section> 
-            <main class="container">                 
-                <div class="row">        
+        <input id="tabelaSelecionada" hidden="true" value="aguardando"></div>
+            <section> 
+                <main class="container-fluid">             
                     <div class="cor-g1 bg-gradient rounded p-2">
                         <div id="alertaGeral"></div>      
                         <div id="root"></div>
                         <div id="toastId" class="toast-container position-fixed bottom-0 start-0 p-3"></div>
                     </div>
-                </div>
-            </main>
-        </section>
+                </main>
+            </section>
 
-        <th:block th:replace="header-footer :: scriptsFooter"></th:block>
+            <th:block th:replace="header-footer :: scriptsFooter"></th:block>
 
     </body> 
 </html>

@@ -6,7 +6,7 @@
                     <div class="row justify-content-md-start">
                         <div class="hstack gap-2">
                             <div class="col-md">Novo Chamado</div>
-                            <div class="col-md" th:if="${role}=='ANALISTA'? true : (${role}=='ADMINISTRADOR'? true : false)">
+                            <th:block th:if="${role}=='ANALISTA'? true : (${role}=='ADMINISTRADOR'? true : false)">
                                 <div class="btn-group text-end" role="group" aria-label="Basic outlined example">
                                     <button type="button" class="btn btn-outline-secondary" onclick="modalSelecionarUsuario()">
                                         Selecionar outro usuário <i class="bi bi-search"></i></button>
@@ -15,7 +15,7 @@
                                     <button type="button" class="btn btn-outline-success"
                                             onclick="modalCriarUsuarioAbertura()"><i class="bi bi-person-plus-fill"></i></button>                                    
                                 </div>
-                            </div>
+                            </th:block>
                         </div>
                     </div>
                 </h5>
@@ -57,7 +57,7 @@
                                         <label for="prioridade">Prioridade</label>
                                     </div>
                                 </div>
-                                <div class="col-md-4 mb-3" th:if="${role} == 'ANALISTA'? true : (${role}==ADMINISTRADOR? true : false)">
+                                <div class="col-md-4 mb-3">
                                     <div class="form-floating">
                                         <select class="form-control link-success" 
                                                 aria-label="Nível"

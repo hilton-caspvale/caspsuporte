@@ -14,7 +14,7 @@
                 <span id="spanFinalizados"class="badge cor-g text-wrap text-dark">0</span> 
             </label>
         </div>
-        <div id="tabelaSelecionada" hidden="true" value="pendentes"></div>
+
     </div>
     <table
         id="table"
@@ -22,7 +22,7 @@
         data-toggle="table"
         data-search="true"     
         data-search-accent-neutralise="true"
-        data-search-highlight="true"
+        data-search-highlight="false"
         data-pagination="true"
         data-buttons-prefix="btn-md btn"
         data-buttons-class="success bg-gradient"
@@ -30,7 +30,7 @@
         data-show-button-text="false"
         data-show-pagination-switch="false" 
         data-show-refresh="true"
-        data-show-toggle="false"
+        data-show-toggle="true"
         data-show-fullscreen="true"
         data-show-columns="true"
         data-show-columns-toggle-all="true"
@@ -44,59 +44,101 @@
         data-sortable="true"
         data-detail-view="true"
         data-detail-view-by-click="true"
-        data-detail-view-icon="false"
+        data-detail-view-icon="true"
         data-detail-formatter="detailFormatter"
         data-url="/atendimento/chamados/aguardando">
         <thead>
-            <tr><!--class="badge bg-light text-dark" atendimentos/tipoTabela?tipo=aguardando-->
+            <tr>
                 <th data-field="ichamado" data-sortable="true" data-formatter="acoesTabelaChamado" data-detail-formatter="idFormatter">Nº</th>
                 <th data-field="caspEntidadesList" data-sortable="true" data-halign="left" data-align="left" data-formatter="entidades" class="col-md-3">Entidade</th>
                 <th data-field="caspAreasList" data-sortable="true" data-halign="left" data-align="center" data-formatter="areas">Área</th>
                 <th data-field="dataAbertura" data-sortable="true" data-formatter="spanTabela">Abertura</th>
                 <th data-field="iusuarioAbertura.nome" data-sortable="true" data-formatter="spanTabela">Usuário</th>
                 <th data-field="resumoChamado" data-sortable="true" data-formatter="textoNormalTabela" class="col-md-4 small">Resumo</th>
-                <th data-field="isituacao" data-sortable="true" data-align="center" data-formatter="situacaoChamado" data-detail-formatter="situacaoFormatter">Situação</th>
+                <th data-field="isituacao" data-sortable="true" data-align="center" data-formatter="situacaoChamado">Situação</th>
             </tr>
         </thead>
     </table> 
     <script>
-
         function detailFormatter(index, row) {
             let html = [];
+            let linha = document.createElement("div");
+            linha.className = "row";
+            let descricao = [];
             $.each(row, function (key, value) {
                 switch (key) {
                     case "descricaoChamado":
-                        let descricao = [
-                            `<label for="descricao" class="form-label">Descrição</label>`,
-                            `<div class="card-header">
-                                    <textarea
-                                        id="descricao" 
-                                        class="form-control casp-textarea fonte"
-                                        aria-label="Descrição"
-                                        readonly="">${value}</textarea>
-                                 </div>`
-                        ].join('');
-                        html.push(descricao);
+                        descricao.push(
+                                `<div class="card-header">`,
+                                `<textarea id="descricao" class="form-control casp-textarea fonte" aria-label="Descrição" readonly="">`,
+                                `${value}</textarea>`,
+                                `</div>`
+                                );
+                        break;
+                    case "dataAgendamento":
+                        if (value) {
+                            linha.appendChild(detalheTabelaItem("Agendado para", value, "col-md-2"));
+                        }
                         break;
                     case "iusuarioEncaminhamento":
                         if (value) {
-                            html.push("<p>" + key + ": " + value.nome + "</p>");
+                            linha.appendChild(detalheTabelaItem("Encaminhado para", value.nome, "col-md-3"));
+                        }
+                        break;
+                    case "iusuarioAtendimento":
+                        if (value) {
+                            linha.appendChild(detalheTabelaItem("Em atendimento por", value.nome, "col-md-3"));
+                        }
+                        break;
+                    case "caspAnexosList":
+                        if (value) {
+                            let anexos = [];
+                            let chamado = 0;
+                            $.each(row, function (key, value) {
+                                if (key === "ichamado") {
+                                    chamado = value;
+                                    return false;
+                                }
+                            });
+                            let div = document.createElement("div");
+                            div.className = "btn-group btn-group-sm me-2";
+                            let existeAnexo;
+                            value.forEach(anexo => {
+                                if (anexo.iarquivo) {
+                                    let descricao = anexo.descricaoArquivo;
+                                    const limite = 15;
+                                    const extensao = descricao.split('.').pop();
+                                    let nomeBase = descricao.substring(0, descricao.length - extensao.length - 1);
+                                    if (nomeBase.length > limite) {
+                                        nomeBase = nomeBase.substring(0, limite - 5);
+                                        descricao = `${nomeBase}[...].${extensao}`;
+                                    }
+                                    anexos.push(`<a href="/atendimento/chamados/${chamado}/anexos/${anexo.ianexo}" class="btn btn-secondary bi bi-paperclip">${descricao} (${anexo.comentarioArquivo})</a>`);
+                                    //anexos.push(`<img src="/atendimento/chamados/${chamado}/anexos/${anexo.ianexo}">${descricao} (${anexo.comentarioArquivo})</img>`);
+                                    div.innerHTML = anexos.join('');
+                                    existeAnexo = true;
+                                }
+                            });
+                            if (existeAnexo) {
+                                html.push(div.outerHTML);
+                            }
                         }
                         break;
                     default:
-                        html.push("<p>" + key + ": " + value + "</p>");
                         break;
                 }
             });
+            html.push(linha.outerHTML);
+            html.push(descricao.join(''));
             return html.join('');
         }
 
         function idFormatter(index, row) {
-            return "";
-        }
-
-        function situacaoFormatter(index, row) {
-            return index + '. Item ID: ' + row.resumoChamado;
+            $.each(row, function (key, value) {
+                if (key === "ichamado") {
+                    return visualizarChamado(value);
+                }
+            });
         }
 
         function novoChamadoTabela() {
@@ -111,11 +153,10 @@
             };
         }
 
-
         $(function () {
             $('#button1').click(function () {
                 atualizarTotais();
-                //document.getElementById("tabelaSelecionada").setAttribute('value', 'aguardando');
+                document.getElementById("tabelaSelecionada").setAttribute('value', 'aguardando');
                 $('#table').bootstrapTable('refreshOptions', {
                     showColumns: true,
                     search: true,
@@ -128,7 +169,7 @@
         $(function () {
             $('#button2').click(function () {
                 atualizarTotais();
-                //document.getElementById("tabelaSelecionada").setAttribute('value', 'atendendo');
+                document.getElementById("tabelaSelecionada").setAttribute('value', 'em-analise');
                 $('#table').bootstrapTable('refreshOptions', {
                     showColumns: true,
                     search: true,
@@ -141,7 +182,7 @@
         $(function () {
             $('#button3').click(function () {
                 atualizarTotais();
-                //document.getElementById("tabelaSelecionada").setAttribute('value', 'encerrados');
+                document.getElementById("tabelaSelecionada").setAttribute('value', 'finalizados');
                 $('#table').bootstrapTable('refreshOptions', {
                     showColumns: true,
                     search: true,
@@ -151,13 +192,13 @@
             });
         });
 
-        $(function () {
+        function acaoTabelaChamado() {
             let tabelaSelecionada = document.getElementById('tabelaSelecionada').value;
             switch (tabelaSelecionada) {
                 case 'pendentes':
                     document.getElementById('button1').click();
                     break;
-                case 'emAtendimento':
+                case 'em-analise':
                     document.getElementById('button2').click();
                     break;
                 case 'finalizados':
@@ -167,7 +208,38 @@
                     document.getElementById('button1').click();
                     break;
             }
+        }
+
+        $(function () {
+            acaoTabelaChamado();
         });
+
+        function voltar() {
+            requestDef(getUriAtendimento(), 'GET', null)
+                    .then(response => {
+                        $('#root').html(response);
+                        $(document).ready(function () {
+                            acaoTabelaChamado();
+                        });
+                    })
+                    .catch(error => {
+                        requestError(error, 'alertaGeral');
+                    });
+        }
+
+        function acaoAposCarregamento() {
+            atualizarTotais();
+            let tabelaSelecionada = document.getElementById("tabelaSelecionada");
+            if (tabelaSelecionada) {
+                $('#table').bootstrapTable('refreshOptions', {
+                    showColumns: true,
+                    search: true,
+                    showRefresh: true,
+                    url: '/atendimento/chamados/' + tabelaSelecionada.value
+                });
+            }
+
+        }
     </script>
     <script src="/public/js/bootstrap-table-pt-BR.min.js"></script>
 </div>

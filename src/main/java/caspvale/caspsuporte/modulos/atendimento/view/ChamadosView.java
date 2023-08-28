@@ -80,6 +80,14 @@ public class ChamadosView {
         this.viewObjects = viewObjects;
     }
 
+    @GetMapping("chamado/{iChamado}/anexos")
+    public ModelAndView anexosDoChamado(ModelAndView modelAndView, @Valid @PathVariable Integer iChamado) {
+        ChamadosModel chamado = (ChamadosModel) chamadosController.get(iChamado).getBody();
+        modelAndView.setViewName("atendimento/components/verChamado :: anexos");
+        modelAndView.addObject("caspChamados", chamado);
+        return modelAndView;
+    }
+
     @GetMapping("chamado/{iChamado}")
     public ModelAndView verChamado(@Valid @PathVariable Integer iChamado) {
         String login = rotas.login();

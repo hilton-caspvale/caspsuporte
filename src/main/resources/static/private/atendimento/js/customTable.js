@@ -299,3 +299,51 @@ function queryParamsUsuarios(params) {
     params.sistemas = sistema.options[sistema.selectedIndex].value;
     return params;
 }
+
+function detalheTabelaItem(descricao, valor, classeColuna) {
+    let divColuna = document.createElement("div");
+    divColuna.className = classeColuna;
+    let label = document.createElement("h6");
+    label.className = "mb-1";
+    label.textContent = descricao;
+    let listaUl = document.createElement("ul");
+    listaUl.className = `list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary`;
+    let listaLi = document.createElement("li");
+    let pItem = document.createElement("p");
+    pItem.className = "mb-0 m-l3";
+    let valorItem = document.createElement("small");
+    valorItem.textContent = valor;
+    pItem.appendChild(valorItem);
+    listaLi.appendChild(pItem);
+    listaUl.appendChild(listaLi);
+    divColuna.appendChild(label);
+    divColuna.appendChild(listaUl);
+    return divColuna;
+}
+
+function detalheTabelaAnexo(descricao, valor, classeColuna) {
+    anexos.push(`<div class="input-group input-group-sm">`,
+            `<input type="text" class="form-control" value="${anexo.descricaoArquivo} - ${anexo.comentarioArquivo}") readonly=""/>`,
+            `<a class="btn btn-outline-success bi bi-download" type="button" data-anexo="${anexo.ianexo}"`,
+            `href="/atendimento/chamados/${chamado}/anexos/${anexo.ianexo}"></a>`,
+            `</div>`,
+            `</div>`);
+    let div = document.createElement("div");
+    div.className = "input-group input-group-sm";
+    let label = document.createElement("h6");
+    label.className = "mb-1";
+    label.textContent = descricao;
+    let listaUl = document.createElement("ul");
+    listaUl.className = `list-unstyled shadow p-1 cor-g rounded border-3 border-start border-secondary`;
+    let listaLi = document.createElement("li");
+    let pItem = document.createElement("p");
+    pItem.className = "mb-0 m-l3";
+    let valorItem = document.createElement("small");
+    valorItem.textContent = valor;
+    pItem.appendChild(valorItem);
+    listaLi.appendChild(pItem);
+    listaUl.appendChild(listaLi);
+    divColuna.appendChild(label);
+    divColuna.appendChild(listaUl);
+    return divColuna;
+}

@@ -1,24 +1,23 @@
 <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
     <button type="button" class="btn btn-outline-success" onclick="moduloAtendimento()"><i class="bi bi-house-fill"></i></button>
     <button type="button" class="btn btn-outline-success" onclick="chamadoUsuarioLogado()"><i class="bi bi-plus-square-fill"></i></button>
-
+    <button type="button" class="btn btn-outline-success" onclick="perfil()"><i class="bi bi-person-fill"></i></button>
+    
     <div class="btn-group" role="group">
         <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
             Casdastros
         </button>
-        <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="/atendimento/novo" target="_blank">Chamado em nova guia</a></li>        
-            <li><a class="dropdown-item" onclick="cadastroAreas()">Áreas</a></li>
-            <li><a class="dropdown-item" onclick="cadastroSistemas()">Sistemas</a></li>        
-            <li><a class="dropdown-item" onclick="cadastroProblemas()">Problemas</a></li>  
-            <li><a class="dropdown-item" onclick="cadastroNiveis()">Níveis</a></li>
-            <li><a class="dropdown-item" onclick="cadastroOrigens()">Origens</a></li>
-            <li><a class="dropdown-item" onclick="cadastroTipoArquivos()">Tipo de Arquivo</a></li>
-            <li><a class="dropdown-item" onclick="cadastroTipoEntidades()">Tipo de Entidade</a></li>
-            <li><a class="dropdown-item" onclick="cadastroEntidades()">Entidade</a></li>
+        <ul class="dropdown-menu" style="z-index: 1021">
             <li><a class="dropdown-item" onclick="cadastroClientes()">Clientes</a></li>
             <li><a class="dropdown-item" onclick="cadastroUsuarios()">Usuarios</a></li>
-            <li><a class="dropdown-item" onclick="meuPerfil()">Dados Cadastrais</a></li>
+            <li><a class="dropdown-item" onclick="cadastroEntidades()">Entidades</a></li>
+            <li><a class="dropdown-item" onclick="cadastroProblemas()">Problemas</a></li>
+            <li><a class="dropdown-item" onclick="cadastroSistemas()">Sistemas</a></li> 
+            <li><a class="dropdown-item" onclick="cadastroAreas()">Áreas</a></li>
+            <li><a class="dropdown-item" onclick="cadastroNiveis()">Níveis</a></li>
+            <li><a class="dropdown-item" onclick="cadastroOrigens()">Origens</a></li>
+            <li><a class="dropdown-item" onclick="cadastroTipoEntidades()">Tipo de Entidade</a></li>
+            <li><a class="dropdown-item" onclick="cadastroTipoArquivos()">Tipo de Arquivo</a></li>
         </ul>
     </div>
 </div>

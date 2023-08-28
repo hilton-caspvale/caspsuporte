@@ -13,30 +13,36 @@ function validarUsuario(formulario) {
         usuarioInvalido.innerHTML = texto;
     } else {
         fetch(uri)
-                .then(response => response.json())
-                .then(data => {
-                    if (response.status === 401) {
-                        window.location.href = '/login';
-                    } else {
-                        if (data.status === 404) {
-                            if (data.detail === 'Usuário não localizado!') {
-                                texto = "";
-                                adicionarClass(login, 'is-valid');
-                                deletarClass(login, 'is-invalid');
-                                botaoGravar.removeAttribute('disabled');
-                            } else {
-                                adicionarClass(login, 'is-invalid');
-                                deletarClass(login, 'is-valid');
-                                botaoGravar.setAttribute('disabled', '');
-                                usuarioInvalido.innerHTML = 'Não foi possível verificar o login informado!!';
-                            }
-                        } else {
-                            adicionarClass(login, 'is-invalid');
-                            deletarClass(login, 'is-valid');
-                            botaoGravar.setAttribute('disabled', '');
-                            usuarioInvalido.innerHTML = 'Login [' + data.nlogin + '] está em uso!';
-                        }
-                    }
+                .then(response => {
+                    response.json()
+                            .then(json => {
+                                if (response.ok) {
+                                    adicionarClass(login, 'is-invalid');
+                                    deletarClass(login, 'is-valid');
+                                    botaoGravar.setAttribute('disabled', '');
+                                    usuarioInvalido.innerHTML = 'Login [' + json.nlogin + '] está em uso!';
+                                } else {
+                                    if (response.status === 401) {
+                                        window.location.href = '/login';
+                                    }
+                                    if (response.status === 404) {
+                                        if (json.detail === 'Usuário não localizado!') {
+                                            texto = "";
+                                            adicionarClass(login, 'is-valid');
+                                            deletarClass(login, 'is-invalid');
+                                            botaoGravar.removeAttribute('disabled');
+                                        }
+                                    } else {
+                                        adicionarClass(login, 'is-invalid');
+                                        deletarClass(login, 'is-valid');
+                                        botaoGravar.setAttribute('disabled', '');
+                                        usuarioInvalido.innerHTML = 'Não foi possível verificar o login informado!!';
+                                    }
+                                }
+                            })
+                            .catch(function (error) {
+                                carregarToast('Não foi possível consultar o login!' + error.message);
+                            });
                 })
                 .catch(function (error) {
                     carregarToast('Erro ao processar requisição! - ' + error.message);
@@ -282,7 +288,7 @@ function encerrarChamado(event) {
 }
 
 function atualizarTotais() {
-    requestDef(chamadosPatch + 'quantidade', 'GET', null)
+    return requestDef(chamadosPatch + 'quantidade', 'GET', null)
             .then(response => {
                 document.getElementById('spanPendente').innerHTML = response.totalAguardando;
                 document.getElementById('spanEmAnalise').innerHTML = response.totalEmAtendimento;

@@ -374,9 +374,11 @@ public class ChamadosService {
             case "ADMINISTRADOR":
                 return chamadosRepository.emAnalise();
             case "ANALISTA":
-                return chamadosRepository.emAnaliseAreaEntidadeSistema(login);
+                return chamadosRepository.emAnaliseUsuario(usuarioLogado);
+            //return chamadosRepository.emAnaliseAreaEntidadeSistema(login);
             case "CLIENTE":
-                return chamadosRepository.emAnaliseAreaEntidadeSistema(login);
+                return chamadosRepository.emAnaliseUsuario(usuarioLogado);
+            //return chamadosRepository.emAnaliseAreaEntidadeSistema(login);
             default:
                 return new ArrayList<>();
         }
@@ -388,9 +390,9 @@ public class ChamadosService {
             case "ADMINISTRADOR":
                 return chamadosRepository.emAnaliseSize();
             case "ANALISTA":
-                return chamadosRepository.emAnaliseAreaEntidadeSistemaSize(login);
+                return chamadosRepository.emAnaliseUsuarioSize(usuarioLogado);
             case "CLIENTE":
-                return chamadosRepository.emAnaliseAreaEntidadeSistemaSize(login);
+                return chamadosRepository.emAnaliseUsuarioSize(usuarioLogado);
             default:
                 return 0;
         }

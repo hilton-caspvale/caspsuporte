@@ -6,23 +6,14 @@
               th:object="${usuarioModel}">
             <div class="card shadow bg-body rounded">
                 <div class="card-header rounded-1">
-                    <div class="row">
-                        <div class="hstack gap-3">
-                            <div class="col-md-2">
+                    <div class="row justify-content-between">
+                        <div class="hstack gap-2">
+                            <div class="col-md">
                                 <strong>Usuário </strong>
                                 <span class="badge bg-secondary bg-gradient loginlog col-md" th:text="*{nlogin}"></span>                            
-                            </div>                            
-                            
-                            <div class="col-md text-center">
-                                <div class="btn-group btn-group-sm" role="group" aria-label="Button group with nested dropdown">
-                                    <button type="button" class="btn btn-outline-success" onclick=""><i class="bi bi-gear"> Solicitar alterações</i></button>
-                                    <button type="button" class="btn btn-outline-success" th:value="*{iUsuario}"  th:attr="onclick='modalTrocarSenha(' + *{iUsuario} + ')'"><i class="bi bi-key"> Trocar senha</i></button>
-                                    <button type="button" class="btn btn-outline-success" 
-                                            onclick="atualizarPerfil()"><i class="bi bi-check-lg"> Gravar</i></button>
-                                </div>
-                            </div>
+                            </div>  
 
-                            <div class="col-md-2 text-end">
+                            <div class="col-md text-end">
                                 <strong>Situação </strong>
                                 <span class="badge bg-success bg-gradient col-md" 
                                       th:text="*{situacaoUsuario}=='A'? 'Ativo' : 'dd'"></span>
@@ -73,12 +64,12 @@
                                 <li th:if="*{caspEntidadesList.size} > 0"
                                     th:each="enti : *{caspEntidadesList}">
                                     <span class="badge text-wrap text-dark bg-cinza casp-span"
-                                          th:text="${enti.nomeEntidade}"/>
+                                          th:text="${enti.nomeEntidade}"></span>
                                 </li>
                                 <li 
                                     th:if="*{caspEntidadesList.size} == 0">
                                     <span class="badge text-wrap text-dark casp-span"
-                                          th:text="'Sem entidade informada'"/>
+                                          th:text="'Sem entidade informada'"></span>
                                 </li>
                             </ul>
                         </div>
@@ -89,11 +80,11 @@
                                     th:each="area : *{caspAreasList}">
                                     <span th:class="'badge text-wrap text-withe casp-span '
                                           +${T(caspvale.caspsuporte.modulos.atendimento.view.common.StringToCSS).mapDescricaoAreaToCSSClass(area.descricaoArea)}"
-                                          th:text="${area.descricaoArea}"/>
+                                          th:text="${area.descricaoArea}"></span>
                                 </li>
                                 <li th:if="*{caspAreasList.size} == 0">
                                     <span class="badge text-wrap text-dark casp-span"
-                                          th:text="'Sem área informada'"/>
+                                          th:text="'Sem área informada'"></span>
                                 </li>
                             </ul>
                         </div>
@@ -104,15 +95,25 @@
                                     <span class="badge text-wrap text-dark bg-cinza" 
                                           style="margin-right: 3px;margin-top: 3px"
                                           th:each="sistema : *{caspSistemasList}"
-                                          th:text="${sistema.descricaoSistema}"/>
+                                          th:text="${sistema.descricaoSistema}"></span>
                                 </li>
                                 <li class="list-group-item"
                                     th:if="*{caspSistemasList.size} == 0">
                                     <span class="badge text-dark casp-span" 
-                                          th:text="'Sem sistema informado'"/>
+                                          th:text="'Sem sistema informado'"></span>
                                 </li>
                             </ul>
                         </div>                              
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="col-md text-end">
+                        <div class="btn-group btn-group-sm" role="group" aria-label="Button group with nested dropdown">
+                            <button type="button" class="btn btn-outline-success" onclick=""><i class="bi bi-gear"> Solicitar alterações</i></button>
+                            <button type="button" class="btn btn-outline-success" th:value="*{iUsuario}"  th:attr="onclick='modalTrocarSenha(' + *{iUsuario} + ')'"><i class="bi bi-key"> Trocar senha</i></button>
+                            <button type="button" class="btn btn-outline-success" 
+                                    onclick="atualizarPerfil()"><i class="bi bi-check-lg"> Gravar</i></button>
+                        </div>
                     </div>
                 </div>
             </div>
